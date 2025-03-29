@@ -1,0 +1,149 @@
+@import "./root.scss";
+
+header {
+  background: linear-gradient(to right, #f9c5d1, #a3d8f4);
+  // padding: 15px 0;
+  text-align: center;
+  color: white; /* Chữ màu trắng cho dễ nhìn */
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+}
+
+body {
+  background-color: #EADDF0; /* Tím pastel nhạt */
+}
+
+
+/* Logo */
+.navbar-icon {
+  // padding-left: 1%;
+  color: white !important;
+}
+
+.navbar-brand img {
+  width: 100px;  /* Điều chỉnh kích thước */
+  height: auto;  /* Giữ tỉ lệ */
+  border-radius: 50%; /* Bo tròn */
+  border: 3px solid #fff; /* Viền trắng xung quanh */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+}
+
+
+.navbar-collapse form {
+  background-color: #ffffff !important;
+  padding: 5px 10% 3px 5%;
+}
+
+.search-form {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--secondary-color);
+  border-radius: 25px;
+  overflow: hidden;
+  padding: 5px;
+  background-color: white;
+}
+
+/* Ô nhập liệu */
+.search-input {
+  flex: 1; /* Ô nhập liệu chiếm hết phần trống */
+  border: none;
+  outline: none;
+  /* padding: 10px 15px 10px 15px; */
+  font-size: 16px;
+  border-radius: 25px 0 0 25px;
+}
+
+/* Nút tìm kiếm */
+.search-button {
+  background-color: var(--pink-color);
+  color: white;
+  border: none;
+  padding-left: 15px;
+  padding-right: 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+/* Hover hiệu ứng */
+.search-button:hover {
+  background-color: #a6c1ee;
+}
+.dropdown-menu {
+  column-count: 3; /* Chia thành 2 cột */
+  column-gap: 20px; /* Khoảng cách giữa các cột */
+  width: 600px; /* Điều chỉnh độ rộng */
+}
+// @media (max-width: 768px) {
+//   .dropdown-menu {
+//     column-count: 1; /* Chỉ 1 cột */
+//     width: 200px; /* Điều chỉnh độ rộng nhỏ hơn */
+//   }
+// }
+
+// Memu mobile
+
+/* Ẩn sidebar mặc định */
+/* Ẩn sidebar mặc định */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Ẩn bên trái */
+  width: 250px;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease-in-out;
+  padding: 20px;
+  z-index: 1000;
+}
+
+/* Khi mở menu */
+.sidebar.open {
+  left: 0;
+}
+
+/* Nút đóng menu */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Ẩn danh mục con ban đầu */
+#categorySidebar {
+  left: -250px;
+}
+
+#categorySidebar.open {
+  left: 0;
+}
+
+/*# sourceMappingURL=layout.css.map */
+
+// Hover đẹp đẹp cái danh mục
+/* Hiệu ứng dropdown */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block; /* Hiển thị menu khi hover */
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Hiệu ứng trượt xuống */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

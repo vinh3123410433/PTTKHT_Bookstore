@@ -1,0 +1,118 @@
+<div>
+
+  <div
+    id="carouselExampleControls"
+    class="carousel slide"
+    data-bs-ride="carousel" data-bs-interval="5000"
+  >
+    <div class="carousel-inner slider-banner">
+      <div class="carousel-item active">
+        <img src="./img/slider/2515.png" class="d-block w-100" alt="..." />
+      </div>
+      <div class="carousel-item">
+        <img
+          src="./img/slider/31842203_7869670.jpg"
+          class="d-block w-100"
+          alt="..."
+        />
+      </div>
+      <div class="carousel-item">
+        <img src="./img/slider/image.png" class="d-block w-100" alt="..." />
+      </div>
+    </div>
+    <button
+      class="carousel-control-prev"
+      type="button"
+      data-bs-target="#carouselExampleControls"
+      data-bs-slide="prev"
+    >
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button
+      class="carousel-control-next"
+      type="button"
+      data-bs-target="#carouselExampleControls"
+      data-bs-slide="next"
+    >
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  {{! category popular }}
+  <div class="container my-5">
+    <h2 class="fw-bold">Danh mục đề cử.</h2>
+    <div class="row mt-4 justify-content-center">
+      {{#each popularCategories}}
+        <div
+          class="col-md-2 mx-2 category-card"
+          {{!-- style="background-color: #eaf8dc;" --}}
+        >
+
+          <p class="category-title">{{this.TenDanhMuc}}</p>
+          <p class="product-count">{{this.SoLuongSanPham}}</p>
+          <img
+            src="/img/cagories/{{this.DanhMucID}}.jpg"
+            class="img-fluid"
+            alt=""
+          />
+        </div>
+
+      {{/each}}
+    </div>
+  </div>
+
+  {{!  đường kẻ thui}}
+  <div class="divider">
+    <span></span>
+  </div>
+<div class="container" style="max-width:90%">
+  {{!-- {{log popularCategories}} --}}
+        {{#each popularproducts}}
+        <div class="danh-muc-de-cu"><h3>
+          {{this.DanhMuc.TenDanhMuc}}
+        </h3></div>
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner carousel-inner-pd">
+    {{#each this.SanPham}}
+      <div class="carousel-item carousel-item-pd {{#if @first}}active{{/if}}">
+        <div class="product-card">
+          <div class="product-image">
+            <img src="{{this.Anh}}" alt="Sách" />
+            <div class="product-icons">
+              <span class="icon">🔍</span>
+              <span class="icon">🛒</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <h5 class="product-title">{{this.TenSanPham}}</h5>
+            <div class="product-price">
+              <span class="new-price">{{formatNumber this.Gia}}₫</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  <button class="carousel-control-prev carousel-control-prev-pd" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next carousel-control-next-pd" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+    {{/each}}
+</div>
+</div>
+<!-- jQuery từ Google CDN -->
+<script
+  src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+></script>
+
+<script src="./bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/home.js"></script>
+<script src="js/layout.js"></script>

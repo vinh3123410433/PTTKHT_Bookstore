@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./bootstrap-5.0.2-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles/index.css">
+
+
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light  hd-color">
+            <div class="container-fluid">
+                <div class="row align-items-center col-12 navbar-icon">
+                    <!-- Logo -->
+                    <div class="col-2 ">
+                        <a class="navbar-brand" href="#">Navbar</a>
+                    </div>
+
+                    <!-- Ô tìm kiếm (chiếm nhiều diện tích hơn) -->
+                    <div class="col-7">
+                        <form class="search-form">
+                            <input class="form-control search-input" type="search" placeholder="Tìm kiếm sản phẩm...">
+                            <button class="btn search-button" type="submit">Tìm kiếm</button>
+                        </form>
+                    </div>
+
+
+                    <!-- Đăng ký / Đăng nhập -->
+                    <div class="col-3 text-end">
+                        <a href="">Đăng ký</a> /
+                        <a href="">Đăng nhập</a>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+        <nav class="navbar navbar-expand-lg navbar-light ">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="nav-item dropdown hd-color">
+                        <a class="nav-link dropdown-toggle " href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Danh mục sản phẩm
+                        </a>
+                        <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 hd-color">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Giới thiệu</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Sản phẩm</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <!-- Indicators (Dấu chấm) -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3"></button>
+        </div>
+
+        <div class="carousel-inner">
+            <!-- Slide 1 -->
+            <div class="carousel-item active slide-css">
+                <img src="./img/slider/2515.png" class="d-block w-100" alt="Slide 1">
+                <!-- <button class="btn btn-discover">Khám phá ngay</button> -->
+                <!-- <div class="carousel-caption">
+
+               
+                </div> -->
+            </div>
+            <!-- Slide 2 -->
+            <div class="carousel-item slide-css">
+                <img src="./img/slider/3d0f9ec9-4599-4b8d-8464-7a9fe6ffbbe1.jpg" class="d-block w-100" alt="Slide 2">
+                <!-- <button class="btn btn-discover">Khám phá ngay</button> -->
+                <!-- <div class="carousel-caption">
+
+               
+                </div> -->
+            </div>
+            <!-- Slide 3 -->
+            <div class="carousel-item slide-css">
+                <img src="./img/slider/image.png" class="d-block w-100" alt="Slide 3">
+                <!-- <button class="btn btn-discover">Khám phá ngay</button> -->
+                <!-- <div class="carousel-caption">
+
+               
+                </div> -->
+            </div>
+            <!-- Slide 4 -->
+            <div class="carousel-item slide-css">
+                <img src="https://via.placeholder.com/1400x600/FFD700/ffffff?text=Thực+phẩm+4" class="d-block w-100"
+                    alt="Slide 4">
+                <!-- <button class="btn btn-discover">Khám phá ngay</button> -->
+                <!-- <div class="carousel-caption">
+
+               
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Nút điều hướng trái/phải -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+    </div>
+
+    <!-- Body -->
+    <div>
+        <div class="container-fluid my-4 books-body-css">
+            <h3 class="text-white fw-bold">Mới nhất</h3>
+            <div id="bookCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Slide 1 -->
+                    <div class="carousel-item active ">
+                        <div class="row">
+                            <div class="col-md-2 ">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 6%</div>
+                                    <h5 class="book-title">Cún nhỏ nói dối...</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 10%</div>
+                                    <h5 class="book-title">Chờ trắng lên</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 13%</div>
+                                    <h5 class="book-title">Đạp nổi bán...</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 1%</div>
+                                    <h5 class="book-title">Sách Gác Xép</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 20%</div>
+                                    <h5 class="book-title">Người tìm xác</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 5%</div>
+                                    <h5 class="book-title">Sách mới</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carousel-item">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="book-card product-slide-item">
+                                    <img src="./img/book/image.png" class="book-img">
+                                    <div class="discount">Giảm 15%</div>
+                                    <h5 class="book-title">Sách hay</h5>
+                                </div>
+                            </div>
+                            <!-- Thêm các sản phẩm khác tương tự -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nút chuyển trang -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#bookCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon custom-nav" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#bookCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon custom-nav" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

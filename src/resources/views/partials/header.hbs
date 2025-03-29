@@ -1,0 +1,96 @@
+<nav class="navbar navbar-expand-lg navbar-light hd-color">
+  <div class="container-fluid">
+    <div class="row align-items-center col-12 navbar-icon">
+      <!-- Logo -->
+      <div class="col-2">
+        <a class="navbar-brand" href="#"><img src="./img/logo.jpg" alt=""></a>
+      </div>
+
+      <!-- Ô tìm kiếm (chiếm nhiều diện tích hơn) -->
+      <div class="col-7">
+        <form class="search-form">
+          <input
+            class="form-control search-input"
+            type="search"
+            placeholder="Tìm kiếm sản phẩm..."
+          />
+          <button class="btn search-button" type="submit">Tìm kiếm</button>
+        </form>
+      </div>
+
+      <!-- Đăng ký / Đăng nhập -->
+      <div class="col-3 text-end">
+        <a href="">Đăng ký</a>
+
+        <a href="">Đăng nhập</a>
+      </div>
+    </div>
+  </div>
+
+</nav>
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <!-- Button mở menu trên mobile -->
+    <button class="navbar-toggler" type="button" id="openMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav me-auto mb-2 mb-lg-0 hd-color">
+    <!-- Trang chủ -->
+    <li class="nav-item"><a class="nav-link active" href="#">Trang chủ</a></li>
+
+    <!-- Danh mục sách -->
+    <li class="nav-item dropdown hd-color d-none d-lg-block">
+      <a
+        class="nav-link dropdown-toggle"
+        href="#"
+        id="navbarDropdown"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >Danh mục sách</a>
+      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+        {{#each categories}}
+          <li>
+            <a class="dropdown-item" href="/category/{{this.DanhMucID}}">
+              {{this.TenDanhMuc}}
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </li>
+
+    <!-- Sản phẩm -->
+    <li class="nav-item"><a class="nav-link" href="#">Sản phẩm</a></li>
+
+    <!-- Giới thiệu -->
+    <li class="nav-item"><a class="nav-link" href="#">Giới thiệu</a></li>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<!-- Sidebar menu chính -->
+<div id="sidebar" class="sidebar">
+  <button id="closeMenu" class="close-btn">✖</button>
+  <ul>
+
+    <li><a href="#">Giới thiệu</a></li>
+        <li><a href="#" id="openCategories">Danh mục sách</a></li>
+
+    <li><a href="#">Sản phẩm</a></li>
+  </ul>
+</div>
+
+<!-- Danh mục con -->
+<div id="categorySidebar" class="sidebar">
+  <button id="closeCategoryMenu" class="close-btn">← Quay lại</button>
+  <h2>Danh Mục Sách</h2>
+  <ul>
+    {{#each categories}}
+      <li><a href="/category/{{this.DanhMucID}}">{{this.TenDanhMuc}}</a></li>
+    {{/each}}
+  </ul>
+</div>

@@ -1,0 +1,181 @@
+@charset "UTF-8";
+body {
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-dark);
+  background-color: #a3d8f4;
+}
+
+h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+button,
+.navbar {
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  /* 🌟 Màu chính (Dùng cho header, tiêu đề quan trọng) */
+  --primary-color: #a3d8f4; /* Xanh dương pastel - Nhẹ nhàng, dịu mắt */
+  /* 🎨 Màu phụ (Dùng cho nút bấm, điểm nhấn) */
+  --secondary-color: #f9c5d1; /* Hồng pastel - Ngọt ngào, nữ tính */
+  /* 💙 Màu xanh dương (Dùng cho đường link, hover, chi tiết nhỏ) */
+  --blue-color: #b5d6f2; /* Xanh baby pastel - Hiện đại, thư giãn */
+  /* 💖 Màu hồng (Dùng cho các phần nổi bật như khuyến mãi) */
+  --pink-color: #f8afa6; /* Hồng nhẹ nhàng - Tạo cảm giác ấm áp */
+  /* 🍊 Màu cam (Dùng cho CTA, khuyến mãi) */
+  --orange-color: #fbc6a4; /* Cam pastel - Trẻ trung, năng động */
+  /* 🌿 Màu xanh lá (Dùng cho danh mục, background nhẹ) */
+  --green-color: #c8e6c9; /* Xanh lá pastel - Mềm mại, tự nhiên */
+  /* 🎨 Màu nền chính */
+  --bg-light: #f7e4cf; /* Be kem nhạt - Nhẹ nhàng nhưng không trắng */
+  --bg-dark: #2e2e2e; /* Xám đậm - Giữ sang trọng cho dark mode */
+  /* 🎨 Màu chữ */
+  --text-dark: #4d4d4d; /* Xám trung tính - Không quá gắt */
+  --text-light: #f5d7db; /* Hồng pastel nhạt - Phù hợp với nền tối */
+  /* 🎨 Màu card sản phẩm */
+  --card-bg: #f6d6d6; /* Hồng pastel siêu nhẹ - Thay vì trắng */
+  /* 🎨 Màu border & shadow */
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+header {
+  background: linear-gradient(to right, #f9c5d1, #a3d8f4);
+  text-align: center;
+  color: white; /* Chữ màu trắng cho dễ nhìn */
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+}
+
+body {
+  background-color: #EADDF0; /* Tím pastel nhạt */
+}
+
+/* Logo */
+.navbar-icon {
+  color: white !important;
+}
+
+.navbar-brand img {
+  width: 100px; /* Điều chỉnh kích thước */
+  height: auto; /* Giữ tỉ lệ */
+  border-radius: 50%; /* Bo tròn */
+  border: 3px solid #fff; /* Viền trắng xung quanh */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+}
+
+.navbar-collapse form {
+  background-color: #ffffff !important;
+  padding: 5px 10% 3px 5%;
+}
+
+.search-form {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--secondary-color);
+  border-radius: 25px;
+  overflow: hidden;
+  padding: 5px;
+  background-color: white;
+}
+
+/* Ô nhập liệu */
+.search-input {
+  flex: 1; /* Ô nhập liệu chiếm hết phần trống */
+  border: none;
+  outline: none;
+  /* padding: 10px 15px 10px 15px; */
+  font-size: 16px;
+  border-radius: 25px 0 0 25px;
+}
+
+/* Nút tìm kiếm */
+.search-button {
+  background-color: var(--pink-color);
+  color: white;
+  border: none;
+  padding-left: 15px;
+  padding-right: 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Hover hiệu ứng */
+.search-button:hover {
+  background-color: #a6c1ee;
+}
+
+.dropdown-menu {
+  column-count: 3; /* Chia thành 2 cột */
+  column-gap: 20px; /* Khoảng cách giữa các cột */
+  width: 600px; /* Điều chỉnh độ rộng */
+}
+
+/* Ẩn sidebar mặc định */
+/* Ẩn sidebar mặc định */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Ẩn bên trái */
+  width: 250px;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease-in-out;
+  padding: 20px;
+  z-index: 1000;
+}
+
+/* Khi mở menu */
+.sidebar.open {
+  left: 0;
+}
+
+/* Nút đóng menu */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Ẩn danh mục con ban đầu */
+#categorySidebar {
+  left: -250px;
+}
+
+#categorySidebar.open {
+  left: 0;
+}
+
+
+/* Hiệu ứng dropdown */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block; /* Hiển thị menu khi hover */
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+/* Hiệu ứng trượt xuống */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*# sourceMappingURL=layout.css.map */

@@ -1,0 +1,128 @@
+@charset "UTF-8";
+/* SLider banner */
+.slider-banner div img {
+  width: 100%; /* Chiều rộng chiếm toàn bộ container */
+  aspect-ratio: 16/4; /* Tỷ lệ 3:4 (chiều rộng:chiều cao) */
+  object-fit: cover; /* Đảm bảo hình ảnh giữ tỷ lệ và cắt phần dư nếu cần */
+  height: auto;
+}
+
+/* product-layout- */
+@media screen and (min-width: 576px) {
+  .carousel-inner-pd {
+    display: flex;
+  }
+  .carousel-item-pd {
+    display: block;
+    margin-right: 0;
+    flex: 0 0 20%;
+  }
+}
+
+.carousel-inner-pd {
+  padding: 1em;
+  display: flex;
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+  scroll-behavior: smooth; /* Cuộn mượt mà */
+}
+
+.carousel-item-pd .card {
+  margin: 0.5em;
+  box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
+  border: none;
+}
+
+.img-wrapper {
+  max-width: 100%;
+  height: 25vw;
+  display: flex;
+  justify-self: center;
+  align-items: flex-start;
+}
+
+.img-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.carousel-control-prev-pd,
+.carousel-control-next-pd {
+  background-color: #e1e1e1;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/*# sourceMappingURL=index.css.map */
+
+
+
+// danh mục phổ biển
+.category-card {
+  background-color: #FFF5D1;  /* Vàng kem */
+  border: 2px solid #E6D5F5;  /* Viền tím nhạt */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  min-height: 270px; /* Đảm bảo các thẻ có cùng chiều cao */
+}
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.category-card img {
+  width: 100%;
+  height: 120px; /* Ảnh cùng kích thước */
+  object-fit: cover;
+  border-radius: 10px;
+}
+.category-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.product-count {
+  font-size: 1rem;
+  color: #e67e22;
+  font-weight: bold;
+}
+
+// Css đường kẻ
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e0e0e0; /* Màu đường kẻ mờ */
+}
+
+.divider span {
+  padding: 0 10px;
+  background: #000; /* Màu đậm ở giữa */
+  height: 2px;
+  width: 80px;
+}
+
+
+
+
+// Danh mục đề cử
+
+.danh-muc-de-cu {
+  background: linear-gradient(to right, #b8e0d2, #f5e6cc);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+}

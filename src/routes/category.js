@@ -4,5 +4,7 @@ let router = express.Router()
 let categoryController = require("../app/controllers/CategoryController")
 
 
-router.use('/', siteController.index)
+router.use('/', categoryController.index)
+
+router.use('/hi', categoryController.index)
 module.exports = router

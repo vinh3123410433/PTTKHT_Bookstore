@@ -11,7 +11,7 @@ class SiteController {
             const popularCategories = await categoryModel.getfiveCategoriespopular()
             const popularproducts = await bookModel.getBooksinPopularCategory()
 
-            console.log(popularproducts)
+            // console.log(popularproducts)
             res.render('home', { books, categories, popularCategories, popularproducts }); // Truyền dữ liệu vào View
         } catch (error) {
             console.error('Error in SiteController:', error);

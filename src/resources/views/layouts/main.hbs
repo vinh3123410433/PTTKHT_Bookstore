@@ -6,15 +6,56 @@
     <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/layout.css">
-    <link rel="stylesheet" href="./css/product.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/category.css">
+    <link rel="stylesheet" href="/css/pdDetail.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-  </head>
-  <body>
-    <header>
-      {{>header}}
-    </header>
+<style>html, body {
+  overflow-x: visible;
+  overflow-y: visible;
+}
+</style>
+<body>
+  {{>header}} 
+  <main style="padding-top: 0;"> 
     {{{body}}}
-    
-  </body>
+  </main>
+  <footer>
+    {{>footer}}
+  </footer>
+
+  
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchBar = document.querySelector('.search-bar-wrapper');
+    const menuBar = document.querySelector('.menu-bar-wrapper');
+
+    if (searchBar && menuBar) {
+      const height = searchBar.offsetHeight;
+      menuBar.style.top = `${height}px`; // Gán top = chiều cao search bar
+    }
+
+    // Phần xử lý ẩn/hiện khi cuộn
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (scrollTop > lastScrollTop && scrollTop > 100) {
+        menuBar.classList.add('hide-on-scroll');
+      } else if (scrollTop < lastScrollTop) {
+        menuBar.classList.remove('hide-on-scroll');
+      }
+
+      lastScrollTop = scrollTop;
+    });
+  });
+</script>
+
+
+
+</body>
+
+
 </html>
+

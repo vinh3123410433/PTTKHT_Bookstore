@@ -55,8 +55,14 @@
 }
 
 .product-title {
-  font-size: 14px;
-  margin-top: 5px;
+  font-size: 18px; /* Tăng kích thước chữ để dễ đọc hơn */
+  font-weight: bold; /* Làm cho tiêu đề đậm đà */
+  margin-top: 10px; /* Tăng khoảng cách phía trên */
+  margin-bottom: 5px; /* Thêm khoảng cách phía dưới */
+  color: #333; /* Màu chữ tối cho độ tương phản tốt */
+  line-height: 1.4; /* Tăng độ cao dòng để tiêu đề không bị sát nhau */
+  text-transform: capitalize; /* Viết hoa chữ cái đầu tiên của mỗi từ */
+
 }
 
 .product-price {
@@ -83,3 +89,7 @@
 .product-image:hover .product-icons {
   opacity: 1;
 }
+
+
+
+// css sản ph

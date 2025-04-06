@@ -75,8 +75,9 @@
         </h3></div>
 <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner carousel-inner-pd">
-    {{#each this.SanPham}}
-      <div class="carousel-item carousel-item-pd {{#if @first}}active{{/if}}">
+  {{#each this.SanPham}}
+    <div class="carousel-item carousel-item-pd {{#if @first}}active{{/if}}">
+      <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
         <div class="product-card">
           <div class="product-image">
             <img src="{{this.Anh}}" alt="Sách" />
@@ -88,12 +89,14 @@
           <div class="product-info">
             <h5 class="product-title">{{this.TenSanPham}}</h5>
             <div class="product-price">
-              <span class="new-price">{{formatNumber this.Gia}}₫</span>
+              <span class="new-price">{{formatNumber this.Gia}}</span>
             </div>
           </div>
         </div>
-      </div>
-    {{/each}}
+      </a>
+    </div>
+  {{/each}}
+
   </div>
 
   <button class="carousel-control-prev carousel-control-prev-pd" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">

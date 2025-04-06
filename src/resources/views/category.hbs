@@ -1,1 +1,84 @@
-<div><p>Trang danh mục nè</p></div>
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Sidebar Danh Mục -->
+        <div class="col-md-3">
+            <div class="category-sidebar">
+                <div class="price-range">
+                    <h3>Khoảng Giá Sách</h3>
+                    <ul>
+                        <li><a href="#">Dưới 50,000 VND</a></li>
+                        <li><a href="#">50,000 VND - 100,000 VND</a></li>
+                        <li><a href="#">100,000 VND - 200,000 VND</a></li>
+                        <li><a href="#">200,000 VND - 500,000 VND</a></li>
+                        <li><a href="#">Trên 500,000 VND</a></li>
+                    </ul>
+                </div>
+                <h5 class="mt-4">Thương hiệu</h5>
+                <div>
+                    <input type="checkbox" id="brand1"> Kim Ấn<br>
+                    <input type="checkbox" id="brand2"> Thuận<br>
+                    <input type="checkbox" id="brand3"> William Dalrymple<br>
+                    <input type="checkbox" id="brand4"> Đỗ Hồng Ngọc<br>
+                    <input type="checkbox" id="brand5"> Zak Dychtwald<br>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nội dung danh mục -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="featured-title">{{categoryName}}</h4>
+                <select class="form-select w-auto">
+                    <option selected>Sản phẩm nổi bật</option>
+                    <option value="1">Giá tăng dần</option>
+                    <option value="2">Giá giảm dần</option>
+                </select>
+            </div>
+       <!-- Hiển thị danh sách sản phẩm -->
+<div class="row product-list">
+    {{#each books}}
+    <div class="col-md-3 m-0">
+        <div class="product-card-container">
+   <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
+        <div class="product-card">
+          <div class="product-image">
+            <img src="{{this.Anh}}" alt="Sách" />
+            <div class="product-icons">
+              <span class="icon">🔍</span>
+              <span class="icon">🛒</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <h5 class="product-title">{{this.TenSanPham}}</h5>
+            <div class="product-price">
+              <span class="new-price">{{formatNumber this.Gia}}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<!-- Phân trang -->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center mt-4">
+        <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+            <a class="page-link" href="?page={{subtract currentPage 1}}" tabindex="-1">Previous</a>
+        </li>
+
+        {{#each (range 1 totalPages)}}
+            <li class="page-item {{#if (eq ../currentPage this)}}active{{/if}}">
+                <a class="page-link" href="?page={{this}}">{{this}}</a>
+            </li>
+        {{/each}}
+
+        <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+            <a class="page-link" href="?page={{add currentPage 1}}">Next</a>
+        </li>
+    </ul>
+</nav>
+
+    </div>
+</div>

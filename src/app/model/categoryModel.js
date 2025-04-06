@@ -30,11 +30,26 @@ const getfiveCategoriespopular = async () => {
 };
 
 
+const getCategoryById = async (categoryId) => {
+    try {
+        // Truy vấn danh mục dựa trên DanhMucID
+        const query = 'SELECT * FROM danhmuc WHERE DanhMucID = ?';
+        const [rows] = await db.query(query, [categoryId]);
+
+        // Nếu có kết quả, trả về danh mục đầu tiên (nếu không có kết quả sẽ trả về null)
+        return rows.length > 0 ? rows[0] : null;
+    } catch (error) {
+        console.error('Error fetching category by ID:', error);
+        throw error;
+    }
+};
+
 
 
 // Xuất các hàm
 module.exports = {
     getAllCategories,
     getfiveCategoriespopular,  
+    getCategoryById
 };
 

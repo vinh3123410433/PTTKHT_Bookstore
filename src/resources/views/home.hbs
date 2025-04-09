@@ -78,21 +78,29 @@
   {{#each this.SanPham}}
     <div class="carousel-item carousel-item-pd {{#if @first}}active{{/if}}">
       <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
-        <div class="product-card">
-          <div class="product-image">
-            <img src="{{this.Anh}}" alt="Sách" />
-            <div class="product-icons">
-              <span class="icon">🔍</span>
-              <span class="icon">🛒</span>
-            </div>
-          </div>
-          <div class="product-info">
-            <h5 class="product-title">{{this.TenSanPham}}</h5>
-            <div class="product-price">
-              <span class="new-price">{{formatNumber this.Gia}}</span>
-            </div>
-          </div>
-        </div>
+<div class="product-card">
+  <div class="product-image">
+    <img src="{{this.Anh}}" alt="Sách" />
+    
+    <!-- ICON hover phải nằm TRONG .product-image -->
+    <div class="product-icons">
+      <span class="icon">
+        <img src="/img/icons/eye.svg" alt="search" />
+      </span>
+      <span class="icon">
+        <img src="/img/icons/cart.svg" alt="cart" />
+      </span>
+    </div>
+  </div>
+
+  <div class="product-info">
+    <h5 class="product-title">{{this.TenSanPham}}</h5>
+    <div class="product-price">
+      <span class="new-price">{{formatNumber this.Gia}}</span>
+    </div>
+  </div>
+</div>
+
       </a>
     </div>
   {{/each}}

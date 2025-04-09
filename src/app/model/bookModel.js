@@ -15,33 +15,50 @@ const paginate = (totalItems, currentPage, perPage) => {
 };
 
 // Hàm lấy danh sách sách (có hoặc không có phân trang)
-const getAllBooks = async (categoryId = null, offset = null, perPage = null) => {
+const getAllBooks = async (categoryId = null, offset = null, perPage = null, filters = {}) => {
     try {
         let query = `
-            SELECT sp.SanPhamID, sp.TenSanPham, sp.ID_NXB, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
-                   GROUP_CONCAT(DISTINCT tg.TenTacGia SEPARATOR ', ') AS TacGia,
-                   GROUP_CONCAT(DISTINCT dm.TenDanhMuc SEPARATOR ', ') AS DanhMuc,
-                   a.Anh AS Anh
+            SELECT 
+                sp.SanPhamID, sp.TenSanPham, sp.ID_NXB, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
+                GROUP_CONCAT(DISTINCT tg.TenTacGia SEPARATOR ', ') AS TacGia,
+                GROUP_CONCAT(DISTINCT dm.TenDanhMuc SEPARATOR ', ') AS DanhMuc,
+                a.Anh AS Anh
             FROM sanpham sp
             JOIN sp_dm ON sp.SanPhamID = sp_dm.SanPhamID
             JOIN danhmuc dm ON sp_dm.DanhMucID = dm.DanhMucID
             LEFT JOIN sp_tg ON sp.SanPhamID = sp_tg.SanPhamID
             LEFT JOIN tacgia tg ON sp_tg.IDTacGia = tg.IDTacGia
             LEFT JOIN anhsp a ON sp.SanPhamID = a.ID_SP AND a.STT = 1
+            WHERE 1=1
         `;
 
-        if (categoryId) {
-            query += ` WHERE dm.DanhMucID = ? `;
+        const params = [];
+
+        // ❌ Bỏ dòng này (đã gộp categoryId vào filters.categoryIDs rồi)
+        // if (categoryId) {
+        //     query += ` AND dm.DanhMucID = ?`;
+        //     params.push(categoryId);
+        // }
+
+        // ✅ Lọc theo danh sách danh mục
+        if (filters.categoryIDs && filters.categoryIDs.length > 0) {
+            const placeholders = filters.categoryIDs.map(() => '?').join(',');
+            query += ` AND dm.DanhMucID IN (${placeholders})`;
+            params.push(...filters.categoryIDs);
         }
 
-        query += ` GROUP BY sp.SanPhamID, sp.TenSanPham, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang, a.Anh `;
-
-        if (offset !== null && perPage !== null) {
-            query += ` LIMIT ? OFFSET ? `;
+        // ✅ Lọc theo giá
+        if (filters.maxPrice) {
+            query += ` AND sp.Gia <= ?`;
+            params.push(filters.maxPrice);
         }
 
-        const params = categoryId ? [categoryId] : [];
+        query += `
+            GROUP BY sp.SanPhamID, sp.TenSanPham, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang, a.Anh
+        `;
+
         if (offset !== null && perPage !== null) {
+            query += ` LIMIT ? OFFSET ?`;
             params.push(perPage, offset);
         }
 
@@ -52,7 +69,6 @@ const getAllBooks = async (categoryId = null, offset = null, perPage = null) => 
         throw error;
     }
 };
-
 
 
 // Hàm lấy sản phẩm theo danh mục phổ biển
@@ -203,7 +219,81 @@ const getListProducts = async (danhMucIDs = []) => {
 
 
 
+async function searchBooksByKeyword(keyword) {
+    const [rows] = await db.execute(`
+        SELECT DISTINCT sp.SanPhamID
+        FROM sanpham sp
+        LEFT JOIN sp_tg sptg ON sp.SanPhamID = sptg.SanPhamID
+        LEFT JOIN tacgia tg ON sptg.IDTacGia = tg.IDTacGia
+        WHERE sp.TenSanPham LIKE ? OR tg.TenTacGia LIKE ?
+    `, [`%${keyword}%`, `%${keyword}%`]);
+
+    return rows;
+}
+
+const getBooksByIds = async (idList) => {
+    try {
+        if (!Array.isArray(idList) || idList.length === 0) {
+            return [];
+        }
+
+        const placeholders = idList.map(() => '?').join(', ');
+        const query = `
+            SELECT sp.SanPhamID, sp.TenSanPham, sp.ID_NXB, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
+                   GROUP_CONCAT(DISTINCT tg.TenTacGia SEPARATOR ', ') AS TacGia,
+                   GROUP_CONCAT(DISTINCT dm.TenDanhMuc SEPARATOR ', ') AS DanhMuc,
+                   a.Anh AS Anh
+            FROM sanpham sp
+            JOIN sp_dm ON sp.SanPhamID = sp_dm.SanPhamID
+            JOIN danhmuc dm ON sp_dm.DanhMucID = dm.DanhMucID
+            LEFT JOIN sp_tg ON sp.SanPhamID = sp_tg.SanPhamID
+            LEFT JOIN tacgia tg ON sp_tg.IDTacGia = tg.IDTacGia
+            LEFT JOIN anhsp a ON sp.SanPhamID = a.ID_SP AND a.STT = 1
+            WHERE sp.SanPhamID IN (${placeholders})
+            GROUP BY sp.SanPhamID, sp.TenSanPham, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang, a.Anh
+        `;
+
+        const [rows] = await db.query(query, idList);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching books by IDs:', error);
+        throw error;
+    }
+};
+const filterBooks = async ({ maxPrice, categoryIDs }) => {
+    let query = `
+        SELECT 
+            sp.SanPhamID, sp.TenSanPham, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
+            GROUP_CONCAT(DISTINCT tg.TenTacGia SEPARATOR ', ') AS TacGia,
+            GROUP_CONCAT(DISTINCT dm.TenDanhMuc SEPARATOR ', ') AS DanhMuc,
+            a.Anh AS Anh
+        FROM sanpham sp
+        JOIN sp_dm ON sp.SanPhamID = sp_dm.SanPhamID
+        JOIN danhmuc dm ON sp_dm.DanhMucID = dm.DanhMucID
+        LEFT JOIN sp_tg ON sp.SanPhamID = sp_tg.SanPhamID
+        LEFT JOIN tacgia tg ON sp_tg.IDTacGia = tg.IDTacGia
+        LEFT JOIN anhsp a ON sp.SanPhamID = a.ID_SP AND a.STT = 1
+        WHERE 1=1
+    `;
+
+    const params = [];
+
+    if (maxPrice) {
+        query += ` AND sp.Gia <= ?`;
+        params.push(maxPrice);
+    }
+
+    if (categoryIDs && categoryIDs.length > 0) {
+        const placeholders = categoryIDs.map(() => '?').join(',');
+        query += ` AND dm.DanhMucID IN (${placeholders})`;
+        params.push(...categoryIDs);
+    }
+
+    query += ` GROUP BY sp.SanPhamID`;
+
+    const [rows] = await db.execute(query, params);
+    return rows;
+};
 
 
-
-module.exports = { getAllBooks , getBooksinPopularCategory,  paginate,  getProductDetail,getListProducts,getProductImages};
+module.exports = { getAllBooks , getBooksinPopularCategory,  paginate,  getProductDetail,getListProducts,getProductImages,searchBooksByKeyword,getBooksByIds,filterBooks};

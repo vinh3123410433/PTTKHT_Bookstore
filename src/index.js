@@ -18,8 +18,11 @@ app.engine(
         defaultLayout: 'main', // Layout mặc định
         helpers: {
             formatNumber: (number) => {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.').replace(/(\.0+|(?<=\.\d)0+)$/, '') + '₫';
-            },
+                const num = Number(number);
+                if (isNaN(num)) return '';
+                return num.toLocaleString('vi-VN') + '₫';
+              },
+              
             eq: (a, b) => a === b, // So sánh hai giá trị
             subtract: (a, b) => a - b, // Trừ hai số
             add: (a, b) => a + b, // ✅ Thêm helper cộng hai số
@@ -29,7 +32,19 @@ app.engine(
                     result += options.fn ? options.fn(i) : i;
                 }
                 return result;
+            },
+            paginationURL: (page, options) => {
+                const query = { ...options.data.root.query, page };
+                const params = new URLSearchParams(query);
+                return `?${params.toString()}`;
+            },
+            includes: (array, value) => {
+                if (!Array.isArray(array)) {
+                    array = [array];
+                }
+                return array.includes(value.toString()) || array.includes(Number(value));
             }
+            
         }
     })
 );

@@ -3,7 +3,5 @@ let router = express.Router()
 
 let categoryController = require("../app/controllers/CategoryController")
 
-
-
-router.use('/', categoryController.index)
+router.get('/:id?', categoryController.index);
 module.exports = router

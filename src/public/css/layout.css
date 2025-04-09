@@ -42,36 +42,41 @@ button,
   --shadow-color: rgba(0, 0, 0, 0.05);
 }
 
-header {
-  background: linear-gradient(to right, #f9c5d1, #a3d8f4);
-  text-align: center;
-  color: white; /* Chữ màu trắng cho dễ nhìn */
-  font-weight: bold;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
-}
-
+/* ==== TOÀN TRANG ==== */
 body {
   background-color: #EADDF0; /* Tím pastel nhạt */
+  font-family: "Poppins", sans-serif;
+  color: #333;
 }
 
-/* Logo */
+/* ==== HEADER ==== */
+header {
+  background: linear-gradient(to right, #f9c5d1, #a3d8f4); /* Hồng - Xanh pastel */
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ==== LOGO NAVBAR ==== */
 .navbar-icon {
   color: white !important;
 }
 
 .navbar-brand img {
-  width: 100px; /* Điều chỉnh kích thước */
-  height: auto; /* Giữ tỉ lệ */
-  border-radius: 50%; /* Bo tròn */
-  border: 3px solid #fff; /* Viền trắng xung quanh */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
 }
 
 .navbar-brand img:hover {
-  transform: scale(1.1); /* Hiệu ứng phóng to khi hover */
+  transform: scale(1.1);
 }
 
+/* ==== THANH TÌM KIẾM ==== */
 .navbar-collapse form {
   background-color: #ffffff !important;
   padding: 5px 10% 3px 5%;
@@ -81,26 +86,23 @@ body {
   height: 45px;
   display: flex;
   align-items: center;
-  border: 2px solid var(--secondary-color);
+  border: 2px solid #f48fb1; /* viền hồng nhạt */
   border-radius: 25px;
   overflow: hidden;
   padding: 5px;
   background-color: white;
 }
 
-/* Ô nhập liệu */
 .search-input {
-  flex: 1; /* Ô nhập liệu chiếm hết phần trống */
+  flex: 1;
   border: none;
   outline: none;
-  /* padding: 10px 15px 10px 15px; */
   font-size: 16px;
   border-radius: 25px 0 0 25px;
 }
 
-/* Nút tìm kiếm */
 .search-button {
-  background-color: var(--pink-color);
+  background-color: #f48fb1;
   color: white;
   border: none;
   padding-left: 15px;
@@ -108,65 +110,30 @@ body {
   border-radius: 25px;
   font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Hover hiệu ứng */
 .search-button:hover {
-  background-color: #a6c1ee;
+  background-color: #a3d8f4;
 }
 
+/* ==== DROPDOWN MENU DANH MỤC ==== */
 .dropdown-menu {
-  column-count: 3; /* Chia thành 2 cột */
-  column-gap: 20px; /* Khoảng cách giữa các cột */
-  width: 600px; /* Điều chỉnh độ rộng */
+  column-count: 3;
+  column-gap: 20px;
+  width: 600px;
+  background-color: #fff0f6; /* nền hồng siêu nhạt */
+  border-radius: 10px;
+  border: 1px solid #f8bbd0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Ẩn sidebar mặc định */
-/* Ẩn sidebar mặc định */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px; /* Ẩn bên trái */
-  width: 250px;
-  height: 100%;
-  background: white;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-  transition: left 0.3s ease-in-out;
-  padding: 20px;
-  z-index: 1000;
-}
-
-/* Khi mở menu */
-.sidebar.open {
-  left: 0;
-}
-
-/* Nút đóng menu */
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-/* Ẩn danh mục con ban đầu */
-#categorySidebar {
-  left: -250px;
-}
-
-#categorySidebar.open {
-  left: 0;
-}
-
-
-/* Hiệu ứng dropdown */
+/* Hover đẹp đẹp cái danh mục */
 .nav-item.dropdown:hover .dropdown-menu {
-  display: block; /* Hiển thị menu khi hover */
+  display: block;
   animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Hiệu ứng trượt xuống */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -177,6 +144,43 @@ body {
     transform: translateY(0);
   }
 }
+/* ==== MENU MOBILE SIDEBAR ==== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: left 0.3s ease-in-out;
+  padding: 20px;
+  z-index: 1000;
+  border-right: 5px solid #f8bbd0;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  color: #d81b60;
+}
+
+#categorySidebar {
+  left: -250px;
+}
+
+#categorySidebar.open {
+  left: 0;
+}
+
+/* ==== STICKY HEADER SEARCH + MENU ==== */
 .search-bar-wrapper {
   position: sticky;
   top: 0;
@@ -196,5 +200,7 @@ body {
 .menu-bar-wrapper.hide-on-scroll {
   transform: translateY(-100%);
 }
+
+/* ==== RESPONSIVE (tuỳ chọn bật lại nếu cần) ==== */
 
 /*# sourceMappingURL=layout.css.map */

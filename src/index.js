@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const path = require('path');
 const express = require('express');
 const app = express();
@@ -51,9 +52,31 @@ app.engine(
 
 app.set('view engine', 'hbs'); // Đặt view engine là Handlebars
 app.set('views', path.join(__dirname, 'resources/views')); // Đường dẫn đến views
+=======
+const express = require('express')
+const app = express()
+const port = 3001
+
+const configViewEngine = require('./config/viewEngine')
+const configSession = require('./config/session')
+
+const route = require('./routes')
+>>>>>>> 658a1fdda7f5be070220fd37fb699492e5d4dcd1
 
 console.log(path.join(__dirname, 'resources/views'));
 
+<<<<<<< HEAD
 route(app);
 
 app.listen(port, () => console.log(`App running at http://localhost:${port}`));
+=======
+configViewEngine(app)
+configSession(app)
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); 
+
+route(app)
+
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+>>>>>>> 658a1fdda7f5be070220fd37fb699492e5d4dcd1

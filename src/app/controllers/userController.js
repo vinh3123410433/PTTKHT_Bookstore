@@ -2,6 +2,7 @@ const UserModel = require('../model/userModel');
 
 const renderAccountPage = async (req, res, next) => {
     try {
+        console.log("hii")
         const data = await UserModel.getInforUser();
         res.render('account', { users: data, session: req.session });
     } catch (err) {
@@ -66,11 +67,11 @@ const login = async (req, res, next) => {
         const user = await UserModel.findUserByPhone(user_telephone);
 
         if (!user) {
-            return res.redirect('/account?error=telephone_not_found');
+            return res.redirect('/user/account?error=telephone_not_found');
         }
 
         if (user.MatKhau !== user_password) {
-            return res.redirect('/account?error=incorrect_password');
+            return res.redirect('/user/account?error=incorrect_password');
         }
 
         req.session.user_id = user.ID_KH;
@@ -97,12 +98,12 @@ const changePasswordUser = async (req, res, next) => {
         const query= `SELECT * FROM KhachHang WHERE ID_KH = 1`;
 
         if (!user) {
-            return res.redirect('/account?error=' + encodeURIComponent('Mật khẩu cũ không đúng'));
+            return res.redirect('/user/account?error=' + encodeURIComponent('Mật khẩu cũ không đúng'));
         }
 
         await UserModel.updatePassword(req.session.user_id, user_new_password);
 
-        res.redirect('/account?success=' + encodeURIComponent('Đổi mật khẩu thành công'));
+        res.redirect('/user/account?success=' + encodeURIComponent('Đổi mật khẩu thành công'));
     } catch (error) {
         next(error);
     }

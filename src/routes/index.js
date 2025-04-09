@@ -10,11 +10,12 @@ function route(app) {
     console.log("hi")
     app.use('/products', productsRouter)
     app.use('/category',categoryRouter)
+    app.use('/user',userRouter)
     app.use('/', siteRouter)
     
     app.use('/',homeRouter)
-    app.use('/',userRouter)
-    app.use('/',cartRouter)
+    
+    app.use('/cart',cartRouter)
 }
 
 module.exports = route

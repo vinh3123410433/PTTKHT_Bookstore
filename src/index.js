@@ -1,33 +1,42 @@
-<<<<<<< HEAD
 const path = require('path');
 const express = require('express');
 const app = express();
 const hbs = require('express-handlebars');
-const port = 3000;
+const port = 3001;
 
 const route = require('./routes');
+const configViewEngine = require('./config/viewEngine');
+const configSession = require('./config/session');
 
+// Cấu hình view engine và session
+configViewEngine(app);
+configSession(app);
+
+// Middleware xử lý dữ liệu gửi lên từ form và JSON
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Template engine
+// Template engine cấu hình Handlebars
 app.engine(
     'hbs',
     hbs.engine({
-        extname: '.hbs', // Sử dụng phần mở rộng .hbs
-        layoutsDir: path.join(__dirname, 'resources/views/layouts'), // Thư mục layouts
-        partialsDir: path.join(__dirname, 'resources/views/partials'), // Thư mục partials
-        defaultLayout: 'main', // Layout mặc định
+        extname: '.hbs',
+        layoutsDir: path.join(__dirname, 'resources/views/layouts'),
+        partialsDir: path.join(__dirname, 'resources/views/partials'),
+        defaultLayout: 'main',
         helpers: {
             formatNumber: (number) => {
                 const num = Number(number);
                 if (isNaN(num)) return '';
                 return num.toLocaleString('vi-VN') + '₫';
-              },
-              
-            eq: (a, b) => a === b, // So sánh hai giá trị
-            subtract: (a, b) => a - b, // Trừ hai số
-            add: (a, b) => a + b, // ✅ Thêm helper cộng hai số
-            range: (start, end, options) => { // Tạo danh sách số từ start đến end
+            },
+            eq: (a, b) => a === b,
+            subtract: (a, b) => a - b,
+            add: (a, b) => a + b,
+            range: (start, end, options) => {
                 let result = '';
                 for (let i = start; i <= end; i++) {
                     result += options.fn ? options.fn(i) : i;
@@ -45,38 +54,15 @@ app.engine(
                 }
                 return array.includes(value.toString()) || array.includes(Number(value));
             }
-            
         }
     })
 );
 
-app.set('view engine', 'hbs'); // Đặt view engine là Handlebars
-app.set('views', path.join(__dirname, 'resources/views')); // Đường dẫn đến views
-=======
-const express = require('express')
-const app = express()
-const port = 3001
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'resources/views'));
 
-const configViewEngine = require('./config/viewEngine')
-const configSession = require('./config/session')
-
-const route = require('./routes')
->>>>>>> 658a1fdda7f5be070220fd37fb699492e5d4dcd1
-
-console.log(path.join(__dirname, 'resources/views'));
-
-<<<<<<< HEAD
+// Routes
 route(app);
 
+// Start server
 app.listen(port, () => console.log(`App running at http://localhost:${port}`));
-=======
-configViewEngine(app)
-configSession(app)
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json()); 
-
-route(app)
-
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
->>>>>>> 658a1fdda7f5be070220fd37fb699492e5d4dcd1

@@ -1,68 +1,80 @@
-
 <div class="bg-gray-100 font-sans">
   <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-2xl shadow-xl">
     <h1 class="text-2xl font-bold mb-6 text-gray-800">Giỏ Sách Của Bạn</h1>
+jklfjsklvndv
     {{#each cart}}
-    <!-- Item -->
-    <div class="flex items-start space-x-4 border-b pb-6 mb-6">
-      <img src="{{this.src}}">
-      
+    <div class="cart-item flex items-start space-x-4 border-b pb-6 mb-6">
+      <img src="{{this.src}}" class="w-24 h-32 object-cover" />
+fhdssddddddddddddddddddđ
       <div class="flex-1">
         <h2 class="text-lg font-semibold text-gray-900">{{this.TenSanPham}}</h2>
-        <p class="text-red-600 font-semibold mt-2">{{this.Gia}}đ<span class="line-through text-gray-400 ml-2">90.000 đ</span></p>
+        <p class="text-red-600 font-semibold mt-2 item-price" data-price="{{this.Gia}}">
+          {{this.Gia}}đ
+        </p>
       </div>
+
       <div class="flex items-center space-x-2">
-        <button class="px-2 py-1 text-lg font-bold border rounded">−</button>
-        <span>1</span>
-        <button class="px-2 py-1 text-lg font-bold border rounded">+</button>
+        <button class="decrease px-2 py-1 text-lg font-bold border rounded">−</button>
+        <span class="quantity">0</span>
+        <button class="increase px-2 py-1 text-lg font-bold border rounded">+</button>
       </div>
-      <div class="text-red-600 font-semibold ml-6">{{this.Gia}}đ</div>
     </div>
     {{/each}}
 
+    <div class="text-right mt-6 text-xl">
+      Tổng: <span class="total-amount text-red-600 font-bold">0 đ</span>
+    </div>
   </div>
+
   <script>
-  function formatCurrency(value) {
-    return new Intl.NumberFormat('vi-VN').format(value) + ' đ';
-  }
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('vi-VN').format(value) + ' đ';
+    }
 
-  function updateTotal() {
-    const prices = document.querySelectorAll('.item-price');
-    const quantities = document.querySelectorAll('.quantity');
-    let total = 0;
+    function updateTotal() {
+      const items = document.querySelectorAll('.cart-item');
+      let total = 0;
 
-    prices.forEach((priceEl, index) => {
-      const price = parseFloat(priceEl.getAttribute('data-price'));
-      const qty = parseInt(quantities[index].textContent);
-      total += price * qty;
-    });
+      items.forEach(item => {
+        const priceEl = item.querySelector('.item-price');
+        const qtyEl = item.querySelector('.quantity');
 
-    document.querySelectorAll('.total-amount').forEach(el => {
-      el.textContent = formatCurrency(total);
-    });
-  }
+        if (!priceEl || !qtyEl) return;
 
-  document.querySelectorAll('.increase').forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      const qtyEl = document.querySelectorAll('.quantity')[index];
-      qtyEl.textContent = parseInt(qtyEl.textContent) + 1;
-      updateTotal();
-    });
-  });
+        const price = parseFloat(priceEl.dataset.price);
+        const qty = parseInt(qtyEl.textContent);
+        total += price * qty;
+      });
 
-  document.querySelectorAll('.decrease').forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-      const qtyEl = document.querySelectorAll('.quantity')[index];
-      let qty = parseInt(qtyEl.textContent);
-      if (qty > 1) {
-        qtyEl.textContent = qty - 1;
+      document.querySelectorAll('.total-amount').forEach(el => {
+        el.textContent = formatCurrency(total);
+      });
+    }
+
+    // Tăng số lượng
+    document.querySelectorAll('.increase').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const qtyEl = btn.parentElement.querySelector('.quantity');
+        let qty = parseInt(qtyEl.textContent);
+        qty++;
+        qtyEl.textContent = qty;
         updateTotal();
-      }
+      });
     });
-  });
 
-  updateTotal(); // Cập nhật tổng tiền ban đầu
-</script>
+    // Giảm số lượng nhưng không dưới 0
+    document.querySelectorAll('.decrease').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const qtyEl = btn.parentElement.querySelector('.quantity');
+        let qty = parseInt(qtyEl.textContent);
+        if (qty > 0) {
+          qty--;
+          qtyEl.textContent = qty;
+          updateTotal();
+        }
+      });
+    });
 
+    updateTotal(); // Gọi ban đầu
+  </script>
 </div>
-

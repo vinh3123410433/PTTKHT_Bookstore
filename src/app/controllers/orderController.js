@@ -6,11 +6,11 @@ const handleCheckout = async (req, res, next) => {
     const userId = req.session.user_id;
 
     if (!userId) {
-        return res.redirect('/account?error=' + encodeURIComponent('Bạn chưa đăng nhập'));
+        return res.redirect('user/account?error=' + encodeURIComponent('Bạn chưa đăng nhập'));
     }
 
     if (!idSanPham || !soluong || !tongTien) {
-        return res.redirect('/cart?error=' + encodeURIComponent('Thiếu thông tin thanh toán'));
+        return res.redirect('cart/cart?error=' + encodeURIComponent('Thiếu thông tin thanh toán'));
     }
 
     try {
@@ -38,7 +38,7 @@ const handleCheckout = async (req, res, next) => {
         res.redirect('/success?message=' + encodeURIComponent('Đặt hàng thành công!'));
     } catch (error) {
         console.error('Lỗi thanh toán:', error);
-        res.redirect('/errorPage?error=' + encodeURIComponent('Lỗi khi xử lý thanh toán'));
+        res.redirect('user/errorPage?error=' + encodeURIComponent('Lỗi khi xử lý thanh toán'));
     }
 };
 

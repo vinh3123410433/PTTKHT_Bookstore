@@ -11,11 +11,11 @@ function route(app) {
     app.use('/products', productsRouter)
     app.use('/category',categoryRouter)
     app.use('/user',userRouter)
-    app.use('/', siteRouter)
-    
-    app.use('/',homeRouter)
-    
     app.use('/cart',cartRouter)
+    app.use('/', siteRouter)
+
+    
+    
 }
 
 module.exports = route

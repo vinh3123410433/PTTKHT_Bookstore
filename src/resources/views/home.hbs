@@ -82,7 +82,13 @@
             <img src="{{this.Anh}}" alt="Sách" />
             <div class="product-icons">
               <span class="icon">🔍</span>
-              <span class="icon">🛒</span>
+              <form method="POST" action="/cart/addToCart" style="display: inline;">
+                <input type="hidden" name="productId" value="{{this.SanPhamID}}">
+                <button type="submit" style="background: none; border: none; cursor: pointer;">
+                  <span class="icon">🛒</span>
+                </button>
+              </form>
+
             </div>
           </div>
           <div class="product-info">

@@ -4,7 +4,7 @@ const categoryModel = require('../model/categoryModel')
 const getAllBooks = async (categoryId = null) => {
     try {
         let query = `
-            SELECT sp.SanPhamID, sp.TenSanPham, sp.ID_NXB, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
+            SELECT sp.SanPhamID, sp.SanPhamID, sp.TenSanPham, sp.ID_NXB, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
                    GROUP_CONCAT(DISTINCT tg.TenTacGia SEPARATOR ', ') AS TacGia,
                    dm.DanhMucID,
                    dm.TenDanhMuc,

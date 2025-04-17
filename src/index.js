@@ -1,8 +1,7 @@
 const path = require("path");
 const express = require("express");
 const app = express();
-const hbs = require("express-handlebars");
-const port = 3000; // Gộp về 1 cổng chính
+const port = 3000;
 
 // Cấu hình và routes
 const configViewEngine = require("./config/viewEngine");
@@ -58,7 +57,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Session và View Engine Config
+// Cấu hình View Engine và Session
 configViewEngine(app);
 configSession(app);
 

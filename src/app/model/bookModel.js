@@ -40,14 +40,12 @@ const getAllBooks = async (
 
     const params = [];
 
-    // ✅ Lọc theo danh sách danh mục
     if (filters.categoryIDs && filters.categoryIDs.length > 0) {
       const placeholders = filters.categoryIDs.map(() => "?").join(",");
       query += ` AND dm.DanhMucID IN (${placeholders})`;
       params.push(...filters.categoryIDs);
     }
 
-    // ✅ Lọc theo giá (min và max)
     if (filters.minPrice) {
       query += ` AND sp.Gia >= ?`;
       params.push(filters.minPrice);

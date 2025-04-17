@@ -3,14 +3,11 @@ const express = require("express");
 const hbs = require("express-handlebars");
 
 let configViewEngine = (app) => {
-  // Thiết lập thư mục views và view engine
   app.set("views", path.join(__dirname, "../resources/views"));
   app.set("view engine", "hbs");
 
-  // Đường dẫn static phải đúng theo vị trí thật sự của thư mục public
   app.use(express.static(path.join(__dirname, "../public")));
 
-  // Cấu hình handlebars với helpers đầy đủ
   app.engine(
     "hbs",
     hbs.engine({
@@ -31,7 +28,7 @@ let configViewEngine = (app) => {
           let result = "";
           if (typeof options.fn === "function") {
             for (let i = start; i <= end; i++) {
-              result += options.fn(i); // Gọi options.fn(i) nếu options.fn là một hàm
+              result += options.fn(i);
             }
           }
           return result;

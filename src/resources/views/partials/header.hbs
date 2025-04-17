@@ -1,29 +1,49 @@
-<style>
-
-</style>
-
 <div class="search-bar-wrapper">
   <nav class="navbar navbar-expand-lg navbar-light hd-color">
     <div class="container-fluid">
       <div class="row align-items-center col-12 navbar-icon">
         <div class="col-2">
-          <a class="navbar-brand" href="#"><img src="/img/logo.jpg" alt=""></a>
+          <a class="navbar-brand" href="#"><img
+              src="/img/logo.jpg"
+              alt=""
+            /></a>
         </div>
         <div class="col-7">
           <form class="search-form" action="/search" method="GET">
-            <input class="form-control search-input" name="q" type="search" placeholder="Tìm kiếm sản phẩm..." />
+            <input
+              class="form-control search-input"
+              name="q"
+              type="search"
+              placeholder="Tìm kiếm sản phẩm..."
+            />
             <button class="btn search-button" type="submit">Tìm kiếm</button>
           </form>
         </div>
         <div class="col-3 text-end">
-          <a href="">Đăng ký</a>
-          <a href="">Đăng nhập</a>
+          <div class="dropdown" style="position: relative;">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Tài khoản
+            </button>
+            <ul
+              class="dropdown-menu menu-tk"
+              aria-labelledby="dropdownMenuButton1"
+            >
+              <li><a class="dropdown-item" href="#">Đăng ký</a></li>
+              <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+
+            </ul>
+          </div>
         </div>
       </div>
     </div>
   </nav>
 </div>
-
 
 <div class="menu-bar-wrapper">
   <nav class="navbar navbar-expand-lg navbar-light">
@@ -35,15 +55,29 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 hd-color">
           <li class="nav-item"><a class="nav-link active" href="#">Trang chủ</a></li>
           <li class="nav-item dropdown hd-color d-none d-lg-block">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">Danh mục sách</a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Danh mục sách
+            </a>
+            <ul
+              class="dropdown-menu custom-dropdown"
+              aria-labelledby="navbarDropdown"
+            >
               {{#each categories}}
-              <li><a class="dropdown-item" href="/category/{{this.DanhMucID}}">{{this.TenDanhMuc}}</a></li>
+                <li><a
+                    class="dropdown-item"
+                    href="/category/{{this.DanhMucID}}"
+                  >{{this.TenDanhMuc}}</a></li>
               {{/each}}
             </ul>
           </li>
-          <li class="nav-item"><a class="nav-link" href="/category">Sản phẩm</a></li>
+          <li class="nav-item"><a class="nav-link" href="/category/">Sản phẩm</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Giới thiệu</a></li>
         </ul>
       </div>

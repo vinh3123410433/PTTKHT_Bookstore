@@ -1,101 +1,94 @@
-const priceSlider = document.getElementById("priceRange");
-const priceValue = document.getElementById("priceValue");
-const categoryInput = document.getElementById("categorySearch");
-const categoryList = document.getElementById("categoryList");
-const filterBtn = document.getElementById("filterBtn");
+// public/js/site.js
 
-// Cập nhật giá khi kéo slider
-priceSlider.addEventListener("input", function () {
-  priceValue.innerText = Number(this.value).toLocaleString("vi-VN");
-});
+document.addEventListener("DOMContentLoaded", function () {
+  // Đổi giá đơn chiếc khi kéo slider (nếu có)
+  const priceSlider = document.getElementById("priceRange");
+  const priceValue = document.getElementById("priceValue");
+  if (priceSlider && priceValue) {
+    priceSlider.addEventListener("input", function () {
+      priceValue.innerText = Number(this.value).toLocaleString("vi-VN");
+    });
+  }
 
-// Debounce tìm kiếm danh mục
-let debounceTimer;
-categoryInput.addEventListener("input", function () {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(() => {
-    const keyword = this.value.toLowerCase();
-    const items = categoryList.querySelectorAll("li");
-    let visibleCount = 0;
+  // Tìm kiếm danh mục có debounce
+  const categoryInput = document.getElementById("categorySearch");
+  const categoryList = document.getElementById("categoryList");
+  const toggleBtn = document.createElement("button");
+  let debounceTimer, expanded = false;
 
-    items.forEach((item) => {
-      const text = item.textContent.toLowerCase();
-      const match = text.includes(keyword);
-      item.style.display = match ? "block" : "none";
-      if (match) visibleCount++;
+  if (categoryInput && categoryList) {
+    categoryInput.addEventListener("input", function () {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const keyword = this.value.toLowerCase();
+        const items = categoryList.querySelectorAll("li");
+        let visibleCount = 0;
+        items.forEach((item) => {
+          const text = item.textContent.toLowerCase();
+          const match = text.includes(keyword);
+          item.style.display = match ? "block" : "none";
+          if (match) visibleCount++;
+        });
+        toggleBtn.style.display = visibleCount > 5 ? "inline-block" : "none";
+      }, 400);
     });
 
-    if (visibleCount > 5) {
+    // Nút xem thêm / thu gọn
+    toggleBtn.id = "toggleCategories";
+    toggleBtn.className = "btn btn-sm btn-outline-primary mt-2";
+    toggleBtn.innerText = "Xem thêm";
+    toggleBtn.addEventListener("click", () => {
+      expanded = !expanded;
+      const items = categoryList.querySelectorAll("li");
+      items.forEach((item, index) => {
+        item.style.display = expanded || index < 5 ? "block" : "none";
+      });
+      toggleBtn.innerText = expanded ? "Thu gọn" : "Xem thêm";
+    });
+    categoryList.insertAdjacentElement("afterend", toggleBtn);
+
+    const items = categoryList.querySelectorAll("li");
+    if (items.length > 5) {
+      items.forEach((item, index) => {
+        item.style.display = index < 5 ? "block" : "none";
+      });
       toggleBtn.style.display = "inline-block";
     } else {
       toggleBtn.style.display = "none";
     }
-  }, 400);
-});
-
-// Toggle "Xem thêm" danh mục
-let expanded = false;
-function toggleCategoryItems() {
-  const items = categoryList.querySelectorAll("li");
-  items.forEach((item, index) => {
-    item.style.display = expanded || index < 5 ? "block" : "none";
-  });
-  toggleBtn.innerText = expanded ? "Thu gọn" : "Xem thêm";
-}
-
-// Tạo nút "Xem thêm" và thêm sau danh sách
-const toggleBtn = document.createElement("button");
-toggleBtn.id = "toggleCategories";
-toggleBtn.className = "btn btn-sm btn-outline-primary mt-2";
-toggleBtn.innerText = "Xem thêm";
-toggleBtn.addEventListener("click", () => {
-  expanded = !expanded;
-  toggleCategoryItems();
-});
-categoryList.insertAdjacentElement("afterend", toggleBtn);
-
-// Ẩn danh mục dư khi tải lần đầu
-window.addEventListener("DOMContentLoaded", () => {
-  const items = categoryList.querySelectorAll("li");
-  if (items.length > 5) {
-    toggleCategoryItems(); // ẩn nếu dư
-  } else {
-    toggleBtn.style.display = "none";
-  }
-});
-
-// Xử lý nút lọc sản phẩm
-filterBtn.addEventListener("click", () => {
-  const maxPrice = priceSlider.value;
-  const selectedCategories = Array.from(
-    document.querySelectorAll('#categoryList input[type="checkbox"]:checked')
-  ).map((cb) => cb.dataset.id);
-
-  const params = new URLSearchParams(window.location.search);
-
-  // Nếu có từ khóa q trong input ẩn
-  const keywordInput = document.querySelector('input[name="q"]');
-  if (keywordInput && keywordInput.value.trim()) {
-    params.set("q", keywordInput.value.trim());
   }
 
-  // Cập nhật maxPrice và categories
-  params.set("maxPrice", maxPrice);
-  params.delete("categories");
-  selectedCategories.forEach((id) => params.append("categories", id));
-
-  // Reset page về 1 khi lọc
-  params.delete("page");
-
-  // Xác định URL gốc
-  const path = window.location.pathname;
-  let basePath = "/search";
-
-  const categoryMatch = path.match(/^\/category\/(\d+)/);
-  if (categoryMatch) {
-    basePath = `/category/${categoryMatch[1]}`;
+  // Sự kiện nút lọc sản phẩm
+  const filterBtn = document.getElementById("filterBtn");
+  if (filterBtn) {
+    filterBtn.addEventListener("click", () => {
+      const minPrice = document.getElementById("minPrice").value;
+      const maxPrice = document.getElementById("maxPrice").value;
+      const selectedCategories = Array.from(
+        document.querySelectorAll('#categoryList input[type="checkbox"]:checked')
+      ).map((cb) => cb.dataset.id);
+  
+      const params = new URLSearchParams(window.location.search);
+      const keywordInput = document.querySelector('input[name="q"]');
+      if (keywordInput && keywordInput.value.trim()) {
+        params.set("q", keywordInput.value.trim());
+      }
+  
+      params.set("minPrice", minPrice);
+      params.set("maxPrice", maxPrice);
+      params.delete("categories");
+      selectedCategories.forEach((id) => params.append("categories", id));
+      params.delete("page");
+  
+      // 👉 Cập nhật phần xử lý basePath
+      const path = window.location.pathname;
+      let basePath = "/search";
+      if (path.startsWith("/category")) {
+        basePath = path; // Giữ nguyên URL category, kể cả khi không có ID
+      }
+  
+      window.location.href = `${basePath}?${params.toString()}`;
+    });
   }
-
-  // Điều hướng với URL đã build
-  window.location.href = `${basePath}?${params.toString()}`;
+  
 });

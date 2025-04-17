@@ -2,7 +2,7 @@ const path = require('path');
 const express = require('express');
 const app = express();
 const hbs = require('express-handlebars');
-const port = 3001;
+const port = 3000;
 
 const route = require('./routes');
 const configViewEngine = require('./config/viewEngine');
@@ -53,7 +53,9 @@ app.engine(
                     array = [array];
                 }
                 return array.includes(value.toString()) || array.includes(Number(value));
-            }
+            },  or: function (a, b) {
+                return a || b;
+              }
         }
     })
 );

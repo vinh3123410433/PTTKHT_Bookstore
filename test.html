@@ -1,0 +1,77 @@
+<!-- filepath: c:\xampp\htdocs\Web\Book_store\user2\PTTKHT_Bookstore\test.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test Price Slider</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      #priceSlider {
+        margin: 50px auto;
+        width: 80%;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Price Range Slider</h2>
+      <!-- Slider container -->
+      <div id="priceSlider"></div>
+      <p class="mt-2">
+        Giá từ: <strong><span id="minPriceValue">0</span></strong> VND -
+        <strong><span id="maxPriceValue">500,000</span></strong> VND
+      </p>
+      <!-- Input ẩn lưu giá trị -->
+      <input type="hidden" id="minPrice" value="0" />
+      <input type="hidden" id="maxPrice" value="500000" />
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var slider = document.getElementById("priceSlider"),
+          minPriceInput = document.getElementById("minPrice"),
+          maxPriceInput = document.getElementById("maxPrice"),
+          minPriceValue = document.getElementById("minPriceValue"),
+          maxPriceValue = document.getElementById("maxPriceValue");
+
+        noUiSlider.create(slider, {
+          start: [0, 500000],
+          connect: true,
+          range: {
+            min: 0,
+            max: 1000000,
+          },
+          step: 10000,
+          format: {
+            to: function (value) {
+              return Math.round(value);
+            },
+            from: function (value) {
+              return Number(value);
+            },
+          },
+        });
+
+        slider.noUiSlider.on("update", function (values, handle) {
+          if (handle === 0) {
+            minPriceInput.value = values[0];
+            minPriceValue.innerText = Number(values[0]).toLocaleString("vi-VN");
+          } else {
+            maxPriceInput.value = values[1];
+            maxPriceValue.innerText = Number(values[1]).toLocaleString("vi-VN");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+`````

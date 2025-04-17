@@ -1,5 +1,26 @@
+<style>
+  /* Ẩn spinner trong input number */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  /* Xóa viền focus ở nút + - */
+  .custom-quantity-group .btn:focus {
+    box-shadow: none;
+    outline: none;
+  }
+</style>
+
+
+
 <div class="custom-container mt-5">
-  <div class="row">
+  <div class="row container-fluid px-5">
     <!-- Hình ảnh sản phẩm bên trái -->
     <div class="col-lg-6">
       <div class="custom-image-wrapper sticky-top" style="top: 100px;">
@@ -196,12 +217,27 @@
     }
   }
 
-  function changeQuantity(change) {
-    const input = document.getElementById('customQuantity');
-    let value = parseInt(input.value);
-    value = isNaN(value) ? 1 : value + change;
-    input.value = Math.max(1, value);
+const maxStock = {{productDetail.SoLuongTon}}; // Render từ server
+
+function changeQuantity(change) {
+  const input = document.getElementById('customQuantity');
+  let value = parseInt(input.value);
+  value = isNaN(value) ? 1 : value + change;
+
+  // Nếu tăng nhưng đã đạt max, thì không thay đổi
+  if (change > 0 && value > maxStock) {
+    value = maxStock;
   }
+
+  // Nếu giảm nhưng nhỏ hơn 1 thì giữ là 1
+  if (change < 0 && value < 1) {
+    value = 1;
+  }
+
+  input.value = value;
+}
+
+
 </script>
 
 <script

@@ -17,6 +17,8 @@ const paginate = (totalItems, currentPage, perPage) => {
 // Hàm lấy danh sách sách (có hoặc không có phân trang)
 const getAllBooks = async (categoryId = null, offset = null, perPage = null, filters = {}) => {
     try {
+        console.log("Lọc theo danh mục:", filters);
+  
         let query = `
             SELECT 
                 sp.SanPhamID, sp.TenSanPham, sp.ID_NXB, sp.MoTa, sp.Gia, sp.SoLuongTon, sp.SoTrang,
@@ -34,12 +36,6 @@ const getAllBooks = async (categoryId = null, offset = null, perPage = null, fil
 
         const params = [];
 
-        // ❌ Bỏ dòng này (đã gộp categoryId vào filters.categoryIDs rồi)
-        // if (categoryId) {
-        //     query += ` AND dm.DanhMucID = ?`;
-        //     params.push(categoryId);
-        // }
-
         // ✅ Lọc theo danh sách danh mục
         if (filters.categoryIDs && filters.categoryIDs.length > 0) {
             const placeholders = filters.categoryIDs.map(() => '?').join(',');
@@ -47,7 +43,11 @@ const getAllBooks = async (categoryId = null, offset = null, perPage = null, fil
             params.push(...filters.categoryIDs);
         }
 
-        // ✅ Lọc theo giá
+        // ✅ Lọc theo giá (min và max)
+        if (filters.minPrice) {
+            query += ` AND sp.Gia >= ?`;
+            params.push(filters.minPrice);
+        }
         if (filters.maxPrice) {
             query += ` AND sp.Gia <= ?`;
             params.push(filters.maxPrice);
@@ -100,6 +100,8 @@ const getProductDetail = async (id = null) => {
         TenTacGia, 
         Gia, 
         TenNXB,
+        SoLuongTon,
+        SoTrang,
         GROUP_CONCAT(DISTINCT CONCAT(danhmuc.DanhMucID, ':', danhmuc.TenDanhMuc)) AS DanhMucInfo
       FROM sanpham
       JOIN sp_tg ON sanpham.SanPhamID = sp_tg.SanPhamID

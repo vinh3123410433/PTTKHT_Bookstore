@@ -1,20 +1,4 @@
 @charset "UTF-8";
-body {
-  font-family: "Montserrat", sans-serif;
-  color: var(--text-dark);
-  background-color: #a3d8f4;
-}
-
-h1 {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-button,
-.navbar {
-  font-family: "Poppins", sans-serif;
-}
 
 :root {
   /* 🌟 Màu chính (Dùng cho header, tiêu đề quan trọng) */
@@ -44,14 +28,26 @@ button,
 
 /* ==== TOÀN TRANG ==== */
 body {
-  background-color: #EADDF0; /* Tím pastel nhạt */
   font-family: "Poppins", sans-serif;
+  background-color: #eaddf0; /* Tím pastel nhạt */
   color: #333;
+}
+
+/* ==== TIÊU ĐỀ ==== */
+h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+button,
+.navbar {
+  font-family: "Poppins", sans-serif;
 }
 
 /* ==== HEADER ==== */
 header {
-  background: linear-gradient(to right, #f9c5d1, #a3d8f4); /* Hồng - Xanh pastel */
+  background: linear-gradient(to right, #f9c5d1, #a3d8f4);
   text-align: center;
   color: white;
   font-weight: bold;
@@ -60,6 +56,10 @@ header {
 
 /* ==== LOGO NAVBAR ==== */
 .navbar-icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   color: white !important;
 }
 
@@ -76,7 +76,7 @@ header {
   transform: scale(1.1);
 }
 
-/* ==== THANH TÌM KIẾM ==== */
+/* ==== TÌM KIẾM ==== */
 .navbar-collapse form {
   background-color: #ffffff !important;
   padding: 5px 10% 3px 5%;
@@ -86,7 +86,7 @@ header {
   height: 45px;
   display: flex;
   align-items: center;
-  border: 2px solid #f48fb1; /* viền hồng nhạt */
+  border: 2px solid #f48fb1;
   border-radius: 25px;
   overflow: hidden;
   padding: 5px;
@@ -117,23 +117,42 @@ header {
   background-color: #a3d8f4;
 }
 
-/* ==== DROPDOWN MENU DANH MỤC ==== */
-.dropdown-menu {
+/* ==== MENU DROPDOWN DANH MỤC ==== */
+.custom-dropdown {
   column-count: 3;
   column-gap: 20px;
   width: 600px;
-  background-color: #fff0f6; /* nền hồng siêu nhạt */
+  background-color: #fff0f6;
   border-radius: 10px;
   border: 1px solid #f8bbd0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover đẹp đẹp cái danh mục */
-.nav-item.dropdown:hover .dropdown-menu {
+.nav-item.dropdown:hover .custom-dropdown {
   display: block;
   animation: fadeIn 0.6s ease-in-out;
 }
 
+.custom-dropdown li a {
+  padding: 8px 12px;
+  transition: background-color 0.2s ease;
+  border-radius: 6px;
+}
+
+.custom-dropdown li a:hover {
+  background-color: var(--blue-color);
+  color: #333;
+}
+
+.menu-tk {
+  position: absolute;
+  right: 0;
+}
+
+.dropdownMenuButton1 .dropdown-item {
+  padding-right: 0;
+  width: 100px;
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -144,6 +163,7 @@ header {
     transform: translateY(0);
   }
 }
+
 /* ==== MENU MOBILE SIDEBAR ==== */
 .sidebar {
   position: fixed;
@@ -153,7 +173,7 @@ header {
   height: 100%;
   background: white;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-  transition: left 0.3s ease-in-out;
+  transition: left 0.4s ease-in-out;
   padding: 20px;
   z-index: 1000;
   border-right: 5px solid #f8bbd0;
@@ -201,6 +221,23 @@ header {
   transform: translateY(-100%);
 }
 
-/* ==== RESPONSIVE (tuỳ chọn bật lại nếu cần) ==== */
+/* ==== RESPONSIVE ==== */
+@media screen and (max-width: 768px) {
+  .navbar .dropdown-toggle span {
+    display: none;
+  }
 
-/*# sourceMappingURL=layout.css.map */
+  .search-form {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .search-input {
+    border-radius: 25px;
+  }
+
+  .search-button {
+    width: 100%;
+    border-radius: 25px;
+  }
+}

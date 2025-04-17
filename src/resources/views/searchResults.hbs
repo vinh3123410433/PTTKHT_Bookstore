@@ -1,28 +1,74 @@
-<h2>Kết quả tìm kiếm cho: "{{keyword}}"</h2>
+
+<!-- Nhúng noUiSlider CSS & JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="/css/slider.css">
+<style>
+.search-heading {
+  padding: 20px 0;
+  background: linear-gradient(135deg, #e0f7fa, #f3e5f5, #fce4ec);
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  color: #4a4a4a;
+  animation: fadeIn 0.6s ease;
+}
+
+.search-heading h2 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.search-heading .search-keyword {
+  color: #ba68c8; /* tím pastel nổi bật */
+  font-weight: 700;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+</style>
+
+<div class="container-fluid mt-4 search-heading">
+  <h2>Kết quả tìm kiếm cho: "<span class="search-keyword">{{keyword}}</span>"</h2>
+</div>
 
 <div class="container-fluid mt-4">
   <div class="row">
     <!-- Sidebar Danh Mục -->
     <div class="col-md-3">
       <div class="category-sidebar p-3 rounded" style="background-color: #fdf0f6;">
-        <!-- Khoảng giá -->
-        <div class="price-range mb-4">
-          <h4 class="fw-bold text-primary">Khoảng Giá Sách</h4>
-          <input
-            type="range"
-            id="priceRange"
-            min="0"
-            max="1000000"
-            step="10000"
-            value="{{query.maxPrice}}"
-            class="form-range"
-            style="accent-color: #f28ab2;"
-          />
-          <p class="mt-2">
-            Giá tối đa:
-            <strong><span id="priceValue">{{formatNumber query.maxPrice}}</span></strong> VND
-          </p>
-        </div>
+<div class="price-range mb-4">
+  <h4 class="fw-bold text-primary">Khoảng Giá Sách</h4>
+  
+  <!-- Container cho slider đôi -->
+  <div id="priceSlider" style="height:50px;"></div>
+  
+  <p class="mt-2">
+    Giá từ: <strong><span id="minPriceValue">
+      {{#if query.minPrice}}
+        {{formatNumber query.minPrice}}
+      {{else}}
+        0
+      {{/if}}
+    </span></strong> VND đến 
+    <strong><span id="maxPriceValue">
+      {{#if query.maxPrice}}
+        {{formatNumber query.maxPrice}}
+      {{else}}
+        {{formatNumber 500000}}
+      {{/if}}
+    </span></strong> VND
+  </p>
+  
+  <!-- Các input ẩn lưu giá trị slider -->
+  <input type="hidden" name="minPrice" id="minPrice" value="{{#if query.minPrice}}{{query.minPrice}}{{else}}0{{/if}}">
+  <input type="hidden" name="maxPrice" id="maxPrice" value="{{#if query.maxPrice}}{{query.maxPrice}}{{else}}500000{{/if}}">
+</div>
 
         <!-- Danh mục -->
         <div class="category-filter">
@@ -122,3 +168,40 @@
     </div>
   </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var slider = document.getElementById('priceSlider');
+    if (slider) {
+      var minQuery = {{#if query.minPrice}}{{query.minPrice}}{{else}}0{{/if}};
+      var maxQuery = {{#if query.maxPrice}}{{query.maxPrice}}{{else}}500000{{/if}};
+      noUiSlider.create(slider, {
+        start: [minQuery, maxQuery],
+        connect: true,
+        range: {
+          min: 0,
+          max: 1000000
+        },
+        step: 10000,
+        format: {
+          to: value => Math.round(value),
+          from: value => Number(value)
+        }
+      });
+
+      const minPriceInput = document.getElementById('minPrice');
+      const maxPriceInput = document.getElementById('maxPrice');
+      const minPriceValue = document.getElementById('minPriceValue');
+      const maxPriceValue = document.getElementById('maxPriceValue');
+
+      slider.noUiSlider.on('update', function(values, handle) {
+        if (handle === 0) {
+          minPriceInput.value = values[0];
+          minPriceValue.innerText = Number(values[0]).toLocaleString('vi-VN');
+        } else {
+          maxPriceInput.value = values[1];
+          maxPriceValue.innerText = Number(values[1]).toLocaleString('vi-VN');
+        }
+      });
+    }
+  });
+</script>

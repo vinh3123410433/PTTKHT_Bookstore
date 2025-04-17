@@ -13,14 +13,14 @@ const getUserById = async (id) => {
     return rows[0];
 };
 
-const updateUserInfo = async (userId, { fullName , phone, dob }) => {
+const updateUserInfo = async (ID_KH, { TenKH , SDT, NgaySinh }) => {
     const query = `UPDATE KhachHang SET NgaySinh = ?, TenKH = ?, SDT = ? WHERE ID_KH = ?`;
-    await database.query(query, [dob, fullName , phone, userId]);
+    await database.query(query, [ NgaySinh, TenKH , SDT, ID_KH]);
 };
 
-const updateUserInfoNoPhone = async (userId, { fullName, dob }) => {
+const updateUserInfoNoPhone = async (ID_KH, { TenKH,  NgaySinh }) => {
     const query = `UPDATE KhachHang SET NgaySinh = ?, TenKH = ? WHERE ID_KH = ?`;
-    await database.query(query, [dob, fullName , userId]);
+    await database.query(query, [ NgaySinh, TenKH , ID_KH]);
 };
 const findUserByPhone = async (phone) => {
     const [rows] = await database.query('SELECT * FROM KhachHang WHERE SDT = ?', [phone]);

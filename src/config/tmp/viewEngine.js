@@ -1,15 +1,24 @@
+// src/config/configViewEngine.js
+const expressHandlebars = require('express-handlebars');
+const path = require('path');
+const helpers= require
 
-const handlebars=require('express-handlebars')
-const path=require('path')
-const configViewEngine=(app)=>{
-
-    app.set('views',path.join("./src",'resources/views'))
-    app.set('view engine','hbs')
-
-    app.engine('hbs',handlebars.engine({
-        extname:'.hbs'
+const configViewEngine = (app) => {
+  const hbs = expressHandlebars.create({
+    extname: '.hbs',
+    defaultLayout: false,
+    helpers: {
+      eq: (a, b) => a === b,
+      or: (...args) => {
+        args.pop();
+        return args.some(Boolean);
+      }
     }
-    
-))}
+  });
 
-module.exports=configViewEngine
+  app.engine('hbs', hbs.engine);          
+  app.set('view engine', 'hbs');          
+  app.set('views', path.join(__dirname, '../resources/views'));  // ✅ ĐÚNG đường dẫn
+};
+
+module.exports = configViewEngine;

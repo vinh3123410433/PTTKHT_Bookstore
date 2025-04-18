@@ -24,6 +24,7 @@ const renderAccountPage = async (req, res, next) => {
             yearOfBirth,
             user: data[0],
             session: req.session
+            
         });
     } catch (err) {
         console.error("Lỗi tại renderAccountPage:", err);
@@ -102,7 +103,6 @@ const login = async (req, res, next) => {
         if (user.MatKhau !== user_password) {
             return res.redirect('/user/account?error=incorrect_password');
         }
-        console.log("passsssssssssssssssssssssssssssssssssssssssssssssssss "+user.MatKhau)
         
         req.session.user_id = user.ID_KH;
         res.redirect('/');
@@ -125,7 +125,7 @@ const changePasswordUser = async (req, res, next) => {
     try {
         
         const user = await UserModel.findUserByIdAndPassword(req.session.user_id, user_old_password);
-        const query= `SELECT * FROM KhachHang WHERE ID_KH = 1`;
+
 
         if (!user) {
             return res.redirect('/user/account?error=' + encodeURIComponent('Mật khẩu cũ không đúng'));

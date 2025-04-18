@@ -125,7 +125,7 @@ CREATE TABLE HoaDonXuat (
     NgayXuat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Thue DECIMAL(10,2),
     TongTien DECIMAL(10,2),
-    TinhTrangThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán', 'Đã hoàn tiền', 'Chưa hoàn tiền'),
+    TinhTrangThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán','Đã hoàn tiền', 'Chưa hoàn tiền'),
 
     FOREIGN KEY (ID_KH) REFERENCES KhachHang(ID_KH),
     FOREIGN KEY (IDNhanVien) REFERENCES NhanVien(IDNhanVien),
@@ -701,3 +701,31 @@ SET SESSION sql_mode = '';
 ALTER TABLE DiaChi_KH MODIFY COLUMN TinhThanhPho VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 SET SESSION sql_mode = REPLACE(@@sql_mode, 'STRICT_TRANS_TABLES', '');
 ALTER TABLE HoaDonXuat CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE HoaDonXuat
+MODIFY COLUMN TinhTrangThanhToan 
+ENUM('Đa thanh toan', 'Chua thanh toan', 'Da hoan tien', 'Chua hoan tien')
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+ALTER TABLE HoaDonXuat
+MODIFY COLUMN PhuongThucThanhToan 
+ENUM('Tien mat', 'Chuyen khoan', 'Credit card')
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+UPDATE HoaDonXuat
+SET PhuongThucThanhToan = 
+  CASE
+    WHEN PhuongThucThanhToan = 'Tiền mặt' THEN 'Tien mat'
+    WHEN PhuongThucThanhToan = 'Chuyển khoản' THEN 'Chuyen khoan'
+    ELSE PhuongThucThanhToan
+  END;
+
+UPDATE HoaDonXuat
+SET PhuongThucThanhToan = 'Tien mat'
+WHERE IDHoaDonXuat IN (1, 2, 4, 5, 7, 8);
+
+UPDATE HoaDonXuat
+SET PhuongThucThanhToan = 'Chuyen khoan'
+WHERE IDHoaDonXuat IN (10, 11, 13, 14, 16, 17,20,19);
+
+

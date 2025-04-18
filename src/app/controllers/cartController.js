@@ -96,7 +96,8 @@ const afterpayment = async (req, res) => {
       const cart = req.session.cartCheckout;
       const total = parseFloat(req.session.cartTotal);
       const userId = req.session.user_id;
-  
+      console.log('cart:', JSON.stringify(cart, null, 2));
+
       if (!cart || cart.length === 0) {
         return res.redirect('/cart');
       }
@@ -125,16 +126,17 @@ const afterpayment = async (req, res) => {
       });
   
 
-      let tinhtrangthanhtoan = 'Chưa thanh toán';
-      if (payment === 'Chuyển khoản' || payment === 'Credit card') {
-        tinhtrangthanhtoan = 'Đã thanh toán';
+      let tinhtrangthanhtoan = 'Chua thanh toan';
+      if (payment === 'Chuyen khoan' || payment === 'Credit card') {
+        tinhtrangthanhtoan = 'Da thanh toan';
       }
-      const validStatuses = ['Đã thanh toán', 'Chưa thanh toán', 'Đã hoàn tiền', 'Chưa hoàn tiền'];
+      const validStatuses = ['Da thanh toan', 'Chua thanh toan', 'Đa hoan tien', 'Chua hoan tien'];
     if (!validStatuses.includes(tinhtrangthanhtoan)) {
-    throw new Error('Giá trị TinhTrangThanhToan không hợp lệ.');
-}
+    throw new Error('Giá trị TinhTrangThanhToan không hợp lệ.');  
+    }
 
       console.log(tinhtrangthanhtoan)
+      console.log("payment: "+ payment)
 
     //   const validPayments = ['Tiền mặt', 'Chuyển khoản', 'Credit card'];
     //   if (!validPayments.includes(tinhtrangthanhtoan)) {
@@ -150,14 +152,14 @@ const afterpayment = async (req, res) => {
       });
 
       console.log("✅ Đã tạo hoá đơn:", hoaDonId);
-  
-      // TODO: Thêm chi tiết sản phẩm vào bảng ChiTietHoaDon nếu cần
-  
-      // Xóa session sau khi lưu
+      for (const item of cart) {
+        await CartModel.xoaSanPhamTrongGio(userId, item.SanPhamID);
+      }
       req.session.cartCheckout = null;
       req.session.cartTotal = 0;
   
-      res.redirect('/cart/confirm'); // Chuyển đến trang cảm ơn
+      res.redirect('/cart/confirm'); 
+      //
   
     } catch (error) {
       console.error("❌ Lỗi khi lưu hoá đơn:", error);

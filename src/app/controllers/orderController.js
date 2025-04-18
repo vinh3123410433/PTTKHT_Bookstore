@@ -1,6 +1,22 @@
 
 const OrderModel = require('../model/orderModel');
 
+const huyDonHang = async (req, res) => {
+    const { IDHoaDonXuat } = req.body;
+    const ID_KH=req.session.user_id;
+    try {
+        console.log("👉 Đã vào controller huyDonHang");
+        console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
+        console.log("👉 ID_KH:", ID_KH);
+        
+      await OrderModel.cancelOrder(IDHoaDonXuat);
+      res.redirect('/lichsudonhang'); // hoặc trang bạn muốn
+    } catch (error) {
+      console.error('Lỗi khi hủy đơn hàng:', error);
+      res.redirect('/user/errorPage?error=' + encodeURIComponent('Hủy đơn hàng thất bại.'));
+    }
+  };
+
 const handleCheckout = async (req, res, next) => {
     const { idSanPham, soluong, tongTien } = req.body;
     const userId = req.session.user_id;
@@ -30,10 +46,6 @@ const handleCheckout = async (req, res, next) => {
                 soLuong: parseInt(soluong)
             });
         }
-        
-
-        // const orderId = await OrderModel.createOrder(userId, tongTien);
-        // await OrderModel.addOrderDetails(orderId, items);
 
         res.redirect('/success?message=' + encodeURIComponent('Đặt hàng thành công!'));
     } catch (error) {
@@ -43,5 +55,6 @@ const handleCheckout = async (req, res, next) => {
 };
 
 module.exports = {
-    handleCheckout
+    handleCheckout,
+    huyDonHang
 };

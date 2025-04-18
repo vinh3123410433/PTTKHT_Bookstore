@@ -31,6 +31,7 @@ const createHoaDonXuat = async ({
     return result.insertId; // trả về ID của hoá đơn mới
   };
 
+
 const  capNhatDiaChi= async ({
     ID_KH,
     TenNguoiNhan,
@@ -64,9 +65,28 @@ const  capNhatDiaChi= async ({
       throw error;
     }
   }
-
+  const cancelOrder = async (ID_HDX) => {
+  
+    const query = `
+      UPDATE GiaoHang
+      SET TinhTrangDon = 'Da huy'
+      WHERE ID_HDX = ?
+    `;
+  
+    try {
+      const [result] = await database.query(query, [ID_HDX]);
+      console.log("✅ Update result:", result);
+    } catch (err) {
+      console.error("❌ Lỗi trong cancelOrder:", err.message);
+      throw err; // để controller bắt lỗi tiếp
+    }
+  };
+  
+  
+  
   
 module.exports = {
     createHoaDonXuat,
-    capNhatDiaChi
+    capNhatDiaChi,
+    cancelOrder
 };

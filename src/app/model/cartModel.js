@@ -35,9 +35,24 @@ const themVaoGio = async (ID_KH, ID_SP) => {
       throw err;
     }
   };
-  
+
+
+  const xoaSanPhamTrongGio = async (ID_KH, ID_SP) => {
+    try {
+      await database.query(
+        `DELETE FROM GioHang WHERE ID_KH = ? AND ID_SP = ?`,
+        [ID_KH, ID_SP]
+      );
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Lỗi khi xóa sản phẩm khỏi giỏ hàng:', error);
+      throw error;
+    }
+  };
 
 module.exports = {
     getCartByUserId,
-    themVaoGio
+    themVaoGio,
+    xoaSanPhamTrongGio
+
 };

@@ -7,13 +7,14 @@ const configSession = require('./config/session')
 
 const route = require('./routes')
 
-
 configViewEngine(app)
 configSession(app)
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); 
 
+
+  
 route(app)
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

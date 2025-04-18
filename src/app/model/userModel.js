@@ -1,7 +1,7 @@
 const database=require('../../config/db')
 
-const getInforUser= async ()=>{
-    const [rows]= await database.query("select * from KhachHang")
+const getInforUser= async (id)=>{
+    const [rows]= await database.query("select * from KhachHang where ID_KH=?",[id])
     return rows
 }
 getResultFromQuery=async(query)=>{

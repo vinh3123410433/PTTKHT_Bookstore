@@ -2,19 +2,38 @@ const UserModel = require('../model/userModel');
 
 const renderAccountPage = async (req, res, next) => {
     try {
-        const data = await UserModel.getInforUser(req.session.user_id);
-        const fullName = data[0].TenKH || "";
-        const [firstName, ...rest] = fullName.split(" ");
-        const user_name = firstName;
-        const user_lastname = rest.join(" ");
-        const phone = data[0].SDT;
+        let user_name = "";
+        let user_lastname = "";
+        let dateOfBirth = "";
+        let monthOfBirth = "";
+        let yearOfBirth = "";
+        let user = {};
+        
+        if (req.session.user_id) {
+            const data = await UserModel.getInforUser(req.session.user_id);
 
-        let rawDate = data[0].NgaySinh;
-        if (rawDate instanceof Date) {
-            rawDate = rawDate.toISOString().split("T")[0]; // yyyy-mm-dd
+            if (data && data.length > 0) {
+                user = data[0];
+
+                const fullName = user.TenKH || "";
+                const nameParts = fullName.trim().split(" ");
+                user_name = nameParts[0] || "";
+                user_lastname = nameParts.slice(1).join(" ") || "";
+
+                let rawDate = user.NgaySinh;
+
+                if (rawDate instanceof Date) {
+                    rawDate = rawDate.toISOString().split("T")[0]; // yyyy-mm-dd
+                }
+
+                if (rawDate) {
+                    const [y, m, d] = rawDate.split("-");
+                    yearOfBirth = y;
+                    monthOfBirth = m;
+                    dateOfBirth = d;
+                }
+            }
         }
-
-        const [yearOfBirth, monthOfBirth, dateOfBirth] = rawDate.split("-");
 
         res.render('account', {
             user_name,
@@ -22,15 +41,15 @@ const renderAccountPage = async (req, res, next) => {
             dateOfBirth,
             monthOfBirth,
             yearOfBirth,
-            user: data[0],
+            user,
             session: req.session
-            
         });
     } catch (err) {
         console.error("Lỗi tại renderAccountPage:", err);
         next(err);
     }
 };
+
 
 const changeUserInfo = async (req, res, next) => {
     const { dateOfBirth, monthOfBirth, yearOfBirth, user_name, user_lastname, user_telephone } = req.body;

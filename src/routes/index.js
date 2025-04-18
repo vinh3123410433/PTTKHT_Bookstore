@@ -2,7 +2,7 @@
 const siteRouter = require('./site')
 const productsRouter = require('./products')
 const categoryRouter=require('./category')
-const homeRouter=require('./homeRouter')
+// const homeRouter=require('./homeRouter')
 const userRouter=require('./userRouter')
 const cartRouter=require('./cartRouter')
 const historyRouter=require('./historyRouter')

@@ -1,23 +1,50 @@
-const path = require('path')
-const express = require('express')
-const hbs = require('express-handlebars')
+const path = require("path");
+const express = require("express");
+const hbs = require("express-handlebars");
 
 let configViewEngine = (app) => {
-    app.set('views', path.join(__dirname, '/../resources/views')); // Đường dẫn đến thư mục views
-    app.set('view engine', 'hbs'); // Sử dụng .hbs làm view engine
-    app.use(express.static(path.join("./src","public")))
-    //template engine
-    app.engine('hbs', hbs.engine({
-        extname: '.hbs', // Đặt phần mở rộng là .hbs
-        layoutsDir: path.join(__dirname, '../resources/views/layouts'), // Thư mục chứa layouts
-        partialsDir: path.join(__dirname, '../resources/views/partials'), // Thư mục chứa partials
-        defaultLayout: 'main', // Layout mặc định
-        helpers: {
-            formatNumber: (number) => {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-            }
-        }
+  app.set("views", path.join(__dirname, "/../resources/views"));
+  app.set("view engine", "hbs");
+  app.use(express.static(path.join("./src", "public")));
 
-    }));
-}
-module.exports = configViewEngine
+  app.engine(
+    "hbs",
+    hbs.engine({
+      extname: ".hbs",
+      layoutsDir: path.join(__dirname, "../resources/views/layouts"),
+      partialsDir: path.join(__dirname, "../resources/views/partials"),
+      defaultLayout: "main",
+      helpers: {
+        formatNumber: (number) => {
+          const num = Number(number);
+          if (isNaN(num)) return "";
+          return num.toLocaleString("vi-VN") + "₫";
+        },
+        eq: (a, b) => a === b,
+        subtract: (a, b) => a - b,
+        add: (a, b) => a + b,
+        range: (start, end, options) => {
+          let result = "";
+          for (let i = start; i <= end; i++) {
+            result += options.fn ? options.fn(i) : i;
+          }
+          return result;
+        },
+        paginationURL: (page, options) => {
+          const query = { ...options.data.root.query, page };
+          const params = new URLSearchParams(query);
+          return `?${params.toString()}`;
+        },
+        includes: (array, value) => {
+          if (!Array.isArray(array)) array = [array];
+          return (
+            array.includes(value.toString()) || array.includes(Number(value))
+          );
+        },
+        or: (a, b) => a || b,
+      },
+    })
+  );
+};
+
+module.exports = configViewEngine;

@@ -26,11 +26,12 @@
   --shadow-color: rgba(0, 0, 0, 0.05);
 }
 
-/* ==== TOÀN TRANG ==== */
 body {
   font-family: "Poppins", sans-serif;
-  background-color: #eaddf0; /* Tím pastel nhạt */
+  background-color: #f9f9f9; /* Tím pastel nhạt */
   color: #333;
+  margin: 0;
+  padding: 0;
 }
 
 /* ==== TIÊU ĐỀ ==== */
@@ -38,6 +39,7 @@ h1 {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  color: #333;
 }
 
 button,
@@ -99,6 +101,7 @@ header {
   outline: none;
   font-size: 16px;
   border-radius: 25px 0 0 25px;
+  color: #333;
 }
 
 .search-button {
@@ -124,7 +127,7 @@ header {
   width: 600px;
   background-color: #fff0f6;
   border-radius: 10px;
-  border: 1px solid #f8bbd0;
+  border: 1px solid #e0e0e0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -137,22 +140,14 @@ header {
   padding: 8px 12px;
   transition: background-color 0.2s ease;
   border-radius: 6px;
-}
-
-.custom-dropdown li a:hover {
-  background-color: var(--blue-color);
   color: #333;
 }
 
-.menu-tk {
-  position: absolute;
-  right: 0;
+.custom-dropdown li a:hover {
+  background-color: #a3d8f4;
+  color: #fff;
 }
 
-.dropdownMenuButton1 .dropdown-item {
-  padding-right: 0;
-  width: 100px;
-}
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -167,7 +162,7 @@ header {
 /* ==== MENU MOBILE SIDEBAR ==== */
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 120px;
   left: -250px;
   width: 250px;
   height: 100%;
@@ -175,7 +170,7 @@ header {
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   transition: left 0.4s ease-in-out;
   padding: 20px;
-  z-index: 1000;
+  z-index: 900;
   border-right: 5px solid #f8bbd0;
 }
 
@@ -210,6 +205,7 @@ header {
 }
 
 .menu-bar-wrapper {
+  top: 116px;
   position: sticky;
   z-index: 1030;
   background-color: white;
@@ -221,7 +217,42 @@ header {
   transform: translateY(-100%);
 }
 
+/* ==== ICON GIỎ HÀNG ==== */
+.cart-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.cart-icon-wrapper .cart-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.cart-icon-wrapper .cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 50%;
+  min-width: 20px;
+  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* ==== RESPONSIVE ==== */
+@media screen and (max-width: 500px) {
+  .menu-bar-wrapper {
+    top: 80px !important;
+  }
+}
 @media screen and (max-width: 768px) {
   .navbar .dropdown-toggle span {
     display: none;
@@ -239,5 +270,10 @@ header {
   .search-button {
     width: 100%;
     border-radius: 25px;
+  }
+
+  .custom-dropdown {
+    column-count: 1;
+    width: 100%;
   }
 }

@@ -32,7 +32,7 @@ class ProductsController {
       // Lấy danh sách hình ảnh của sản phẩm
       const images = await bookModel.getProductImages(productid);
       console.log("Chi tiết sản phẩm:", productDetail);
-
+      const isLoggedIn = req.session.user_id ? true : false;
       // Truyền dữ liệu vào view
       res.render("pdDetail", {
         productDetail,
@@ -41,6 +41,8 @@ class ProductsController {
         otherbook,
         images,
         query: req.query,
+        session: req.session,
+        isLoggedIn,
       });
     } catch (error) {
       console.error("Lỗi khi lấy chi tiết sản phẩm:", error);

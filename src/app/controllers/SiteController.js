@@ -4,20 +4,21 @@ const categoryModel = require("../model/categoryModel");
 class SiteController {
   async index(req, res) {
     try {
-      console.log("Có vào đây khôngggggggggggggggggggg");
       const books = await bookModel.getAllBooks();
       const categories = await categoryModel.getAllCategories();
       const popularCategories = await categoryModel.getfiveCategoriespopular();
       const popularproducts = await bookModel.getBooksinPopularCategory();
       console.log("popularproducts", popularproducts);
       console.log("Danh mục: ", categories);
-
+      const isLoggedIn = req.session.user_id ? true : false;
       res.render("home", {
         books,
         categories,
         popularCategories,
         popularproducts,
         query: req.query,
+        session: req.session,
+        isLoggedIn,
       });
     } catch (error) {
       console.error("Error in SiteController:", error);

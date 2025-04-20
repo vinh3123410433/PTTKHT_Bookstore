@@ -9,6 +9,7 @@ const getAllCategories = async () => {
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw error;
+    z;
   }
 };
 

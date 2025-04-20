@@ -2,7 +2,11 @@
               <link rel="stylesheet" href="/css/product.css">
        
        
-       
+       <style>
+        .product-card{
+          margin-right: 10px;
+        }
+       </style>
           <div>
             <div
               id="carouselExampleControls"
@@ -47,24 +51,20 @@
             {{! category popular }}
             <div class="container my-5">
               <h2 class="fw-bold">Danh mục đề cử.</h2>
-              <div class="row mt-4 justify-content-center">
-                {{#each popularCategories}}
-                  <div
-                    class="col-md-2 mx-2 category-card"
-                    {{!-- style="background-color: #eaf8dc;" --}}
-                  >
+<div class="row mt-4 justify-content-center">
+  {{#each popularCategories}}
+    <div class="col-md-2 mx-2 category-card" style="margin-bottom: 20px;">
+      <p class="category-title">{{this.TenDanhMuc}}</p>
+      <p class="product-count">{{this.SoLuongSanPham}}</p>
+      <img
+        src="/img/cagories/{{this.DanhMucID}}.jpg"
+        class="img-fluid"
+        alt=""
+      />
+    </div>
+  {{/each}}
+</div>
 
-                    <p class="category-title">{{this.TenDanhMuc}}</p>
-                    <p class="product-count">{{this.SoLuongSanPham}}</p>
-                    <img
-                      src="/img/cagories/{{this.DanhMucID}}.jpg"
-                      class="img-fluid"
-                      alt=""
-                    />
-                  </div>
-
-                {{/each}}
-              </div>
             </div>
 
             {{!  đường kẻ thui}}
@@ -78,36 +78,35 @@
                     {{this.DanhMuc.TenDanhMuc}}
                   </h3></div>
           <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner carousel-inner-pd">
-            {{#each this.SanPham}}
-              <div class="carousel-item carousel-item-pd {{#if @first}}active{{/if}}">
-                <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
-          <div class="product-card">
-            <div class="product-image">
-              <img src="{{this.Anh}}" alt="Sách" />
-              <div class="product-icons">
-                <span class="icon">
-                  <img src="/img/icons/eye.svg" alt="search" />
-                </span>
-                <span class="icon">
-                  <img src="/img/icons/cart.svg" alt="cart" />
-                </span>
-              </div>
-            </div>
-
-            <div class="product-info">
-              <h5 class="product-title">{{this.TenSanPham}}</h5>
-              <div class="product-price">
-                <span class="new-price">{{formatNumber this.Gia}}</span>
-              </div>
+<div class="carousel-inner carousel-inner-pd">
+  {{#each this.SanPham}}
+    <div class="carousel-item carousel-item-pd  {{#if @first}}active{{/if}}">
+      <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
+        <div class="product-card ">
+          <div class="product-image">
+            <img src="{{this.Anh}}" alt="Sách" />
+            <div class="product-icons">
+              <span class="icon">
+                <img src="/img/icons/eye.svg" alt="search" />
+              </span>
+              <span class="icon">
+                <img src="/img/icons/cart.svg" alt="cart" />
+              </span>
             </div>
           </div>
 
-                </a>
-              </div>
-            {{/each}}
-
+          <div class="product-info">
+            <h5 class="product-title">{{this.TenSanPham}}</h5>
+            <div class="product-price">
+              <span class="new-price">{{formatNumber this.Gia}}</span>
             </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  {{/each}}
+</div>
+
 
             <button class="carousel-control-prev carousel-control-prev-pd" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>

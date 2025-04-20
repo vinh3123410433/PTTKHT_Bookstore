@@ -1,16 +1,32 @@
 
 const OrderModel = require('../model/orderModel');
 
+const huyDonHang = async (req, res) => {
+    const { IDHoaDonXuat } = req.body;
+    const ID_KH=req.session.user_id;
+    try {
+        console.log("👉 Đã vào controller huyDonHang");
+        console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
+        console.log("👉 ID_KH:", ID_KH);
+        
+      await OrderModel.cancelOrder(IDHoaDonXuat);
+      res.redirect('/lichsudonhang'); // hoặc trang bạn muốn
+    } catch (error) {
+      console.error('Lỗi khi hủy đơn hàng:', error);
+      res.redirect('/user/errorPage?error=' + encodeURIComponent('Hủy đơn hàng thất bại.'));
+    }
+  };
+
 const handleCheckout = async (req, res, next) => {
     const { idSanPham, soluong, tongTien } = req.body;
     const userId = req.session.user_id;
 
     if (!userId) {
-        return res.redirect('/account?error=' + encodeURIComponent('Bạn chưa đăng nhập'));
+        return res.redirect('user/account?error=' + encodeURIComponent('Bạn chưa đăng nhập'));
     }
 
     if (!idSanPham || !soluong || !tongTien) {
-        return res.redirect('/cart?error=' + encodeURIComponent('Thiếu thông tin thanh toán'));
+        return res.redirect('cart/cart?error=' + encodeURIComponent('Thiếu thông tin thanh toán'));
     }
 
     try {
@@ -30,18 +46,15 @@ const handleCheckout = async (req, res, next) => {
                 soLuong: parseInt(soluong)
             });
         }
-        
-
-        // const orderId = await OrderModel.createOrder(userId, tongTien);
-        // await OrderModel.addOrderDetails(orderId, items);
 
         res.redirect('/success?message=' + encodeURIComponent('Đặt hàng thành công!'));
     } catch (error) {
         console.error('Lỗi thanh toán:', error);
-        res.redirect('/errorPage?error=' + encodeURIComponent('Lỗi khi xử lý thanh toán'));
+        res.redirect('user/errorPage?error=' + encodeURIComponent('Lỗi khi xử lý thanh toán'));
     }
 };
 
 module.exports = {
-    handleCheckout
+    handleCheckout,
+    huyDonHang
 };

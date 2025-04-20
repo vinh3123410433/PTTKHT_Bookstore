@@ -3,8 +3,9 @@ const categoryModel = require("../model/categoryModel");
 
 async function index(req, res) {
   try {
+    console.log("Có vào đây khôngggggggggggggggggggg");
     const categoryId = req.params.id || null;
-    console.log("hiiii: " + categoryId);
+    // console.log("hiiii: " + categoryId);
     const currentPage = parseInt(req.query.page) || 1;
     const perPage = 16;
 

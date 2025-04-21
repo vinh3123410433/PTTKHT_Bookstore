@@ -20,7 +20,7 @@
 
 
 <div class="custom-container mt-5">
-  <div class="row container-fluid px-5">
+  <div class="row container-fluid px-5 pd-detail-container">
     <!-- Hình ảnh sản phẩm bên trái -->
     <div class="col-lg-6">
       <div class="custom-image-wrapper sticky-top" style="top: 100px;">
@@ -159,8 +159,14 @@
 </div>
 
 <style>
-  .custom-container {
-    padding: 0 15px;
+  .pd-detail-container{
+    width: 100%;
+    background-color: #FFFFFF;
+     border: 1px solid #E0E0E0; 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    padding: 80px;
   }
   .custom-image-wrapper {
     display: flex;
@@ -207,8 +213,84 @@
   .custom-tab-box {
     background-color: #f8f9fa;
   }
-</style>
 
+
+
+
+  @media (max-width: 991.98px) {
+  .pd-detail-container {
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+
+  .custom-image-wrapper {
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .custom-product-image {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .custom-thumbnail {
+    width: 70px;
+  }
+
+  .custom-info-wrapper {
+    padding-left: 0;
+  }
+
+  .custom-product-title {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .custom-tab-box {
+    padding: 1rem;
+  }
+
+  .custom-info-grid .row {
+    font-size: 13px;
+  }
+
+  .custom-quantity-group {
+    width: 100%;
+  }
+
+  .custom-price-box {
+    text-align: center;
+  }
+
+  .d-flex.gap-2.mb-5 {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+    .custom-quantity-group {
+    width: 100%;
+    max-width: 150px;
+  }
+
+  .custom-quantity-group input {
+    width: 40px;
+    font-size: 15px;
+  }
+
+  .custom-quantity-group button {
+    width: 32px;
+    font-size: 16px;
+  }
+}
+
+</style>
+<script src="../public/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/home.js"></script>
+<script src=""></script>
 <script>
   function changeCustomImage(imageSrc) {
     const activeItem = document.querySelector('#customProductCarousel .carousel-item.active img');
@@ -240,9 +322,3 @@ function changeQuantity(change) {
 
 </script>
 
-<script
-  src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"
-></script>
-
-<script src="./bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/home.js"></script>

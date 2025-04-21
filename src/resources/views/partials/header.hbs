@@ -1,3 +1,6 @@
+<style>.toast { z-index: 99999 !important; /* Đặt z-index cao hơn các phần tử
+  khác */ }
+</style>
 <div class="search-bar-wrapper">
   <nav class="navbar navbar-expand-lg navbar-light hd-color">
     <div class="container-fluid">
@@ -8,7 +11,7 @@
               alt=""
             /></a>
         </div>
-        <div class="col-7">
+        <div class="col-6">
           <form class="search-form" action="/search" method="GET">
             <input
               class="form-control search-input"
@@ -19,27 +22,49 @@
             <button class="btn search-button" type="submit">Tìm kiếm</button>
           </form>
         </div>
-        <div class="col-3 text-end">
-          <div class="dropdown" style="position: relative;">
-            <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Tài khoản
-            </button>
-            <ul
-              class="dropdown-menu menu-tk"
-              aria-labelledby="dropdownMenuButton1"
-            >
-              <li><a class="dropdown-item" href="/user/account/">Đăng ký</a></li>
-              <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+        <div
+          class="col-4 d-flex justify-content-end align-items-center gap-3 pr-5 pr-md-4 pr-lg-5"
+        >
+          <div class="d-flex justify-content-end align-items-center gap-3">
+            <!-- Giỏ hàng -->
+            <a href="/cart" class="cart-icon-wrapper position-relative">
+              <img src="/img/check-out.png" alt="Giỏ hàng" class="cart-icon" />
+              <span
+                class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                0
+              </span>
+            </a>
 
-            </ul>
+            <!-- Dropdown tài khoản -->
+            <div class="dropdown account-dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Tài khoản
+              </button>
+              <ul
+                class="dropdown-menu account-menu w-auto"
+                aria-labelledby="dropdownMenuButton1"
+                style="width: 100%"
+              >
+                {{#if session.user_id}}
+                  <li><a class="dropdown-item" href="/user/account">Thông tin
+                      của tôi</a></li>
+                  <li><a class="dropdown-item" href="/user/logout">Đăng xuất</a></li>
+                {{else}}
+                  <li><a class="dropdown-item" href="/user/account">Đăng ký</a></li>
+                  <li><a class="dropdown-item" href="/user/account">Đăng nhập</a></li>
+                {{/if}}
+              </ul>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </nav>
@@ -105,3 +130,31 @@
     {{/each}}
   </ul>
 </div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div
+    id="toast-success"
+    class="toast align-items-center text-white bg-success border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="d-flex">
+      <div class="toast-body">
+        Sản phẩm đã được thêm vào giỏ hàng!
+      </div>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Chèn giá trị từ Handlebars vào biến JavaScript const isLoggedIn =
+  {{isLoggedIn}};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

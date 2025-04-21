@@ -93,23 +93,18 @@
       <!-- Hiển thị sản phẩm -->
       <div class="row product-list" style="padding-left: 50px;">
         {{#each books}}
+
         <div class="col-md-3 m-0">
           <div class="product-card-container">
-            <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
+           <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
               <div class="product-card">
-              <div class="product-image">
-                <img src="{{this.Anh}}" alt="Sách" />
-                <div class="product-icons">
-                  <span class="icon">
-                    <img src="/img/icons/eye.svg" alt="search" />
-                  </span>
-                  <span class="icon">
-                    <img src="/img/icons/cart.svg" alt="cart" />
-                  </span>
+                <div class="product-image">
+                  <img src="{{this.Anh}}" alt="Sách" />
+                  <div class="product-icons">
+                    <span class="icon"><img src="/img/icons/eye.svg" alt="search" /></span>
+                    <span class="icon icon-add-cart" id="add-to-cart-{{this.SanPhamID}}" data-id="{{this.SanPhamID}}" ><img src="/img/icons/cart.svg" alt="cart" /></span>
+                  </div>
                 </div>
-              </div>
-
-                
                 <div class="product-info">
                   <h5 class="product-title">{{this.TenSanPham}}</h5>
                   <div class="product-price">

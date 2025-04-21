@@ -48,8 +48,6 @@ const getHoaDonByUserIdAndStatus = async (userId, status) => {
         params.push(status);
       }
     }
-  
-    // ✅ Luôn thực hiện query
     const [rows] = await database.query(query, params);
   
     const grouped = groupedByHoaDonXuat(rows);

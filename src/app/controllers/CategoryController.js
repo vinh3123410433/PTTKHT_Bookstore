@@ -54,7 +54,7 @@ async function index(req, res) {
     const categories = await categoryModel.getAllCategories();
     const category = await categoryModel.getCategoryById(categoryId);
     const categoryName = category ? category.TenDanhMuc : "Tất cả sách";
-
+    const isLoggedIn = req.session.user_id ? true : false;
     res.render("category", {
       books,
       totalPages,
@@ -63,6 +63,8 @@ async function index(req, res) {
       categories,
       categoryName,
       query: req.query,
+      session: req.session,
+      isLoggedIn,
     });
   } catch (error) {
     console.error("Error in BookController:", error);

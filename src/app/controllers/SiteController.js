@@ -1,21 +1,24 @@
-const bookModel = require("../model/bookModel");
-const categoryModel = require("../model/categoryModel");
+import bookModel from "../model/bookModel.js";
+import categoryModel from "../model/categoryModel.js";
+// import category from "../model/warehouse/category.js";
 
 class SiteController {
+  // Hiển thị trang chủ
   async index(req, res) {
     try {
       const books = await bookModel.getAllBooks();
       const categories = await categoryModel.getAllCategories();
+      // Đổi theo tên hàm thực tế trong bookModel
       const popularCategories = await categoryModel.getfiveCategoriespopular();
-      const popularproducts = await bookModel.getBooksinPopularCategory();
-      console.log("popularproducts", popularproducts);
-      console.log("Danh mục: ", categories);
-      const isLoggedIn = req.session.user_id ? true : false;
+      const popularProducts = await bookModel.getBooksinPopularCategory();
+
+      const isLoggedIn = !!req.session.user_id;
+
       res.render("home", {
         books,
         categories,
         popularCategories,
-        popularproducts,
+        popularProducts,
         query: req.query,
         session: req.session,
         isLoggedIn,
@@ -26,33 +29,32 @@ class SiteController {
     }
   }
 
+  // Xử lý tìm kiếm
   async search(req, res) {
     try {
-      const { q, maxPrice, categories: categoryIDs } = req.query;
+      const { q: keywordRaw, maxPrice, categories: categoryIDs } = req.query;
       const categories = await categoryModel.getAllCategories();
-      const keyword = q?.trim();
+      const keyword = keywordRaw?.trim();
       let baseList = [];
 
       if (keyword) {
         const matched = await bookModel.searchBooksByKeyword(keyword);
         const ids = matched.map((b) => Number(b.SanPhamID));
         baseList = await bookModel.getBooksByIds(ids);
-      }
-
-      if (!keyword && categoryIDs) {
+      } else if (categoryIDs) {
         const categoryArray = Array.isArray(categoryIDs)
-          ? categoryIDs
-          : [categoryIDs];
+          ? categoryIDs.map(Number)
+          : [Number(categoryIDs)];
         baseList = await bookModel.getListProducts(categoryArray);
-      }
-
-      let filteredList = baseList;
-      if (maxPrice && baseList.length > 0) {
-        filteredList = baseList.filter((book) => book.Gia <= Number(maxPrice));
-      }
-
-      if (!keyword && !categoryIDs) {
+      } else {
+        // Không có keyword và category, quay về trang chủ
         return res.redirect("/");
+      }
+
+      // Lọc theo giá nếu có
+      let filteredList = baseList;
+      if (maxPrice && baseList.length) {
+        filteredList = baseList.filter((book) => book.Gia <= Number(maxPrice));
       }
 
       res.render("searchResults", {
@@ -62,7 +64,7 @@ class SiteController {
         hasResults: filteredList.length > 0,
         currentPage: 1,
         totalPages: 1,
-        query: req.query, // 🔥 truyền lại giá trị filter
+        query: req.query,
       });
     } catch (error) {
       console.error("Search error:", error);
@@ -71,4 +73,4 @@ class SiteController {
   }
 }
 
-module.exports = new SiteController();
+export default new SiteController();

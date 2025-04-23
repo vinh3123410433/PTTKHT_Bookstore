@@ -1,0 +1,60 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/category.css" />
+{{/block}}
+
+{{#block "js"}}
+  {{! <script src="/js/warehouse/category.js"></script> }}
+{{/block}}
+
+<!-- Category table -->
+<div class="category-table">
+  <div class="inside-table">
+    <div class="categoryHeader">
+      <h2>Các tác phẩm trong "{{detail_header.TenDanhMuc}}"</h2>
+      <div>
+        <a href="warehouse/category"><button class="back-to-category">Quay lại</button></a>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <td>ID</td>
+          <td>Tên</td>
+          <td>Tác giả</td>
+          <td>Nhà xuất bản</td>
+          <td>Hình ảnh</td>
+          <td>Giá</td>
+          <td>SL tồn</td>
+          <td>Số trang</td>
+          <td>Mô tả</td>
+        </tr>
+      </thead>
+      <tbody class="category-list">
+        {{#if category_detail.length}}
+          {{#each category_detail}}
+            <tr>
+              <td>{{this.SanPhamID}}</td>
+              <td>{{this.TenSanPham}}</td>
+              <td>{{this.TenTacGia}}</td>
+              <td>{{this.TenNXB}}</td>
+              <td><img src="{{this.Anh}}" width="100" /></td>
+              <td>{{formatCurrency this.Gia}}</td>
+              <td>{{this.SoLuongTon}}</td>
+              <td>{{this.SoTrang}}</td>
+              <td>
+                <div class="mo-ta">
+                  {{this.MoTa}}
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td colspan="9" style="text-align: center;">Không có dữ liệu</td>
+          </tr>
+        {{/if}}
+      </tbody>
+    </table>
+
+  </div>
+</div>

@@ -1,0 +1,124 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/receipt.css" />
+{{/block}}
+
+{{#block "js"}}
+  {{! <script src="/js/warehouse/receipt.js"></script> }}
+{{/block}}
+
+<div class="receipt-table">
+  <div class="inside-table">
+    <div class="receiptHeader">
+      <div class="des-receiptHeader">
+        <p style="font-size: x-large;color: black;">Chi Tiết Hóa Đơn #{{id}}</p>
+        <p>Nhân viên tạo đơn: {{receipt_info.TenNhanVien}}</p>
+        <p>Ngày lập đơn:
+          {{formatDate receipt_info.NgayNhap "DD/MM/YYYY HH:mm"}}</p>
+      </div>
+      <div class="des-receiptHeader">
+        {{#if receipt_info.TinhTrangThanhToan}}
+          <div class="delivered">
+            Đã thanh toán
+          </div>
+        {{else}}
+          <div class="pending">
+            Chưa thanh toán
+          </div>
+        {{/if}}
+      </div>
+    </div>
+    <hr />
+    <div class="info-container">
+      <div class="info-box">
+        <div class="header">
+          <p>
+            <i class="fas fa-user-tie"></i>
+            <span>Thông tin nhà cung cấp</span>
+          </p>
+        </div>
+        <div class="body">
+          <p><b>ID</b>: #{{receipt_info.ID_NCC}}</p>
+          <p><b>Tên</b>: {{receipt_info.TenNCC}}</p>
+          <p><b>Số điện thoại</b>: {{receipt_info.SDT}}</p>
+          <p><b>Email</b>: {{receipt_info.Email}}</p>
+          <p><b>Địa chỉ</b>:
+            {{receipt_info.SoNhaDuong}},
+            {{receipt_info.PhuongXa}},
+            {{receipt_info.QuanHuyen}},
+            {{receipt_info.TinhThanhPho}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="order-container">
+      <div class="order-product">
+        <div class="header">
+          <p>
+            <i class="fas fa-book"></i>
+            <span>Sách đã nhập</span>
+          </p>
+        </div>
+        <div class="body">
+          <table class="product-table">
+            <thead>
+              <tr>
+                <td>STT</td>
+                <td>Sản phẩm</td>
+                <td>Giá nhập</td>
+                <td>Số lượng</td>
+                <td>Thành tiền</td>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each product_detail}}
+                <tr>
+                  <td>{{inc @index}}</td>
+                  <td>
+                    <div class="product-info">
+                      <img src="{{this.Anh}}" width="80" />
+                      <div class="product-details">
+                        <p>{{this.TenSanPham}}</p>
+                        <p>{{this.TenTacGia}}</p>
+                        <p>ID: #{{this.IDSanPham}}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{formatCurrency this.GiaNhap}}</td>
+                  <td>{{this.SoLuong}}</td>
+                  <td>{{formatCurrency this.ThanhTien}}</td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="order-total">
+        <div class="header">
+          <p>
+            <i class="fas fa-calculator"></i>
+            <span>Tổng kết đơn hàng</span>
+          </p>
+        </div>
+        <div class="body">
+          <table class="total-table">
+            <tr>
+              <td>Tạm tính:</td>
+              <td>{{formatCurrency receipt_info.TongTien}}</td>
+            </tr>
+            <tr>
+              <td>Phí vận chuyển:</td>
+              <td>{{formatCurrency 30000}}</td>
+            </tr>
+            <tr>
+              <td>Tổng cộng:</td>
+              <td>{{formatCurrency (add receipt_info.TongTien 30000)}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <a href="warehouse/receipt/create_pdf/{{id}}"><button
+        class="download-btn"
+      ><i class="fas fa-download"></i>
+        Tải hóa đơn</button></a>
+  </div>
+</div>

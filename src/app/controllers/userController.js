@@ -1,4 +1,4 @@
-const UserModel = require("../model/userModel");
+import UserModel from "../model/userModel.js";
 
 const renderAccountPage = async (req, res, next) => {
   try {
@@ -188,6 +188,7 @@ const changePasswordUser = async (req, res, next) => {
     next(error);
   }
 };
+
 const registerUser = async (req, res, next) => {
   try {
     const {
@@ -258,7 +259,7 @@ const checkSession = (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   renderAccountPage,
   changeUserInfo,
   errorPage,

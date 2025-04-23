@@ -1,0 +1,38 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/category.css" />
+{{/block}}
+
+<div class="category-table">
+  <div class="inside-table">
+    <div class="categoryHeader">
+      <h2>Cập Nhật Danh Mục</h2>
+      <a href="warehouse/category"><button class="cancel-btn">Quay lại</button></a>
+    </div>
+
+    <form action="warehouse/category/edit" method="post">
+      <div class="form-group">
+        <label for="id" class="form-label">ID Danh Mục</label>
+        <input
+          type="text"
+          class="form-control"
+          value="{{edit_category.DanhMucID}}"
+          id="id"
+          name="id"
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="name" class="form-label">Tên Danh Mục</label>
+        <input
+          type="text"
+          class="form-control"
+          value="{{edit_category.TenDanhMuc}}"
+          id="name"
+          name="name"
+        />
+      </div>
+      <button class="add-btn" type="submit">Sửa</button>
+    </form>
+
+  </div>
+</div>

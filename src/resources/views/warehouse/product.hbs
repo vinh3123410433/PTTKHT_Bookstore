@@ -1,0 +1,130 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/product.css" />
+{{/block}}
+
+{{#block "js"}}
+  <script src="/js/warehouse/product.js"></script>
+{{/block}}
+
+<!-- Product table -->
+<div class="product-table">
+  <div class="inside-table">
+    <div class="productHeader">
+      <h2>Sản Phẩm</h2>
+      <div>
+        <a href="/warehouse/product"><button class="reset-btn">Làm Mới</button></a>
+        <a href="/warehouse/product/create_excel"><button class="excel-btn">Xuất
+            Excel</button></a>
+        <a href="/warehouse/product/create"><button class="add-product">Thêm Sản
+            Phẩm</button></a>
+      </div>
+    </div>
+    <div style="display: flex">
+      <select name="" id="selection-box">
+        <option value="">--- Chọn sản phẩm ---</option>
+        <option value="/warehouse/product/on_sale">Sản phẩm đang bán</option>
+        <option value="/warehouse/product/delete_opt">Sản phẩm đã xóa</option>
+      </select>
+      <form action="/warehouse/product/search" method="get" id="search-form">
+        <div class="search-container">
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Nhập thông tin cần tìm kiếm ..."
+            autocomplete="off"
+          />
+          <button class="search-btn" type="submit"><i
+              class="fas fa-search"
+            ></i></button>
+        </div>
+      </form>
+    </div>
+    <table id="product_table">
+      <thead>
+        <tr id="header-row">
+          <td class="sortable">ID<span class="arrow">▲</span></td>
+          <td class="sortable">Tên<span class="arrow">▲</span></td>
+          <td class="sortable">Tác giả<span class="arrow">▲</span></td>
+          <td class="sortable">Nhà xuất bản<span class="arrow">▲</span></td>
+          <td>Hình ảnh</td>
+          <td class="sortable">Giá<span class="arrow">▲</span></td>
+          <td class="sortable">SL tồn<span class="arrow">▲</span></td>
+          <td class="sortable">Số trang<span class="arrow">▲</span></td>
+          <td>Mô tả</td>
+          <td>Chức năng</td>
+        </tr>
+      </thead>
+      <tbody class="products-list">
+        {{#if product.length}}
+          {{#each product}}
+            <tr>
+              <td>{{this.SanPhamID}}</td>
+              <td>{{this.TenSanPham}}</td>
+              <td>{{this.TenTacGia}}</td>
+              <td>{{this.TenNXB}}</td>
+              <td>
+                <div class="image-container">
+                  <img src="{{this.Anh}}" width="80" />
+                  <span class="view-more">+ Thêm</span>
+                </div>
+              </td>
+              <td data-value="{{this.Gia}}">{{formatCurrency this.Gia}}</td>
+              <td>{{this.SoLuongTon}}</td>
+              <td>{{this.SoTrang}}</td>
+              <td>
+                <div class="mo-ta">
+                  {{this.MoTa}}
+                </div>
+              </td>
+              <td>
+                <div class="button-container">
+                  <a href="/warehouse/product/view/{{this.SanPhamID}}">
+                    <button class="icon-btn view-btn">
+                      <i class="fas fa-eye"></i>
+                      <span class="tooltip">Chi tiết</span>
+                    </button>
+                  </a>
+                  <a href="/warehouse/product/update/{{this.SanPhamID}}">
+                    <button class="icon-btn edit-btn">
+                      <i class="fas fa-edit"></i>
+                      <span class="tooltip">Chỉnh sửa</span>
+                    </button>
+                  </a>
+                  <button
+                    class="icon-btn delete-btn"
+                    data-id="{{this.SanPhamID}}"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                    <span class="tooltip">Xóa</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td colspan="10" style="text-align: center;">Không có dữ liệu</td>
+          </tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Delete product -->
+<div class="delete-popup">
+  <div class="popup">
+    <div class="popup-head">
+      <p>Bạn có chắc chắn muốn xóa sản phẩm?</p>
+      <button class="popup-close-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="popup-body">
+      <p>Nếu đã xóa, bạn sẽ không thể tiếp tục sử dụng sản phẩm.</p>
+    </div>
+    <div class="popup-foot">
+      <button class="popup-btn popup-cancel-btn">Hủy</button>
+      <button class="popup-btn popup-confirm-btn">Xác nhận</button>
+    </div>
+  </div>
+</div>

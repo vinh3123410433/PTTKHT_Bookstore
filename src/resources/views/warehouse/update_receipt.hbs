@@ -1,0 +1,110 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/receipt.css" />
+{{/block}}
+
+{{#block "js"}}
+  <script src="/js/warehouse/receipt.js"></script>
+{{/block}}
+
+<div class="receipt-table">
+  <div class="inside-table">
+    <div class="receiptHeader">
+      <h2>Cập Nhật Hóa Đơn {{receipt_info.IDHoaDonNhap}}</h2>
+      <a href="warehouse/receipt"><button class="cancel-btn">Quay lại</button></a>
+    </div>
+
+    <form method="post" action="warehouse/receipt/edit">
+      <input
+        type="text"
+        name="id"
+        value="{{receipt_info.IDHoaDonNhap}}"
+        hidden
+      />
+      <div class="form-group">
+        <label for="provider" class="form-label">Nhà Cung Cấp</label>
+        <input
+          type="text"
+          class="form-control"
+          id="provider"
+          name="provider"
+          autocomplete="off"
+          value="{{receipt_info.provider_info}}"
+          placeholder="Nhập id hoặc tên nhà cung cấp ..."
+          required
+        />
+        <div id="suggestions_provider"></div>
+      </div>
+      <div class="form-group">
+        <label for="employee" class="form-label">Nhân Viên</label>
+        <input
+          type="text"
+          class="form-control"
+          id="employee"
+          name="employee"
+          autocomplete="off"
+          value="{{receipt_info.employee_info}}"
+          placeholder="Nhập id hoặc tên nhân viên ..."
+          required
+        />
+        <div id="suggestions_employee"></div>
+      </div>
+      <div class="form-group">
+        <label for="product" class="form-label">Sản Phẩm</label>
+        <input
+          type="text"
+          class="form-control"
+          id="product"
+          name="product"
+          autocomplete="off"
+          placeholder="Nhập id hoặc tên sản phẩm ..."
+        />
+        <input type="hidden" id="product_details" name="product_details" />
+        <div id="suggestions_product"></div>
+        <table border="1" id="product-list">
+          <thead>
+            <tr>
+              <td>ID</td>
+              <td>Tên</td>
+              <td>Số lượng</td>
+              <td>Giá nhập</td>
+              <td>Xóa</td>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each receipt_detail}}
+              <tr>
+                <td>{{this.IDSanPham}}</td>
+                <td>{{this.TenSanPham}}</td>
+                <td><input
+                    type="text"
+                    class="quantity"
+                    value="{{this.SoLuong}}"
+                  /></td>
+                <td><input
+                    type="text"
+                    class="price"
+                    value="{{this.GiaNhap}}"
+                  /></td>
+                <td><button class="remove-btn">X</button></td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+      {{!-- <div class="form-group">
+                <label for="payment" class="form-label">Tình Trạng Thanh Toán</label>
+                <select name="payment" id="payment">
+                    {{#if receipt_info.TinhTrangThanhToan}}
+                        <option value="1" selected>Đã thanh toán</option>
+                        <option value="0">Chưa thanh toán</option>
+                    {{else}}
+                        <option value="1">Đã thanh toán</option>
+                        <option value="0" selected>Chưa thanh toán</option>
+                    {{/if}}
+                </select>
+            </div> --}}
+      <button class="add-btn" type="submit">Sửa</button>
+    </form>
+
+  </div>
+</div>

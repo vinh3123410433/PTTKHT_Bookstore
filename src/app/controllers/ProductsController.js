@@ -1,5 +1,5 @@
-const bookModel = require("../model/bookModel");
-const categoryModel = require("../model/categoryModel");
+import bookModel from "../model/bookModel.js";
+import categoryModel from "../model/categoryModel.js";
 class ProductsController {
   // [GET] /pd
   async index(req, res) {
@@ -7,13 +7,12 @@ class ProductsController {
       const productid = req.query.id;
 
       // Lấy chi tiết sản phẩm
-      const productDetail = await bookModel.getProductDetail(productid);
+      const productDetail = await getProductDetail(productid);
       if (!productDetail) {
         return res.status(404).send("Sản phẩm không tồn tại");
       }
 
-      // Lấy danh mục và các sản phẩm khác có cùng danh mục
-      const categories = await categoryModel.getAllCategories();
+      const categories = await getAllCategories();
       const danhMucList = productDetail.DanhMucs.map((dm) => Number(dm.id));
 
       // Tạo bộ lọc cho giá nếu có
@@ -26,13 +25,10 @@ class ProductsController {
       }
 
       // Lấy các sản phẩm khác theo danh mục và áp dụng bộ lọc giá (nếu có)
-      const otherbook = await bookModel.getListProducts(danhMucList, filter);
-      console.log("Các sản phẩm cùng danh mục:", otherbook);
-
+      const otherbook = await getListProducts(danhMucList, filter);
       // Lấy danh sách hình ảnh của sản phẩm
-      const images = await bookModel.getProductImages(productid);
-      console.log("Chi tiết sản phẩm:", productDetail);
-      const isLoggedIn = req.session.user_id ? true : false;
+      const images = await getProductImages(productid);
+      const isLoggedIn = !!req.session.user_id;
       // Truyền dữ liệu vào view
       res.render("pdDetail", {
         productDetail,
@@ -50,4 +46,5 @@ class ProductsController {
     }
   }
 }
-module.exports = new ProductsController();
+
+export default new ProductsController();

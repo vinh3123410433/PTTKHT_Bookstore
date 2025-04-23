@@ -1,0 +1,109 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/provider.css" />
+{{/block}}
+
+{{#block "js"}}
+  <script src="/js/warehouse/provider.js"></script>
+{{/block}}
+
+<!-- Provider table -->
+<div class="provider-table">
+  <div class="inside-table">
+    <div class="providerHeader">
+      <h2>Nhà Cung Cấp</h2>
+      <div>
+        <a href="warehouse/provider"><button class="reset-btn">Làm Mới</button></a>
+        <a href="warehouse/provider/create_excel"><button class="excel-btn">Xuất
+            Excel</button></a>
+        <a href="warehouse/provider/create"><button class="add-provider">Thêm
+            Nhà Cung Cấp</button></a>
+      </div>
+    </div>
+    <div style="display: flex">
+      <select name="" id="selection-box">
+        <option value="">--- Chọn nhà cung cấp ---</option>
+        <option value="warehouse/provider/on_cooperate">Nhà cung cấp đang hợp
+          tác</option>
+        <option value="warehouse/provider/delete_opt">Nhà cung cấp đã xóa</option>
+      </select>
+      <form action="warehouse/provider/search" method="get" id="search-form">
+        <div class="search-container">
+          <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Nhập thông tin cần tìm kiếm ..."
+            autocomplete="off"
+          />
+          <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+      </form>
+    </div>
+    <table id="provider_table">
+      <thead>
+        <tr id="header-row">
+          <td class="sortable">ID<span class="arrow">▲</span></td>
+          <td class="sortable">Tên<span class="arrow">▲</span></td>
+          <td class="sortable">SĐT<span class="arrow">▲</span></td>
+          <td class="sortable">Email<span class="arrow">▲</span></td>
+          <td class="sortable">Số nhà, Đường<span class="arrow">▲</span></td>
+          <td class="sortable">Phường, Xã<span class="arrow">▲</span></td>
+          <td class="sortable">Quận, Huyện<span class="arrow">▲</span></td>
+          <td class="sortable">Tỉnh, Thành phố<span class="arrow">▲</span></td>
+          <td>Chức năng</td>
+        </tr>
+      </thead>
+      <tbody class="providers-list">
+        {{#if provider.length}}
+          {{#each provider}}
+            <tr>
+              <td>{{this.ID_NCC}}</td>
+              <td>{{this.TenNCC}}</td>
+              <td>{{this.SDT}}</td>
+              <td>{{this.Email}}</td>
+              <td>{{this.SoNhaDuong}}</td>
+              <td>{{this.PhuongXa}}</td>
+              <td>{{this.QuanHuyen}}</td>
+              <td>{{this.TinhThanhPho}}</td>
+              <td>
+                <div class="button-container">
+                  <a href="/provider/update/{{this.ID_NCC}}">
+                    <button class="icon-btn edit-btn">
+                      <i class="fas fa-edit"></i>
+                      <span class="tooltip">Chỉnh sửa</span>
+                    </button>
+                  </a>
+                  <button class="icon-btn delete-btn" data-id="{{this.ID_NCC}}">
+                    <i class="fas fa-trash-alt"></i>
+                    <span class="tooltip">Xóa</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td colspan="9" style="text-align: center;">Không có dữ liệu</td>
+          </tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Delete product -->
+<div class="delete-popup">
+  <div class="popup">
+    <div class="popup-head">
+      <p>Bạn có chắc chắn muốn xóa nhà cung cấp?</p>
+      <button class="popup-close-btn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="popup-body">
+      <p>Nếu đã xóa, bạn sẽ không thể tiếp tục sử dụng thông tin nhà cung cấp.</p>
+    </div>
+    <div class="popup-foot">
+      <button class="popup-btn popup-cancel-btn">Hủy</button>
+      <button class="popup-btn popup-confirm-btn">Xác nhận</button>
+    </div>
+  </div>
+</div>

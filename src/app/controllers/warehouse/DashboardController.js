@@ -1,0 +1,30 @@
+// const dashboardConfig = require('../db/dashboard');
+import dashboardConfig from "../../model/warehouse/dashboard.js";
+
+class DashboardController {
+  // show the dashboard
+  async index(req, res) {
+    try {
+      const sum_product = (await dashboardConfig.get_sum_of_product())[0];
+      const sum_provider = (await dashboardConfig.get_sum_of_provider())[0];
+      const sum_receipt = (await dashboardConfig.get_sum_of_receipt())[0];
+      const sum_paid_money = (await dashboardConfig.get_sum_of_paid_money())[0];
+      const provider_recently = await dashboardConfig.get_provider_recently();
+      const receipt_recently = await dashboardConfig.get_receipt_recently();
+      res.render("warehouse/dashboard", {
+        sum_product,
+        sum_provider,
+        sum_receipt,
+        sum_paid_money,
+        receipt_recently,
+        provider_recently,
+        layout: "warehouse",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+// module.exports = new DashboardController();
+export default new DashboardController();

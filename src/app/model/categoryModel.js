@@ -1,15 +1,13 @@
-const db = require("../../config/db");
+import db from "../../config/db.js";
 
 // Hàm lấy tất cả danh mục
 const getAllCategories = async () => {
   try {
     const [rows] = await db.query("SELECT * FROM danhmuc");
-
     return rows;
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw error;
-    z;
   }
 };
 
@@ -36,7 +34,6 @@ const getCategoryById = async (categoryId) => {
     // Truy vấn danh mục dựa trên DanhMucID
     const query = "SELECT * FROM danhmuc WHERE DanhMucID = ?";
     const [rows] = await db.query(query, [categoryId]);
-
     // Nếu có kết quả, trả về danh mục đầu tiên (nếu không có kết quả sẽ trả về null)
     return rows.length > 0 ? rows[0] : null;
   } catch (error) {
@@ -45,8 +42,8 @@ const getCategoryById = async (categoryId) => {
   }
 };
 
-// Xuất các hàm
-module.exports = {
+// Sử dụng export default để xuất toàn bộ
+export default {
   getAllCategories,
   getfiveCategoriespopular,
   getCategoryById,

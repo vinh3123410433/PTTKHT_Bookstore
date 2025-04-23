@@ -1,0 +1,115 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/warehouse/statistic.css" />
+{{/block}}
+
+{{#block "js"}}
+  <script src="/js/warehouse/statistic.js"></script>
+{{/block}}
+
+<!-- Statistic table -->
+<div class="statistic-table">
+  <div class="inside-table">
+    <div class="statisticHeader">
+      <h2>Thống Kê Lịch Sử Nhập Hàng</h2>
+      <div>
+        <a id="excel-link" href="#"><button class="excel-statistic">Xuất Excel</button></a>
+        <a href="warehouse/statistic"><button class="reset-btn">Làm Mới</button></a>
+      </div>
+    </div>
+    <div>
+      <form method="GET" action="warehouse/statistic/history">
+        <div class="search-container">
+          <div>
+            <label>Ngày bắt đầu:</label>
+            <input
+              id="date"
+              type="date"
+              name="from"
+              value="{{from}}"
+              required
+            />
+          </div>
+          <div>
+            <label class="date">Ngày kết thúc:</label>
+            <input id="date" type="date" name="to" value="{{to}}" required />
+          </div>
+          <button class="search-btn" type="submit">Thống Kê</button>
+        </div>
+      </form>
+    </div>
+    <table class="statistic-table-list" id="statistic_table">
+      <thead>
+        <tr id="header-row">
+          <td class="sortable">ID<span class="arrow">▲</span></td>
+          <td class="sortable">Ngày nhập<span class="arrow">▲</span></td>
+          <td class="sortable">Nhà cung cấp<span class="arrow">▲</span></td>
+          <td class="sortable">Nhân viên<span class="arrow">▲</span></td>
+          <td class="sortable">Tổng hóa đơn<span class="arrow">▲</span></td>
+          {{! <td>Tình trạng thanh toán</td> }}
+          <td>Chức năng</td>
+        </tr>
+      </thead>
+      <tbody class="statistics-list">
+        {{#if statistic.length}}
+          {{#each statistic}}
+            <tr>
+              <td>#{{this.IDHoaDonNhap}}</td>
+              <td
+                data-value="{{formatDate this.NgayNhap 'YYYY-MM-DD HH:mm:ss'}}"
+              >
+                {{formatDate this.NgayNhap "DD/MM/YYYY HH:mm"}}
+              </td>
+              <td>{{this.TenNCC}}</td>
+              <td>{{this.TenNhanVien}}</td>
+              <td data-value="{{this.TongTien}}">{{formatCurrency
+                  this.TongTien
+                }}</td>
+              {{!-- {{#if this.TinhTrangThanhToan}}
+                                <td>
+                                    <div class="delivered">
+                                        Đã thanh toán
+                                    </div>
+                                </td>
+                            {{else}}
+                                <td>
+                                    <div class="pending">
+                                        Chưa thanh toán
+                                    </div>
+                                </td>
+                            {{/if}} --}}
+              <td>
+                <div class="button-container">
+                  <a href="warehouse/receipt/view/{{this.IDHoaDonNhap}}">
+                    <button class="icon-btn view-btn">
+                      <i class="fas fa-eye"></i>
+                      <span class="tooltip">Chi tiết</span>
+                    </button>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        {{else}}
+          <tr>
+            <td colspan="9" style="text-align: center;">Không có dữ liệu trong
+              khoảng thời gian này.</td>
+          </tr>
+        {{/if}}
+      </tbody>
+      {{#if statistic.length}}
+        <tfoot>
+          <tr>
+            <td
+              colspan="5"
+              style="text-align:center;color:red;font-weight:600;font-size:24px;"
+            >Tổng cộng:</td>
+            <td
+              colspan="5"
+              style="text-align:center;color:red;font-weight:600;font-size:24px;"
+            >{{formatCurrency total}}</td>
+          </tr>
+        </tfoot>
+      {{/if}}
+    </table>
+  </div>
+</div>

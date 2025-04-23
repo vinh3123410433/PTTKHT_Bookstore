@@ -1,4 +1,4 @@
-const database = require("../../config/db");
+import database from "../../config/db.js";
 
 const getCartByUserId = async (userId) => {
   const query = `
@@ -8,7 +8,7 @@ const getCartByUserId = async (userId) => {
         JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
         JOIN AnhSP ON AnhSP.ID_SP = SanPham.SanPhamID
         WHERE KhachHang.ID_KH = ?
-				GROUP BY khachhang.ID_KH,giohang.ID_SP
+                GROUP BY khachhang.ID_KH,giohang.ID_SP
     `;
   const [rows] = await database.query(query, [userId]);
   return rows;
@@ -56,8 +56,4 @@ const xoaSanPhamTrongGio = async (ID_KH, ID_SP) => {
   }
 };
 
-module.exports = {
-  getCartByUserId,
-  themVaoGio,
-  xoaSanPhamTrongGio,
-};
+export default { getCartByUserId, themVaoGio, xoaSanPhamTrongGio };

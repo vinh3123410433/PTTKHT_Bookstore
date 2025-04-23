@@ -1,9 +1,9 @@
+import express from "express";
+import orderController from "../app/controllers/orderController.js";
 
-const express = require('express');
 const router = express.Router();
-const orderController = require('../app/controllers/orderController');
-     
 
-router.post('/thanhtoan', orderController.handleCheckout);
-router.post('/huyDonHang',orderController.huyDonHang);
-module.exports = router;
+router.post("/thanhtoan", orderController.handleCheckout);
+router.post("/huyDonHang", orderController.huyDonHang);
+
+export default router;

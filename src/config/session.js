@@ -1,20 +1,32 @@
-// npm install express-session session-file-store
+import session from "express-session";
+import FileStoreFactory from "session-file-store";
+import path from "path";
 
-const session = require('express-session');
-const FileStore = require('session-file-store')(session);
+// Khởi tạo FileStore từ express-session
+const FileStore = FileStoreFactory(session);
 
 const configSession = (app) => {
-  app.use(session({
-    store: new FileStore({}),
-    secret: 'yennhicute',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      secure: false,
-      httpOnly: true,
-      sameSite: 'lax'
-    }
-  }));
+  const storagePath = path.join(process.cwd(), "sessions");
+  const fileStoreOptions = {
+    path: storagePath,
+    useAsyncWrite: true,
+    reapInterval: 3600, // Tự động dọn các session cũ mỗi giờ
+    logFn: () => {}, // Tắt log mặc định
+  };
+
+  app.use(
+    session({
+      store: new FileStore(fileStoreOptions),
+      secret: "yennhicute",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: false,
+        httpOnly: true,
+        sameSite: "lax",
+      },
+    })
+  );
 };
 
-module.exports = configSession;
+export default configSession;

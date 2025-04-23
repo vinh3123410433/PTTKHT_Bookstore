@@ -1,5 +1,5 @@
-const db = require("../../config/db");
-const categoryModel = require("../model/categoryModel");
+import db from "../../config/db.js";
+import categoryModel from "../model/categoryModel.js";
 
 // Hàm tính toán phân trang
 const paginate = (totalItems, currentPage, perPage) => {
@@ -75,15 +75,13 @@ const getAllBooks = async (
 // Hàm lấy sản phẩm theo danh mục phổ biển
 const getBooksinPopularCategory = async () => {
   const popularCategories = await categoryModel.getfiveCategoriespopular();
-  books = [];
+  let books = [];
   for (const i of popularCategories) {
-    tmp = {
+    const tmp = {
       DanhMuc: i,
-      SanPham: await getAllBooks(i.DanhMucID, null, null, {
-        categoryIDs: [i.DanhMucID],
-      }),
+      SanPham: await getAllBooks(i.DanhMucID),
     };
-    books.push(await tmp);
+    books.push(tmp);
   }
   return books;
 };
@@ -127,8 +125,7 @@ const getProductDetail = async (id = null) => {
         })
       : [];
 
-    delete product.DanhMucInfo; // Xoá chuỗi gốc nếu không cần
-
+    delete product.DanhMucInfo;
     return product;
   } catch (err) {
     console.error("Lỗi khi lấy chi tiết sản phẩm:", err);
@@ -141,16 +138,13 @@ const getProductImages = async (productId) => {
     const query = `
             SELECT Anh FROM anhsp WHERE ID_SP = ?;
         `;
-
     const [rows] = await db.execute(query, [productId]);
 
-    // Nếu không có hình ảnh, trả về mảng rỗng
     if (!rows.length) {
       return [];
     }
 
-    // Trả về danh sách các hình ảnh dưới dạng mảng
-    const images = rows.map((row) => row.Anh); // `Anh` chứa đường dẫn hoặc base64
+    const images = rows.map((row) => row.Anh);
     return images;
   } catch (error) {
     console.error("Error fetching images:", error);
@@ -183,7 +177,6 @@ const getListProducts = async (danhMucIDs = []) => {
 
   try {
     const [rows] = await db.execute(query, danhMucIDs);
-
     const productMap = {};
 
     for (const row of rows) {
@@ -197,11 +190,10 @@ const getListProducts = async (danhMucIDs = []) => {
           IDTacGia: row.IDTacGia,
           TenTacGia: row.TenTacGia,
           DanhMucs: [],
-          Anh: row.Anh || null, // chỉ lấy 1 ảnh chính thôi
+          Anh: row.Anh || null,
         };
       }
 
-      // Thêm danh mục nếu chưa có
       const exists = productMap[row.SanPhamID].DanhMucs.find(
         (dm) => dm.DanhMucID === row.DanhMucID
       );
@@ -264,6 +256,7 @@ const getBooksByIds = async (idList) => {
     throw error;
   }
 };
+
 const filterBooks = async ({ maxPrice, categoryIDs }) => {
   let query = `
         SELECT 
@@ -298,62 +291,8 @@ const filterBooks = async ({ maxPrice, categoryIDs }) => {
   const [rows] = await db.execute(query, params);
   return rows;
 };
-const getProductById = async (SanPhamID) => {
-  const query = `
-    SELECT 
-      sanpham.SanPhamID, MoTa, TenSanPham, sp_tg.IDTacGia, TenTacGia, Gia, TenNXB,
-      danhmuc.DanhMucID, danhmuc.TenDanhMuc,
-      a.Anh AS Anh
-    FROM sanpham
-    JOIN sp_tg ON sanpham.SanPhamID = sp_tg.SanPhamID
-    JOIN tacgia ON tacgia.IDTacGia = sp_tg.IDTacGia
-    JOIN nxb ON sanpham.ID_NXB = nxb.ID_NXB
-    JOIN sp_dm ON sanpham.SanPhamID = sp_dm.SanPhamID
-    JOIN danhmuc ON sp_dm.DanhMucID = danhmuc.DanhMucID
-    LEFT JOIN anhsp a ON sanpham.SanPhamID = a.ID_SP AND a.STT = 1
-    WHERE sanpham.SanPhamID = ?
-  `;
 
-  try {
-    const [rows] = await db.execute(query, [SanPhamID]);
-
-    if (rows.length === 0) {
-      return null;
-    }
-
-    const product = {
-      SanPhamID: rows[0].SanPhamID,
-      TenSanPham: rows[0].TenSanPham,
-      MoTa: rows[0].MoTa,
-      Gia: rows[0].Gia,
-      TenNXB: rows[0].TenNXB,
-      IDTacGia: rows[0].IDTacGia,
-      TenTacGia: rows[0].TenTacGia,
-      DanhMucs: [],
-      Anh: rows[0].Anh || null,
-    };
-
-    // Thêm các danh mục vào product
-    for (const row of rows) {
-      const exists = product.DanhMucs.find(
-        (dm) => dm.DanhMucID === row.DanhMucID
-      );
-      if (!exists) {
-        product.DanhMucs.push({
-          DanhMucID: row.DanhMucID,
-          TenDanhMuc: row.TenDanhMuc,
-        });
-      }
-    }
-
-    return product;
-  } catch (err) {
-    console.error("Lỗi khi truy vấn sản phẩm theo ID:", err);
-    throw err;
-  }
-};
-
-module.exports = {
+export default {
   getAllBooks,
   getBooksinPopularCategory,
   paginate,
@@ -363,5 +302,4 @@ module.exports = {
   searchBooksByKeyword,
   getBooksByIds,
   filterBooks,
-  getProductById,
 };

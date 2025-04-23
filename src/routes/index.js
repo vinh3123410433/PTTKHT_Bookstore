@@ -1,31 +1,10 @@
+// routes/index.js
+import userRouters from "./userRouters.js"; // Cập nhật đường dẫn chính xác
+import adminRouters from "./adminRouters.js"; // Cập nhật đường dẫn chính xác
 
-const siteRouter = require('./site')
-const productsRouter = require('./products')
-const categoryRouter=require('./category')
-// const homeRouter=require('./homeRouter')
-const userRouter=require('./userRouter')
-const cartRouter=require('./cartRouter')
-const historyRouter=require('./historyRouter')
-const orderRouter=require('./orderRouter.js')
-function route(app) {
-    console.log("hi")
-    app.use('/products', productsRouter)
-    app.use('/category',categoryRouter)
-    app.use('/user',userRouter)
-    app.use('/cart',cartRouter)
-    app.use('/order',orderRouter)
-    app.use('/lichsudonhang',historyRouter)
+const route = (app) => {
+  app.use("/admin", adminRouters);
+  app.use("/", userRouters);
+};
 
-    app.use('/', siteRouter)
-
-  app.use("/products", productsRouter);
-  app.use("/category", categoryRouter);
-  app.use("/user", userRouter);
-  app.use("/cart", cartRouter);
-
-  // Nếu homeRouter chỉ xử lý trang chủ "/", nên đặt trước siteRouter
-
-  app.use("/", siteRouter);
-}
-
-module.exports = route;
+export default route;

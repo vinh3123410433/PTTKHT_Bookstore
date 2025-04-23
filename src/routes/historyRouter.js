@@ -1,7 +1,9 @@
-const express=require('express')
-const router=express.Router()   
+import express from "express";
+import historyController from "../app/controllers/historyController.js";
 
-const historyController=require('../app/controllers/historyController') 
-router.get('/', historyController.renderHistoryPage);
+const router = express.Router();
 
-module.exports=router
+// Sử dụng renderHistoryPage như một hàm callback
+router.get("/", historyController.renderHistoryPage);
+
+export default router;

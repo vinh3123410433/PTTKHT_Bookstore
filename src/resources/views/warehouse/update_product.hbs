@@ -1,0 +1,89 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/warehouse/product.css">
+{{/block}}
+
+{{#block "js"}}
+    <script src="/js/warehouse/product.js"></script>
+{{/block}}
+
+<div class="product-table">
+    <div class="inside-table">
+        <div class="productHeader">
+            <h2>Cập Nhật Sản Phẩm</h2>
+            <a href="warehouse/product"><button class="cancel-btn">Quay lại</button></a>
+        </div>
+
+        <form method="post" action="warehouse/product/edit">
+            <div class="form-group">
+                <label for="id" class="form-label">ID Sản Phẩm</label>
+                <input type="text" class="form-control" value = "{{edit_product.SanPhamID}}" id="id" name="id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">Tên Sản Phẩm</label>
+                <input type="text" class="form-control" value = "{{edit_product.TenSanPham}}" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="author" class="form-label">Tác Giả</label>
+                <input type="text" class="form-control" value = "{{edit_product.TenTacGia}}" id="author" name="author">
+            </div>
+            <div class="form-group">
+                <label for="publisher" class="form-label">Nhà Xuất Bản</label>
+                <input type="text" class="form-control" value = "{{edit_product.TenNXB}}" id="publisher" name="publisher">
+            </div>
+            <div class="form-group">
+                <label for="category" class="form-label">Danh Mục</label>
+                <div class="chk-box-category">
+                    {{#each list_category}}
+                    <label>
+                        <input type="checkbox" name="category" value="{{this.DanhMucID}}" 
+                        {{isChecked this.DanhMucID ../checked_category}}>
+                        {{this.TenDanhMuc}}
+                    </label>
+                    {{/each}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="form-label">Giá</label>
+                <input type="text" class="form-control" value = "{{edit_product.Gia}}" id="price" name="price">
+            </div>
+            <div class="form-group">
+                <label for="inventory" class="form-label">Số Lượng Tồn</label>
+                <input type="text" class="form-control" value = "{{edit_product.SoLuongTon}}" id="inventory" name="inventory">
+            </div>
+            <div class="form-group">
+                <label for="pages" class="form-label">Số Trang</label>
+                <input type="text" class="form-control" value = "{{edit_product.SoTrang}}" id="pages" name="pages">
+            </div>
+            <div class="form-group">
+                <label for="description" class="form-label">Mô Tả</label>
+                <textarea class="form-control" name="description" id="description" cols="30" rows="10">{{edit_product.MoTa}}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="image" class="form-label">Hình Ảnh</label>
+                <div style="display: flex;">
+                    <label for="imageUpload" class="frame">
+                        <i class="fas fa-camera"></i>
+                        <span>Thêm ảnh</span>
+                    </label>
+                    <button id="clearImages" class="remove-img" type="button">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Xóa Tất Cả</span>
+                    </button>
+                    <input type="file" id="imageUpload" accept="image/*" multiple>
+                    <input type="hidden" id="imageBase64" name="imageBase64" value="{{json_image}}">
+                </div>
+                <div id="imagePreview">
+                    <div class="image-container">
+                        {{#each images}}
+                        <div class="image-frame">
+                            <img src="{{this.Anh}}">
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            <button class="add-btn" type="submit">Sửa</button>
+        </form>
+
+    </div>
+</div>

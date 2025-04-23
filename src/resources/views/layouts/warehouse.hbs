@@ -1,0 +1,93 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Kho</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/warehouse/style.css" />
+    {{{_blocks.css}}}
+
+  </head>
+  <body>
+
+    <div class="container">
+      <!-- side bar -->
+      <div class="navigation">
+        <ul>
+          <li>
+            <a href="/">
+              <span class="icon" style="min-width: 55px;"></span>
+              <span class="title"><h1>STORE</h1></span>
+            </a>
+          </li>
+          <li>
+            <a href="/">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span class="title">Tổng Quan</span>
+            </a>
+          </li>
+          <li>
+            <a href="/product">
+              <span class="icon"><i class="fas fa-gifts"></i></span>
+              <span class="title">Sản Phẩm</span>
+            </a>
+          </li>
+          <li>
+            <a href="/category">
+              <span class="icon"><i class="fas fa-clipboard-list"></i></span>
+              <span class="title">Danh Mục</span>
+            </a>
+          </li>
+          <li>
+            <a href="/provider">
+              <span class="icon"><i class="fas fa-warehouse"></i></span>
+              <span class="title">Nhà Cung Cấp</span>
+            </a>
+          </li>
+          <li>
+            <a href="/receipt">
+              <span class="icon"><i
+                  class="fas fa-file-invoice-dollar"
+                ></i></span>
+              <span class="title">Hóa Đơn Nhập</span>
+            </a>
+          </li>
+          <li>
+            <a href="/statistic">
+              <span class="icon"><i class="fas fa-chart-bar"></i></span>
+              <span class="title">Thống Kê</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+              <span class="title">Đăng Xuất</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="main">
+        <!-- nav bar -->
+        <div class="topbar">
+          <div class="toggle">
+            <i class="fas fa-bars"></i>
+          </div>
+
+          <div class="user">
+            <a href="#"><img src="/img/user.jpg" class="user-pic" /></a>
+          </div>
+        </div>
+
+        {{{body}}}
+
+      </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+    {{{_blocks.js}}}
+  </body>
+</html>

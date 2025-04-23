@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hóa đơn nhập hàng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      font-size: 14px;
+      color: #000;
+    }
+    h2 {
+      text-align: center;
+      margin: 50px 0;
+    }
+    .info-section {
+      margin-bottom: 20px;
+    }
+    .info-section p {
+      margin: 4px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #000;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .total_info{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .totals {
+      border-collapse: collapse;
+      width: 60%;
+      margin: 30px 0;
+    }
+    .totals,
+    .totals tr,
+    .totals tr td {
+      border: none;
+    }
+    .totals tr{
+        border-bottom: 1px solid #ddd;
+    }
+    .totals tr:last-child{
+        border: none;
+        font-weight: 600;
+    }
+    .totals tr td {
+        padding: 10px 0;
+    }
+    .totals tr td:first-child{
+        text-align: left;
+    }
+    .totals tr td:last-child{
+        text-align: right;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <h2>HÓA ĐƠN NHẬP HÀNG</h2>
+
+  <div class="info-section">
+    <p style="font-size: 18px;"><strong>Số hóa đơn:</strong> #{{id}}</p>
+    <p>Nhân viên tạo đơn: {{receipt_info.TenNhanVien}}</p>
+    <p>Ngày nhập hàng: {{formatDate receipt_info.NgayNhap "DD/MM/YYYY HH:mm"}}</p>
+  </div>
+  <hr>
+
+  <div class="info-section" style="margin-top: 20px;">
+    <h3 style="font-size: 18px;">THÔNG TIN NHÀ CUNG CẤP</h3>
+    <p><strong>Tên nhà cung cấp:</strong> {{receipt_info.TenNCC}}</p>
+    <p><strong>Số điện thoại:</strong> {{receipt_info.SDT}}</p>
+    <p><strong>Email:</strong> {{receipt_info.Email}}</p>
+    <p><strong>Địa chỉ:</strong> {{receipt_info.SoNhaDuong}}, {{receipt_info.PhuongXa}}, {{receipt_info.QuanHuyen}}, {{receipt_info.TinhThanhPho}}</p>
+  </div>
+
+  <h3 style="font-size: 18px; margin-top: 40px;">CHI TIẾT SẢN PHẨM</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Sản phẩm</th>
+        <th>Đơn giá</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+        {{#each product_detail}}
+        <tr>
+            <td>{{inc @index}}</td>
+            <td>{{this.TenSanPham}}</td>
+            <td>{{formatCurrency this.GiaNhap}}</td>
+            <td>{{this.SoLuong}}</td>
+            <td>{{formatCurrency this.ThanhTien}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+  </table>
+
+  <div class="total_info">
+    <table class="totals">
+        <tr>
+            <td>Tạm tính:</td>
+            <td>{{formatCurrency receipt_info.TongTien}}</td>
+        </tr>
+        <tr>
+            <td>Phí vận chuyển:</td>
+            <td>{{formatCurrency 30000.00}}</td>
+        </tr>
+        <tr>
+            <td>Tổng cộng:</td>
+            <td>{{formatCurrency (add receipt_info.TongTien 30000.00)}}</td>
+        </tr>
+    </table>
+  </div>
+
+  <hr>
+  <div class="footer">
+    Cảm ơn đã đồng hành cùng Book Store!
+  </div>
+</body>
+</html>

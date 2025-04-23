@@ -1,13 +1,11 @@
-const OrderModel = require('../model/historyModel');
+import getHoaDonByUserIdAndStatus from "../model/historyModel.js";
 
 function formatCurrencyVND(amount) {
-  return parseFloat(amount).toLocaleString('vi-VN', {
-    maximumFractionDigits: 0
-  }) + ' đ';
+  return (
+    parseFloat(amount).toLocaleString("vi-VN", { maximumFractionDigits: 0 }) +
+    " đ"
+  );
 }
-
-
-
 
 const renderHistoryPage = async (req, res) => {
   try {
@@ -15,14 +13,15 @@ const renderHistoryPage = async (req, res) => {
     const status = req.query.status; // lấy status từ URL
 
     if (!userId) {
-      return res.redirect('/user/account?error=' + encodeURIComponent('Chưa đăng nhập'));
+      return res.redirect(
+        "/user/account?error=" + encodeURIComponent("Chưa đăng nhập")
+      );
     }
-    console.log(status)
-    let history= await OrderModel.getHoaDonByUserIdAndStatus(userId, status);
-
+    console.log(status);
+    let history = await getHoaDonByUserIdAndStatus(userId, status);
 
     // Xử lý text và màu hiển thị trạng thái
-    history.forEach(hd => {
+    history.forEach((hd) => {
       switch (hd.TinhTrangDon) {
         case "Cho xac nhan":
           hd.TrangThaiText = "🚚 Chờ xác nhận";
@@ -54,22 +53,27 @@ const renderHistoryPage = async (req, res) => {
       }
     });
 
-    history.forEach(hoaDons=>{
-      hoaDons.DaHuy = hoaDons.TinhTrangDon === 'Da huy';
-      hoaDons.TongTien=formatCurrencyVND(hoaDons.TongTien)
-      hoaDons.ChiTietHoaDonXuat.forEach(hd => {
+    history.forEach((hoaDons) => {
+      hoaDons.DaHuy = hoaDons.TinhTrangDon === "Da huy";
+      hoaDons.TongTien = formatCurrencyVND(hoaDons.TongTien);
+      hoaDons.ChiTietHoaDonXuat.forEach((hd) => {
         hd.Gia = formatCurrencyVND(hd.Gia);
-        hd.ThanhTien=formatCurrencyVND(hd.ThanhTien)
+        hd.ThanhTien = formatCurrencyVND(hd.ThanhTien);
       });
-    })
+    });
 
-    res.render('lichsudonhang', { history,status: req.query.status || null, session: req.session });
+    res.render("lichsudonhang", {
+      history,
+      status: req.query.status || null,
+      session: req.session,
+    });
   } catch (error) {
-    console.error('Lỗi khi tải lịch sử đơn hàng:', error);
-    res.redirect('/user/errorPage?error=' + encodeURIComponent('Lỗi khi tải lịch sử đơn hàng'));
+    console.error("Lỗi khi tải lịch sử đơn hàng:", error);
+    res.redirect(
+      "/user/errorPage?error=" +
+        encodeURIComponent("Lỗi khi tải lịch sử đơn hàng")
+    );
   }
 };
 
-module.exports = {
-  renderHistoryPage
-};
+export default { renderHistoryPage };

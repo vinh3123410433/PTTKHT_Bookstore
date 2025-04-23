@@ -1,4 +1,4 @@
-const database = require("../../config/db");
+import database from "../../config/db.js";
 
 const createHoaDonXuat = async ({
   ID_KH,
@@ -59,6 +59,7 @@ const capNhatDiaChi = async ({
     throw error;
   }
 };
+
 const cancelOrder = async (ID_HDX) => {
   const query = `
       UPDATE GiaoHang
@@ -75,8 +76,4 @@ const cancelOrder = async (ID_HDX) => {
   }
 };
 
-module.exports = {
-  createHoaDonXuat,
-  capNhatDiaChi,
-  cancelOrder,
-};
+export default { createHoaDonXuat, capNhatDiaChi, cancelOrder };

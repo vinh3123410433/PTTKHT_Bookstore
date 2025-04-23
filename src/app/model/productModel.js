@@ -1,4 +1,4 @@
-const database = require("../../config/db");
+import database from "../../config/db.js";
 
 const getProductById = async (SanPhamID) => {
   const query = `
@@ -9,6 +9,5 @@ const getProductById = async (SanPhamID) => {
   const [rows] = await database.query(query, [SanPhamID]);
   return rows[0];
 };
-module.exports = {
-  getProductById,
-};
+
+export default { getProductById };

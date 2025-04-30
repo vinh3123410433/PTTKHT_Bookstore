@@ -1,15 +1,14 @@
 import express from "express";
-import siteRouter from "./site.js";
-import userRouter from "./userRouter.js";
-import cartRouter from "./cartRouter.js";
-import historyRouter from "./historyRouter.js";
-import orderRouter from "./orderRouter.js";
+import siteRouter from "./user/site.js";
+import userRouter from "./user/userRouter.js";
+import cartRouter from "./user/cartRouter.js";
+import historyRouter from "./user/historyRouter.js";
+import orderRouter from "./user/orderRouter.js";
 
 // Controllers
-import pdController from "../app/controllers/ProductsController.js";
-import categoryController from "../app/controllers/CategoryController.js";
-import siteController from "../app/controllers/SiteController.js";
-
+import pdController from "../app/controllers/user/ProductsController.js";
+import categoryController from "../app/controllers/user/CategoryController.js";
+import siteController from "../app/controllers/user/SiteController.js";
 const router = express.Router();
 
 // Các route cho các phần của website

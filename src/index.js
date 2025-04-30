@@ -1,11 +1,12 @@
 // src/index.js
+
 import express from "express";
 import route from "./routes/index.js";
 import configViewEngine from "./config/viewEngine.js";
 import configSession from "./config/session.js";
 
 const app = express();
-const port = 3003;
+const port = 5000;
 
 // Body parser
 app.use(express.urlencoded({ extended: true }));

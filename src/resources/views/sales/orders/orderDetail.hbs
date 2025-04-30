@@ -1,0 +1,132 @@
+<div class="container">
+  <div class="invoice-header">
+    <h2 class="centered-title">HÓA ĐƠN MUA HÀNG</h2>
+    <div class="row">
+      {{!-- <div class="col-md-6">
+        <h3>{{company.name}}</h3>
+        <p>{{company.address}}</p>
+        <p>Điện thoại: {{company.phone}}</p>
+        <p>Email: {{company.email}}</p>
+      </div> --}}
+      <div class="col-md-6">
+        {{!-- <img src="{{company.logo}}" alt="Logo công ty" height="100" /> --}}
+        <h4>Số hóa đơn: #{{orderDetails.order.IDHoaDonXuat}}</h4>
+        <p>Ngày đặt hàng: {{formatDate orderDetails.order.NgayXuat}}</p>
+        {{!-- <p>Ngày giao hàng: {{formatDate order.deliveryDate}}</p> --}}
+      </div>
+    </div>
+  </div>
+
+  <div class="customer-info">
+    <h4><strong>THÔNG TIN KHÁCH HÀNG</strong></h4>
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Tên khách hàng:</strong>
+          {{orderDetails.order.TenNguoiNhan}}</p>
+        <p><strong>Số điện thoại:</strong>
+          {{orderDetails.order.SoDienThoai}}</p>
+        {{!-- <p><strong>Email:</strong> {{customer.email}}</p> --}}
+        <p><strong>Địa chỉ:</strong>
+          {{orderDetails.order.SoNhaDuong}},
+          {{orderDetails.order.QuanHuyen}},
+          {{orderDetails.order.TinhThanhPho}}</p>
+        <p><strong>Phương thức thanh toán:</strong>
+          {{orderDetails.order.PhuongThucThanhToan}}</p>
+      </div>
+      {{! <div class="col-md-6"> }}
+      {{!-- <p><strong>Trạng thái thanh toán:</strong> {{order.paymentStatus}}</p> --}}
+      {{! </div> }}
+    </div>
+  </div>
+
+  <div class="order-items">
+    <h4><strong>CHI TIẾT SẢN PHẨM</strong></h4>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Sản phẩm</th>
+          <th>Đơn giá</th>
+          <th>Số lượng</th>
+          <th>Thành tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each orderDetails.items}}
+          <tr>
+            <td>{{inc @index}}</td>
+            <td>{{this.TenSanPham}}</td>
+            <td>{{formatCurrency this.Gia}}</td>
+            <td>{{this.SoLuong}}</td>
+            <td>{{formatCurrency this.ThanhTien}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="order-summary">
+    
+    <div class="summary-container">
+      <div class="summary-row">
+        <div class="summary-label">Tổng tiền hàng:</div>
+        <div class="summary-value">{{formatCurrency
+            orderDetails.summary.subtotal
+          }}</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Phí vận chuyển:</div>
+        <div class="summary-value">{{formatCurrency
+            orderDetails.summary.shipping
+          }}</div>
+      </div>
+      <div class="summary-row">
+        <div class="summary-label">Giảm giá:</div>
+        <div class="summary-value">{{formatCurrency
+            orderDetails.summary.discount
+          }}</div>
+      </div>
+      <div class="summary-row total-row">
+        <div class="summary-label">Tổng tiền:</div>
+        <div class="summary-value">{{formatCurrency
+            orderDetails.summary.total
+          }}</div>
+      </div>
+    
+  </div>
+
+  <div class="footer">
+    <p class="text-center">Cảm ơn quý khách đã mua hàng tại Book Store!</p>
+  </div>
+</div>
+
+<style>
+  /* Base styling */ .container { font-family: Arial, sans-serif; width: 148mm;
+  /* A5 width */ height: 210mm; /* A5 height */ margin: 0 auto; padding: 10mm;
+  border: 1px solid #ccc; box-sizing: border-box; } /* Typography adjustments
+  for A5 */ body { font-size: 9pt; line-height: 1.3; } h2 { font-size: 14pt;
+  margin-bottom: 5pt; } h3 { font-size: 12pt; margin-bottom: 4pt; } h4 {
+  font-size: 10pt; margin-bottom: 4pt; } p { margin: 3pt 0; } /* Section spacing
+  */ .invoice-header { border-bottom: 1pt solid #ddd; padding-bottom: 0pt;
+  margin-bottom: 8pt; } .customer-info, .delivery-info, .order-items {
+  margin-bottom: 8pt; } /* Table adjustments */ .table { width: 100%;
+  border-collapse: collapse; margin-bottom: 8pt; } .table th, .table td {
+  border: 0.5pt solid #ddd; padding: 3pt; text-align: left; font-size: 8pt; }
+  .table th { background-color: #f2f2f2; } /* Utilities */ .text-right {
+  text-align: right; } .text-center { text-align: center; } .footer {
+  margin-top: 10pt; padding-top: 6pt; border-top: 0.5pt solid #ddd; font-size:
+  8pt; } /* Image sizing */ img { max-height: 60pt; width: auto; } /* Row
+  spacing */ .row { display: flex; flex-wrap: wrap; margin-bottom: 5pt; }
+  .col-md-6 { width: 100%; box-sizing: border-box; } /* Print-specific settings
+  */ @media print { @page { size: A5; margin: 0; } html, body { width: 148mm;
+  height: 210mm; margin: 0; padding: 0; } .container { border: none; width:
+  100%; height: 100%; page-break-after: always; } } /* Add this new style for
+  the centered title */ .centered-title { text-align: center; width: 100%;
+  font-size: 16pt; font-weight: bold; } /* Order summary styles */
+  .order-summary { margin-top: 15pt; margin-bottom: 15pt; padding: 5pt; } .summary-container { width: 70%; margin-left: auto; }
+  .summary-row { display: flex; justify-content: space-between; padding: 3pt
+  5pt; border-bottom: 0.5pt dotted #ccc; } .summary-label { font-weight: bold;
+  text-align: right; } .summary-value { min-width: 80pt; text-align: right; }
+  .total-row { border-top: 1pt solid #000; border-bottom: none; font-weight:
+  bold; font-size: 10pt; padding-top: 5pt; }
+</style>

@@ -1,0 +1,210 @@
+<div class="container">
+  <!-- side bar -->
+  <div class="sidebar">
+    <ul>
+      <li>
+        <a href="/">
+          <span></span>
+          <span><h1>BOOK STORE</h1></span>
+        </a>
+      </li>
+      <li>
+        <a href="/">
+          <span><i class="fas fa-home"></i></span>
+          <span>Tổng Quan</span>
+        </a>
+      </li>
+      <li class="active">
+        <a href="/orders/show">
+          <span><i class="fas fa-shopping-cart"></i></span>
+          <span>Đơn Hàng</span>
+        </a>
+      </li>
+      <li>
+        <a href="/statistic">
+          <span><i class="fas fa-chart-bar"></i></span>
+          <span>Thống Kê</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span><i class="fas fa-sign-out-alt"></i></span>
+          <span>Đăng Xuất</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <!-- nav bar -->
+    <div class="navbar">
+      <div class="navbar-toggle">
+        {{! <i class="fas fa-bars"></i> }}
+      </div>
+      <div class="search-box">
+        <label>
+          <input type="text" placeholder="Tìm Kiếm" />
+          <i class="fas fa-search"></i>
+        </label>
+      </div>
+      <div class="user-profile">
+        <a href="#"><img src="/user.jpg" /></a>
+      </div>
+    </div>
+
+    <!-- Nội dung thống kê doanh thu -->
+    <div class="statistics-container">
+      <h2 class="content-title">Thống kê doanh thu</h2>
+
+      <div class="section-header">
+        <div class="tab-navigation">
+          <a href="/statistic?type=year" class="tab-item {{#if (eq activeTab 'year')}}active{{/if}}" data-tab="year">Thống kê theo năm</a>
+          <a href="/statistic?type=month" class="tab-item {{#if (eq activeTab 'month')}}active{{/if}}" data-tab="month">Thống kê từng tháng trong năm</a>
+          <a href="/statistic?type=day" class="tab-item {{#if (eq activeTab 'day')}}active{{/if}}" data-tab="day">Thống kê từng ngày trong tháng</a>
+          <a href="/statistic?type=custom" class="tab-item {{#if (eq activeTab 'custom')}}active{{/if}}" data-tab="custom">Thống kê từ ngày đến ngày</a>
+        </div>
+        <form action="/statistic/api/export" method="GET">
+          <!-- Thêm các tham số hiện tại của URL -->
+          <input type="hidden" name="type" value="{{activeTab}}">
+          {{#if (eq activeTab 'custom')}}
+            <input type="hidden" name="startDate" value="{{defaultStartDate}}">
+            <input type="hidden" name="endDate" value="{{defaultEndDate}}">
+          {{/if}}
+          {{#if (eq activeTab 'year')}}
+            <input type="hidden" name="startYear" value="{{startYear}}">
+            <input type="hidden" name="endYear" value="{{endYear}}">
+          {{/if}}
+          {{#if (eq activeTab 'month')}}
+            <input type="hidden" name="year" value="{{selectedYear}}">
+          {{/if}}
+          {{#if (eq activeTab 'day')}}
+            <input type="hidden" name="month" value="{{currentMonth}}">
+            <input type="hidden" name="year" value="{{currentYear}}">
+          {{/if}}
+          <button type="submit" id="export-btn" class="export-button">
+            <i class="fas fa-file-export"></i>
+            Xuất excel
+          </button>
+        </form>
+      </div>
+
+      <!-- Date range selector - Hidden by default -->
+      <div
+        id="date-range-selector"
+        class="date-range-selector"
+        style="display: {{#if (eq activeTab 'custom')}}block{{else}}none{{/if}};"
+      >
+        <form action="/statistic" method="GET">
+          <input type="hidden" name="type" value="custom">
+          <div class="date-range-inputs">
+            <div class="date-input-group">
+              <label for="start-date">Từ ngày:</label>
+              <input type="date" id="start-date" name="startDate" class="date-input" value="{{defaultStartDate}}" />
+            </div>
+            <div class="date-input-group">
+              <label for="end-date">Đến ngày:</label>
+              <input type="date" id="end-date" name="endDate" class="date-input" value="{{defaultEndDate}}" />
+            </div>
+            <button type="submit" class="apply-button">Áp dụng</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Year selector - Hidden by default -->
+      <div id="year-selector" class="year-selector" style="display: {{#if (eq activeTab 'year')}}block{{else}}none{{/if}};">
+        <form action="/statistic" method="GET">
+          <input type="hidden" name="type" value="year">
+          <div class="year-selector-inputs">
+            <label for="select-year">Chọn từ năm:</label>
+            <select id="select-year" name="startYear" class="year-input">
+              {{#each years}}
+                <option value="{{this}}" {{#if (eq ../startYear this)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+            <label for="select-year-to">Chọn đến năm:</label>
+            <select id="select-year-to" name="endYear" class="year-input">
+              {{#each years}}
+                <option value="{{this}}" {{#if (eq ../endYear this)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+            <button type="submit" class="apply-button">Áp dụng</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Month in year selector - Hidden by default -->
+      <div
+        id="month-in-year-selector"
+        class="month-in-year-selector"
+        style="display: {{#if (eq activeTab 'month')}}block{{else}}none{{/if}};"
+      >
+        <form action="/statistic" method="GET">
+          <input type="hidden" name="type" value="month">
+          <div class="month-in-year-inputs">
+            <label for="select-year-for-months">Chọn năm:</label>
+            <select id="select-year-for-months" name="year" class="year-input">
+              {{#each years}}
+                <option value="{{this}}" {{#if (eq ../selectedYear this)}}selected{{/if}}>{{this}}</option>
+              {{/each}}
+            </select>
+            <button type="submit" class="apply-button">Áp dụng</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Day in month selector - Hidden by default -->
+      <div id="day-in-month-selector" class="day-in-month-selector" style="display: {{#if (eq activeTab 'day')}}block{{else}}none{{/if}};">
+        <form action="/statistic" method="GET">
+          <input type="hidden" name="type" value="day">
+          <div class="day-in-month-inputs">
+            <label for="select-month">Chọn tháng:</label>
+            <select id="select-month" name="month" class="month-input">
+              {{#each months}}
+                <option value="{{this.value}}" {{#if (eq ../currentMonth this.value)}}selected{{/if}}>{{this.text}}</option>
+              {{/each}}
+            </select>
+            <input type="hidden" name="year" value="{{currentYear}}">
+            <button type="submit" class="apply-button">Áp dụng</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="statistics-table-container">
+        <table class="statistics-table">
+          <thead>
+            <tr>
+              <th>Thời gian</th>
+              <th>Doanh thu</th>
+              <th>Vốn</th>
+              <th>Lợi nhuận</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#if data.length}}
+              {{#each data}}
+                <tr>
+                  <td>{{this.Ngay}}</td>
+                  <td>{{this.DoanhThu}}</td>
+                  <td>{{this.Von}}</td>
+                  <td>{{this.LoiNhuan}}</td>
+                </tr>
+              {{/each}}
+            {{else}}
+              <tr>
+                <td colspan="4" class="no-data">Không có dữ liệu cho khoảng thời gian này</td>
+              </tr>
+            {{/if}}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Tổng</td>
+              <td>{{totals.DoanhThu}}</td>
+              <td>{{totals.Von}}</td>
+              <td>{{totals.LoiNhuan}}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

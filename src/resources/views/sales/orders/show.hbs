@@ -1,0 +1,521 @@
+<div class="container">
+  <!-- side bar -->
+  <div class="sidebar">
+    <ul>
+      <li>
+        <a href="/">
+          <span></span>
+          <span><h1>BOOK STORE</h1></span>
+        </a>
+      </li>
+      <li>
+        <a href="/">
+          <span><i class="fas fa-home"></i></span>
+          <span>Tổng Quan</span>
+        </a>
+      </li>
+      {{!-- <li>
+        <a href="#">
+          <span><i class="fas fa-gifts"></i></span>
+          <span>Sản Phẩm</span>
+        </a>
+      </li> --}}
+      <li class="active">
+        <a href="/orders/show">
+          <span><i class="fas fa-shopping-cart"></i></span>
+          <span>Đơn Hàng</span>
+        </a>
+      </li>
+      <li>
+        <a href="/statistic">
+          <span><i class="fas fa-chart-bar"></i></span>
+          <span>Thống Kê</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span><i class="fas fa-sign-out-alt"></i></span>
+          <span>Đăng Xuất</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <!-- nav bar -->
+    <div class="navbar">
+      <div class="navbar-toggle">
+        {{! <i class="fas fa-bars"></i> }}
+      </div>
+      <div class="search-box">
+        <label>
+          <input type="text" placeholder="Tìm Kiếm" />
+          <i class="fas fa-search"></i>
+        </label>
+      </div>
+      <div class="user-profile">
+        <a href="#"><img src="/user.jpg" /></a>
+      </div>
+    </div>
+
+    <!-- Nội dung quản lý đơn hàng -->
+    <div class="order-content">
+      <div class="order-header">
+        <h2 class="order-title">Hóa đơn xuất</h2>
+        <div class="order-filters">
+          <form class="filter-form">
+            <div class="filter-group">
+              <input type="text" name="id" placeholder="Mã đơn hàng" value="{{query.id}}" />
+            </div>
+            <div class="filter-group">
+              <select name="status">
+                <option value="" {{#unless query.status}}selected{{/unless}}>Trạng thái đơn hàng</option>
+                <option value="pending" {{#if (eq query.status "pending")}}selected{{/if}}>Chờ xác nhận</option>
+                <option value="processing" {{#if (eq query.status "processing")}}selected{{/if}}>Chờ lấy hàng</option>
+                <option value="shipping" {{#if (eq query.status "shipping")}}selected{{/if}}>Đang giao hàng</option>
+                <option value="completed" {{#if (eq query.status "completed")}}selected{{/if}}>Đã giao</option>
+                <option value="cancelled" {{#if (eq query.status "cancelled")}}selected{{/if}}>Đã hủy</option>
+                <option value="returned" {{#if (eq query.status "returned")}}selected{{/if}}>Trả hàng</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <select name="paymentMethod">
+                <option value="" {{#unless query.paymentMethod}}selected{{/unless}}>Tất cả PTTT</option>
+                <option value="cod" {{#if (eq query.paymentMethod "cod")}}selected{{/if}}>Tiền mặt</option>
+                <option value="bank" {{#if (eq query.paymentMethod "bank")}}selected{{/if}}>Chuyển khoản</option>
+                <option value="credit" {{#if (eq query.paymentMethod "credit")}}selected{{/if}}>Credit card</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <select name="paymentStatus">
+                <option value="" {{#unless query.paymentStatus}}selected{{/unless}}>Tình trạng thanh toán</option>
+                <option value="paid" {{#if (eq query.paymentStatus "paid")}}selected{{/if}}>Đã thanh toán</option>
+                <option value="unpaid" {{#if (eq query.paymentStatus "unpaid")}}selected{{/if}}>Chưa thanh toán</option>
+                <option value="refunded" {{#if (eq query.paymentStatus "refunded")}}selected{{/if}}>Đã hoàn tiền</option>
+                <option value="not_refunded" {{#if (eq query.paymentStatus "not_refunded")}}selected{{/if}}>Chưa hoàn tiền</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <input
+                type="text"
+                name="fromDate"
+                id="fromDate"
+                onfocus="(this.type='date')"
+                onblur="if(!this.value) this.type='text'"
+                placeholder="Từ ngày"
+                value="{{query.fromDate}}"
+              />
+            </div>
+            <div class="filter-group">
+              <input
+                type="text"
+                name="toDate"
+                onfocus="(this.type='date')"
+                onblur="if(!this.value) this.type='text'"
+                id="toDate"
+                placeholder="Đến ngày"
+                value="{{query.toDate}}"
+              />
+            </div>
+
+            <div class="form-buttons-container">
+              <button class="filter-button" type="submit">
+                <i class="fas fa-filter"></i>
+                Lọc
+              </button>
+              <button class="reset-button" type="button">
+                <i class="fas fa-sync-alt"></i>
+                Làm mới
+              </button>
+              <button class="export-button" type="button">
+                <i class="fas fa-file-export"></i>
+                Xuất Excel 
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab danh sách đơn hàng -->
+      <div class="order-tabs">
+        <div class="order-tab {{#if (eq activeTab 'all')}}active{{/if}}" data-target="all-orders" data-value="all">
+          Tất cả đơn hàng
+        </div>
+        <div class="order-tab {{#if (eq activeTab 'return-cancel')}}active{{/if}}" data-target="return-cancel-requests" data-value="return-cancel">
+          Yêu cầu hủy/trả
+          <span class="badge">{{counts.returnRequests}}</span>
+        </div>
+        <div class="order-tab {{#if (eq activeTab 'archived')}}active{{/if}}" data-target="archived-orders" data-value="archived">
+          Đơn hàng đã lưu trữ
+        </div>
+      </div>
+
+      <!-- Active Filters Display -->
+      {{#if hasActiveFilters}}
+      <div class="active-filters">
+        <span class="active-filters-title">Bộ lọc đang áp dụng:</span>
+        {{#each activeFilters}}
+          <div class="filter-tag">
+            <span class="filter-name">{{this.name}}:</span>
+            <span class="filter-value">{{this.value}}</span>
+            <a href="javascript:void(0);" class="remove-filter" data-param="{{this.param}}">
+              <i class="fas fa-times"></i>
+            </a>
+          </div>
+        {{/each}}
+      </div>
+      {{/if}}
+
+      <!-- Nội dung từng tab -->
+      <div id="all-orders" class="order-content-section {{#if (eq activeTab 'all')}}active{{else}}{{#unless activeTab}}active{{/unless}}{{/if}}">
+        <!-- Bảng đơn hàng -->
+        <div class="order-table-container">
+          {{#if orders.length}}
+          <table class="order-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;" class="checkbox-cell">
+                  <input
+                    type="checkbox"
+                    id="select-all-checkbox"
+                    class="checkbox-custom"
+                  />
+                </th>
+                <th>
+                  Mã đơn hàng
+                  <span class="sort-icon" data-sort="id">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Khách hàng
+                  <span class="sort-icon" data-sort="customer">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Ngày đặt
+                  <span class="sort-icon" data-sort="date">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Tổng tiền
+                  <span class="sort-icon" data-sort="amount">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Trạng thái đơn hàng
+                  <span class="sort-icon" data-sort="status">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Phương Thức Thanh Toán
+                  <span class="sort-icon" data-sort="paymentMethod">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Tình Trạng Thanh Toán
+                  <span class="sort-icon" data-sort="paymentStatus">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th class="text-center" style="width: 120px;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each orders}}
+                <tr data-id="{{this.IDHoaDonXuat}}">
+                  <td class="checkbox-cell">
+                    <input
+                      type="checkbox"
+                      class="order-checkbox checkbox-custom"
+                      data-id="{{this.IDHoaDonXuat}}"
+                    />
+                  </td>
+                  <td class="order-id">
+                    <a href="/orders/{{this.IDHoaDonXuat}}">#{{this.IDHoaDonXuat}}</a>
+                  </td>
+                  <td>{{this.TenNguoiNhan}}</td>
+                  <td>{{formatCurrentDate this.NgayXuat}}</td>
+                  <td>{{formatCurrency this.TongTien}}</td>
+                  <td>
+                    <span class="status-badge {{statusClass this.TinhTrangDon}}">
+                      {{this.TinhTrangDon}}
+                    </span>
+                  </td>
+                  <td>{{this.PhuongThucThanhToan}}</td>
+                  <td>
+                    <span class="status-badge {{statusClass this.TinhTrangThanhToan}}">
+                      {{this.TinhTrangThanhToan}}
+                    </span>
+                  </td>
+                  <td class="action-buttons">
+                    <a href="/orders/{{this.IDHoaDonXuat}}" class="view-button">
+                      <i class="fas fa-eye"></i> 
+                    </a>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <div class="no-results-message">
+            <i class="fas fa-search"></i>
+            <p>Không tìm thấy đơn hàng nào phù hợp với bộ lọc.</p>
+            <p>Vui lòng thử lại với điều kiện lọc khác hoặc <a href="javascript:void(0);" class="clear-all-filters">xóa tất cả bộ lọc</a>.</p>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      <!-- Tab yêu cầu hủy/trả hàng -->
+      <div id="return-cancel-requests" class="order-content-section {{#if (eq activeTab 'return-cancel')}}active{{/if}}">
+        <div class="order-table-container">
+          {{#if returnCancelRequests.length}}
+          <table class="order-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;" class="checkbox-cell">
+                  <input type="checkbox" class="checkbox-custom" />
+                </th>
+                <th>
+                  Mã đơn hàng
+                  <span class="sort-icon" data-sort="id">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Khách hàng
+                  <span class="sort-icon" data-sort="customer">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Ngày đặt
+                  <span class="sort-icon" data-sort="date">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Tổng tiền
+                  <span class="sort-icon" data-sort="amount">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Trạng thái đơn hàng
+                  <span class="sort-icon" data-sort="status">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Phương Thức Thanh Toán
+                  <span class="sort-icon" data-sort="paymentMethod">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Tình Trạng Thanh Toán
+                  <span class="sort-icon" data-sort="paymentStatus">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th class="text-center" style="width: 120px;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each returnCancelRequests}}
+                <tr data-id="{{this.IDHoaDonXuat}}">
+                  <td class="checkbox-cell">
+                    <input
+                      type="checkbox"
+                      class="order-checkbox checkbox-custom"
+                      data-id="{{this.IDHoaDonXuat}}"
+                    />
+                  </td>
+                  <td class="order-id">
+                    <a href="/orders/{{this.IDHoaDonXuat}}">#{{this.IDHoaDonXuat}}</a>
+                  </td>
+                  <td>{{this.TenNguoiNhan}}</td>
+                  <td>{{formatCurrentDate this.NgayXuat}}</td>
+                  <td>{{formatCurrency this.TongTien}}</td>
+                  <td>
+                    <span class="status-badge {{statusClass this.TinhTrangDon}}">
+                      {{this.TinhTrangDon}}
+                    </span>
+                  </td>
+                  <td>{{this.PhuongThucThanhToan}}</td>
+                  <td>
+                    <span class="status-badge {{statusClass this.TinhTrangThanhToan}}">
+                      {{this.TinhTrangThanhToan}}
+                    </span>
+                  </td>
+                  <td class="action-buttons">
+                    <a href="/orders/{{this.IDHoaDonXuat}}" class="view-button">
+                      <i class="fas fa-eye"></i> Chi tiết
+                    </a>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <div class="no-results-message">
+            <i class="fas fa-search"></i>
+            <p>Không tìm thấy yêu cầu hủy/trả hàng nào phù hợp với bộ lọc.</p>
+            <p>Vui lòng thử lại với điều kiện lọc khác hoặc <a href="javascript:void(0);" class="clear-all-filters">xóa tất cả bộ lọc</a>.</p>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      <!-- Tab đơn hàng đã lưu trữ -->
+      <div id="archived-orders" class="order-content-section {{#if (eq activeTab 'archived')}}active{{/if}}">
+        <div class="order-table-container">
+          {{#if archivedOrders.length}}
+          <table class="order-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;" class="checkbox-cell">
+                  <input type="checkbox" class="checkbox-custom" />
+                </th>
+                <th>
+                  Mã đơn hàng
+                  <span class="sort-icon" data-sort="id">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Khách hàng
+                  <span class="sort-icon" data-sort="customer">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Ngày đặt
+                  <span class="sort-icon" data-sort="date">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Tổng tiền
+                  <span class="sort-icon" data-sort="amount">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Trạng thái đơn hàng
+                  <span class="sort-icon" data-sort="status">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Phương Thức Thanh Toán
+                  <span class="sort-icon" data-sort="paymentMethod">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th>
+                  Tình Trạng Thanh Toán
+                  <span class="sort-icon" data-sort="paymentStatus">
+                    <i class="fas fa-sort"></i>
+                  </span>
+                </th>
+                <th class="text-center" style="width: 120px;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each archivedOrders}}
+                <tr data-id="{{this.IDHoaDonXuat}}">
+                  <td class="checkbox-cell">
+                    <input
+                      type="checkbox"
+                      class="order-checkbox checkbox-custom"
+                      data-id="{{this.IDHoaDonXuat}}"
+                    />
+                  </td>
+                  <td class="order-id">
+                    <a href="/orders/{{this.IDHoaDonXuat}}">#{{this.IDHoaDonXuat}}</a>
+                  </td>
+                  <td>{{this.TenNguoiNhan}}</td>
+                  <td>{{formatCurrentDate this.NgayXuat}}</td>
+                  <td>{{formatCurrency this.TongTien}}</td>
+                  <td>
+                    <span class="status-badge {{statusClass this.TinhTrangDon}}">
+                      {{this.TinhTrangDon}}
+                    </span>
+                  </td>
+                  <td>{{this.PhuongThucThanhToan}}</td>
+                  <td>
+                    <span class="status-badge {{statusClass this.TinhTrangThanhToan}}">
+                      {{this.TinhTrangThanhToan}}
+                    </span>
+                  </td>
+                  <td class="action-buttons">
+                    <a href="/orders/{{this.IDHoaDonXuat}}" class="view-button">
+                      <i class="fas fa-eye"></i> Chi tiết
+                    </a>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+          {{else}}
+          <div class="no-results-message">
+            <i class="fas fa-search"></i>
+            <p>Không tìm thấy đơn hàng đã lưu trữ nào phù hợp với bộ lọc.</p>
+            <p>Vui lòng thử lại với điều kiện lọc khác hoặc <a href="javascript:void(0);" class="clear-all-filters">xóa tất cả bộ lọc</a>.</p>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+<!-- Thêm script cho chức năng chuyển tab -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.order-tab');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Xóa active class khỏi tất cả các tab
+        tabs.forEach(t => t.classList.remove('active'));
+        
+        // Thêm active class cho tab được click
+        this.classList.add('active');
+        
+        // Lấy target section
+        const targetId = this.getAttribute('data-target');
+        
+        // Ẩn tất cả các section
+        document.querySelectorAll('.order-content-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        
+        // Hiện section được chọn
+        document.getElementById(targetId).classList.add('active');
+        
+        // Lấy giá trị tab từ data-value
+        const tabValue = this.getAttribute('data-value') || '';
+        
+        const currentUrl = new URL(window.location);
+       
+        if (tabValue) {
+          currentUrl.searchParams.set('tab', tabValue);
+        } else {
+          currentUrl.searchParams.delete('tab');
+        }
+        
+        window.location.href = currentUrl.toString();
+      });
+    });
+  });
+</script>

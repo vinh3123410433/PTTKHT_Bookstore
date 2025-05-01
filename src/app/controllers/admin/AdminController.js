@@ -9,7 +9,7 @@ class AdminController {
   async handleLogin(req, res) {
     const { id, password } = req.body;
     const user = await AdminModel.findByID(id);
-    console.log("Tài khoản:", user);
+    // console.log("Tài khoản:", user);
 
     if (!user || user.MatKhau !== password) {
       console.log(user.MatKhau);
@@ -39,7 +39,6 @@ class AdminController {
       default:
         return res.redirect("/admin/login");
     }
-    console.log("hiiiii");
   }
 }
 

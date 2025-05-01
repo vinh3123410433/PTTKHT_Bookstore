@@ -149,6 +149,7 @@ class OrderController {
         activeFilters,
         hasActiveFilters: activeFilters.length > 0,
         layout: "sales",
+        currentPath: req.path,
       });
     } catch (error) {
       console.error("Error fetching orders:", error);

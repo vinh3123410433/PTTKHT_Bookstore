@@ -1,0 +1,51 @@
+<div class="sidebar">
+  <ul>
+    <li>
+      <a href="./">
+        <!-- Quay lại trang Dashboard -->
+        <span></span>
+        <span><h1>BOOK STORE</h1></span>
+      </a>
+    </li>
+    <li class="active">
+      <a href="./">
+        <!-- Trang Dashboard -->
+        <span><i class="fas fa-home"></i></span>
+        <span>Tổng Quan</span>
+      </a>
+    </li>
+    <!-- Đơn Hàng -->
+    <li>
+      <a href="orders/show">
+        <!-- Liên kết đến orders/show -->
+        <span><i class="fas fa-shopping-cart"></i></span>
+        <span>Đơn Hàng</span>
+      </a>
+    </li>
+    <!-- Thống Kê -->
+    <li>
+      <a href="statistic">
+        <!-- Liên kết đến statistic -->
+        <span><i class="fas fa-chart-bar"></i></span>
+        <span>Thống Kê</span>
+      </a>
+    </li>
+    <!-- Đăng Xuất -->
+    <li>
+      <a href="#">
+        <span><i class="fas fa-sign-out-alt"></i></span>
+        <span>Đăng Xuất</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script>
+  document.querySelectorAll('.sidebar a').forEach(link => { const href =
+  link.getAttribute('href'); const currentPath = window.location.pathname; if
+  (currentPath.includes('/admin/sales/')) { if (href === "orders/show") {
+  link.setAttribute('href', "/admin/sales/" + href); } if (href === "statistic")
+  { link.setAttribute('href', "/admin/sales/" + href); } } if
+  (currentPath.includes('/admin/sales/orders/')) { if (href === "./") {
+  link.setAttribute('href', "/admin/sales/"); } } });
+</script>

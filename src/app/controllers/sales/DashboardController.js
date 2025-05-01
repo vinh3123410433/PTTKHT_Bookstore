@@ -40,6 +40,7 @@ class DashboardController {
         ],
         data,
         layout: "sales",
+        currentPath: req.path,
       });
     } catch (error) {
       console.error("Error fetching dashboard data:", error);

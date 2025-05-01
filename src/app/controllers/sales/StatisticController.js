@@ -116,6 +116,7 @@ class StatisticController {
         endYear: endYear || years[0],
         selectedYear: year || years[0],
         layout: "sales",
+        currentPath: req.path,
         // pageTitle: title,
       });
     } catch (error) {

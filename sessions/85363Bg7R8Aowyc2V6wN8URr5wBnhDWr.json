@@ -1,12 +1,1 @@
-{
-  "cookie": {
-    "originalMaxAge": null,
-    "expires": null,
-    "secure": false,
-    "httpOnly": true,
-    "path": "/",
-    "sameSite": "lax"
-  },
-  "user": { "id": 2, "TenNhomQuyen": "warehouse_manager" },
-  "__lastAccess": 1746025388841
-}
+{"cookie":{"originalMaxAge":null,"expires":null,"secure":false,"httpOnly":true,"path":"/","sameSite":"lax"},"user":{"id":2,"TenNhomQuyen":"warehouse_manager"},"__lastAccess":1746027230189}

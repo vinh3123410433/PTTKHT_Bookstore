@@ -19,16 +19,22 @@ class AdminController {
         error: "Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.",
       });
     }
+    // // Lưu session
+    req.session.user = {
+      id: user.ID_TK,
+      TenNhomQuyen: user.TenNhomQuyen.toLowerCase(), // ví dụ: "Admin", "Sale" → chuyển về "admin", "sale"
+    };
+    console.log("Tên nhóm quyền: hiiii" + req.session.user.TenNhomQuyen);
 
     // Điều hướng theo nhóm quyền
     switch (req.session.user.TenNhomQuyen) {
       case "admin":
         return res.redirect("/admin/dashboard");
-      case "sales_manager":
+      case "quản lý bán hàng":
         return res.redirect("/admin/sale");
-      case "manager":
+      case "người quản lý doanh nghiệp":
         return res.redirect("/admin");
-      case "warehouse_manager":
+      case "quản lý kho":
         return res.redirect("/admin/warehouse");
       default:
         return res.redirect("/admin/login");

@@ -9,7 +9,7 @@ class ProductController {
   async index(req, res) {
     try {
       const product = await productConfig.getAll();
-      res.render("warehouse/product", { product });
+      res.render("warehouse/product", { product, layout: "warehouse" });
     } catch (err) {
       console.error(err);
     }

@@ -19,12 +19,6 @@ class AdminController {
         error: "Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.",
       });
     }
-    // Lưu session
-    req.session.user = {
-      id: user.ID_TK,
-      TenNhomQuyen: user.TenNhomQuyen.toLowerCase(), // ví dụ: "Admin", "Sale" → chuyển về "admin", "sale"
-    };
-    console.log("Tên nhóm quyền: " + req.session.user.TenNhomQuyen);
 
     // Điều hướng theo nhóm quyền
     switch (req.session.user.TenNhomQuyen) {
@@ -39,6 +33,7 @@ class AdminController {
       default:
         return res.redirect("/admin/login");
     }
+    console.log("hiiiii");
   }
 }
 

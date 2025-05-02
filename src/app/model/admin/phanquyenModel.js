@@ -19,11 +19,11 @@ async function findPermissionbyQuyenCha(name) {
     return [];
   }
 }
-async function findPAccessIdNhomQuyen(id) {
+async function findPAccessIdNhomQuyen(id, action) {
   try {
     const [rows] = await db.execute(
-      `SELECT ChucNang FROM ChiTietQuyen WHERE ID_NhomQuyen = ? AND HanhDong = 'access'`,
-      [id]
+      `SELECT ChucNang FROM ChiTietQuyen WHERE ID_NhomQuyen = ? AND HanhDong = ?`,
+      [id, action]
     );
     return rows;
   } catch (error) {

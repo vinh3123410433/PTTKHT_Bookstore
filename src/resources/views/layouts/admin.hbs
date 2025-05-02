@@ -2,16 +2,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
+    <title>Quản Lý Doanh Nghiệp</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+    {{{_blocks.css}}}
+
   </head>
   <body>
+    <div class="container">
+      <!-- side bar -->
+      {{>meunuadmin}}
 
-    <main style="padding-top: 0;">
-      {{{body}}}
-    </main>
-    <footer>
+      <div class="main">
+        <!-- nav bar -->
+        <div class="topbar">
+          <div class="toggle">
+            <i class="fas fa-bars"></i>
+          </div>
 
-    </footer>
+          <div class="user">
+            <a href="#"><img src="/img/user.jpg" class="user-pic" /></a>
+          </div>
+        </div>
+
+        {{{body}}}
+
+      </div>
+    </div>
+
+    <script src="/js/script.js"></script>
+    {{{_blocks.js}}}
   </body>
 </html>

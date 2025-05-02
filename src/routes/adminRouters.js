@@ -21,9 +21,24 @@ router.post("/login", AdminController.handleLogin);
 const warehouse = [];
 const sales = [];
 const admin = [];
-router.use("/warehouse", isLoggedIn, checkRole("qlkho"), warehouseRouter);
-router.use("/sales", isLoggedIn, checkRole("qlbanhang"), salesRouter);
-router.use("/dashboard", isLoggedIn, checkRole("admin"), dashboardRouter);
+router.use(
+  "/warehouse",
+  isLoggedIn,
+  checkRole("qlkho", "qldoanhnghiep"),
+  warehouseRouter
+);
+router.use(
+  "/sales",
+  isLoggedIn,
+  checkRole("qlbanhang", "qldoanhnghiep"),
+  salesRouter
+);
+router.use(
+  "/dashboard",
+  isLoggedIn,
+  checkRole("admin", "qldoanhnghiep"),
+  dashboardRouter
+);
 
 // Trang chủ admin (chuyển hướng theo vai trò)
 router.get("/", isLoggedIn, redirectByRole);

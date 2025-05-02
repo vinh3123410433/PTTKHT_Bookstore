@@ -64,4 +64,7 @@ export default {
   json: function (context) {
     return JSON.stringify(context);
   },
+  includes: function (arr, value) {
+    return Array.isArray(arr) && arr.includes(value);
+  },
 };

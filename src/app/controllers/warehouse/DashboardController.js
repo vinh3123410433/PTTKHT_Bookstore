@@ -1,6 +1,6 @@
 // const dashboardConfig = require('../db/dashboard');
 import dashboardConfig from "../../model/warehouse/dashboard.js";
-
+import phanquyen from "../../model/admin/phanquyenModel.js";
 class DashboardController {
   // show the dashboard
   async index(req, res) {
@@ -11,6 +11,11 @@ class DashboardController {
       const sum_paid_money = (await dashboardConfig.get_sum_of_paid_money())[0];
       const provider_recently = await dashboardConfig.get_provider_recently();
       const receipt_recently = await dashboardConfig.get_receipt_recently();
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+      console.log(permissions);
       res.render("warehouse/dashboard", {
         sum_product,
         sum_provider,
@@ -18,7 +23,9 @@ class DashboardController {
         sum_paid_money,
         receipt_recently,
         provider_recently,
+        accessList: req.session.user.accessList,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);

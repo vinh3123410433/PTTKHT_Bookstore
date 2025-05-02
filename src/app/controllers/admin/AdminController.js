@@ -4,7 +4,7 @@ import phanquyen from "../../model/admin/phanquyenModel.js";
 
 class AdminController {
   showLogin(req, res) {
-    res.render("admin/login", { layout: "admin" });
+    res.render("admin/login", { layout: false });
   }
 
   async handleLogin(req, res) {
@@ -19,11 +19,13 @@ class AdminController {
     }
 
     const accessPermissions = await phanquyen.findPAccessIdNhomQuyen(
-      user.ID_NhomQuyen
+      user.ID_NhomQuyen,
+      "access"
     );
 
     req.session.user = {
       id: user.ID_TK,
+      idNQ: user.ID_NhomQuyen,
       TenNhomQuyen: user.TenNhomQuyen.toLowerCase(),
       accessList: accessPermissions.map((item) => item.ChucNang),
     };
@@ -38,7 +40,7 @@ class AdminController {
     };
 
     if (req.session.user.accessList.length === 1) {
-      console.log("1 nè");
+      // console.log("1 nè");
       const onlyAccess = req.session.user.accessList[0];
       console.log(onlyAccess);
       const redirectURL = accessRedirectMap[onlyAccess] || "/admin/dashboard";
@@ -46,8 +48,8 @@ class AdminController {
     } else if (req.session.user.accessList.length > 1) {
       return res.redirect("/admin/dashboard");
     } else {
-      return res.render("admin/login", {
-        layout: "admin",
+      return res.render("errors/403", {
+        layout: false,
         error: "Không tìm thấy quyền truy cập.",
       });
     }

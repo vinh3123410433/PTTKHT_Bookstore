@@ -1,0 +1,169 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  overflow-x: hidden;
+}
+.container {
+  position: relative;
+  width: 100%;
+}
+.navigation {
+  position: fixed;
+  width: 230px;
+  height: 100%;
+  background: #003147;
+  transition: 0.5s;
+  overflow: auto;
+}
+.navigation::-webkit-scrollbar {
+  width: 8px;
+}
+
+.navigation::-webkit-scrollbar-track {
+  background: #00253a; /* tối hơn nền #003147 một chút */
+}
+
+.navigation::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3); /* màu trắng đục nhẹ */
+  border-radius: 4px;
+}
+
+.navigation::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5); /* sáng hơn khi hover */
+}
+
+.navigation.active {
+  width: 60px;
+}
+.navigation ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.navigation ul li {
+  position: relative;
+  width: 100%;
+  list-style: none;
+}
+.navigation ul li:hover {
+  background: #03a9f4;
+  /* background: #334155; */
+}
+/* .navigation ul li:nth-child(1){
+    margin-bottom: 20px;
+} */
+.navigation ul li:nth-child(1):hover {
+  background: transparent;
+}
+.navigation ul li a {
+  position: relative;
+  display: block;
+  width: 100%;
+  display: flex;
+  text-decoration: none;
+  color: #fff;
+}
+.navigation ul li a .icon {
+  position: relative;
+  display: block;
+  min-width: 60px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
+.navigation ul li a .icon .fas {
+  color: #fff;
+  font-size: 24px;
+}
+.navigation ul li a .title {
+  position: relative;
+  display: block;
+  padding: 0 10px;
+  height: 50px;
+  line-height: 50px;
+  white-space: nowrap;
+}
+.main {
+  position: absolute;
+  width: calc(100% - 230px);
+  left: 230px;
+  min-height: 100vh;
+  background: #f5f5f5;
+  transition: 0.5s;
+}
+.main.active {
+  width: calc(100% - 60px);
+  left: 60px;
+}
+.main .topbar {
+  display: flex;
+  width: 100%;
+  background: #fff;
+  height: 60px;
+  padding: 0 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+.toggle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+}
+.toggle .fa-bars {
+  line-height: 60px;
+  font-size: 24px;
+  text-align: center;
+}
+.toggle::before {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: #111;
+}
+.search {
+  position: relative;
+  width: 400px;
+  margin: 0 10px;
+}
+.search label {
+  position: relative;
+  width: 100%;
+}
+.search label input {
+  width: 100%;
+  height: 40px;
+  border-radius: 40px;
+  padding: 5px 20px;
+  padding-left: 35px;
+  outline: none;
+  border: 1px solid rgb(0, 0, 0, 0.2);
+}
+.search label .fas {
+  position: absolute;
+  left: 15px;
+  top: 4px;
+}
+.user {
+  position: relative;
+  min-width: 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+.user img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

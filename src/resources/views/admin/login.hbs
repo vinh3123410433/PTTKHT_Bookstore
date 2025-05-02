@@ -1,66 +1,87 @@
-<link rel="stylesheet" href="/css/admin/login.css" />
-<section class="vh-100">
-  <div class="container-fluid d-flex justify-content-center align-items-center">
-    <div class="login-container">
-      <div class="row d-flex justify-content-center align-items-center">
-        <div class="col-md-6 col-lg-6">
-          <img
-            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-            class="img-fluid"
-            alt="Sample image"
-          />
-        </div>
-        <div class="col-md-6 col-lg-6">
-          <form action="/admin/login" method="POST">
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.min.css" />
+  </head>
+  <body>
 
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-              <input
-                name="id"
-                type="text"
-                id="form3Example3"
-                class="form-control form-control-lg"
-                placeholder="Nhập mã tài khoản"
-              />
-              <label class="form-label" for="form3Example3">Mã tài khoản</label>
-            </div>
-
-            <!-- Password input -->
-            <div class="form-outline mb-3">
-              <input
-                name="password"
-                type="password"
-                id="form3Example4"
-                class="form-control form-control-lg"
-                placeholder="Nhập mật khẩu"
-              />
-              <label class="form-label" for="form3Example4">Mật khẩu</label>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center">
-              <!-- Checkbox -->
-              <div class="form-check mb-0">
-                <input
-                  class="form-check-input me-2"
-                  type="checkbox"
-                  value=""
-                  id="form2Example3"
+    <main style="padding-top: 0;">
+      <link rel="stylesheet" href="/css/admin/login.css" />
+      <section class="vh-100">
+        <div
+          class="container-fluid d-flex justify-content-center align-items-center"
+        >
+          <div class="login-container">
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-md-6 col-lg-6">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                  class="img-fluid"
+                  alt="Sample image"
                 />
-
               </div>
-              <a href="#!" class="text-body">Quên mật khẩu?</a>
+              <div class="col-md-6 col-lg-6">
+                <form action="/admin/login" method="POST">
+
+                  <!-- Email input -->
+                  <div class="form-outline mb-4">
+                    <input
+                      name="id"
+                      type="text"
+                      id="form3Example3"
+                      class="form-control form-control-lg"
+                      placeholder="Nhập mã tài khoản"
+                    />
+                    <label class="form-label" for="form3Example3">Mã tài khoản</label>
+                  </div>
+
+                  <!-- Password input -->
+                  <div class="form-outline mb-3">
+                    <input
+                      name="password"
+                      type="password"
+                      id="form3Example4"
+                      class="form-control form-control-lg"
+                      placeholder="Nhập mật khẩu"
+                    />
+                    <label class="form-label" for="form3Example4">Mật khẩu</label>
+                  </div>
+
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <!-- Checkbox -->
+                    <div class="form-check mb-0">
+                      <input
+                        class="form-check-input me-2"
+                        type="checkbox"
+                        value=""
+                        id="form2Example3"
+                      />
+
+                    </div>
+                    <a href="#!" class="text-body">Quên mật khẩu?</a>
+                  </div>
+
+                  <div class="text-center text-lg-start mt-4 pt-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Đăng
+                      nhập</button>
+
+                    <p class="small fw-bold mt-2 pt-1 mb-0">Không có tài khoản?
+                      <a href="#!" class="link-danger">Đăng ký ngay</a></p>
+                  </div>
+
+                </form>
+              </div>
             </div>
-
-            <div class="text-center text-lg-start mt-4 pt-2">
-              <button type="submit" class="btn btn-primary btn-lg">Đăng nhập</button>
-
-              <p class="small fw-bold mt-2 pt-1 mb-0">Không có tài khoản?
-                <a href="#!" class="link-danger">Đăng ký ngay</a></p>
-            </div>
-
-          </form>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
+    </main>
+    <footer>
+
+    </footer>
+  </body>
+</html>

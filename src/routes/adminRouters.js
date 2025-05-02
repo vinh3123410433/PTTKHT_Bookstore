@@ -16,6 +16,16 @@ import dashboardRouter from "./dashboardRouter.js";
 // import saleRouter from "./sale.js";
 
 // Trang đăng nhập
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/");
+    }
+    res.clearCookie("connect.sid"); // Xóa cookie session
+    res.redirect("login");
+  });
+});
+
 router.get("/login", AdminController.showLogin);
 router.post("/login", AdminController.handleLogin);
 const warehouse = [];

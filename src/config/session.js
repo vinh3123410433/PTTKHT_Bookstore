@@ -19,11 +19,12 @@ const configSession = (app) => {
       store: new FileStore(fileStoreOptions),
       secret: "yennhicute",
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
         secure: false,
         httpOnly: true,
         sameSite: "lax",
+        maxAge: 3600000,
       },
     })
   );

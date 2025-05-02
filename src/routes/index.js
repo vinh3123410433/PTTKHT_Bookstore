@@ -4,6 +4,7 @@ import adminRouters from "./adminRouters.js"; // Cập nhật đường dẫn ch
 
 const route = (app) => {
   app.use("/admin", adminRouters);
+
   app.use("/", userRouters);
 };
 

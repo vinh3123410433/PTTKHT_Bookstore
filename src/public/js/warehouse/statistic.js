@@ -7,15 +7,71 @@ window.addEventListener("DOMContentLoaded", () => {
             td.addEventListener("click", () => sortTable(index));
         }
     });
-    const from = document.querySelector('input[name="from"]').value;
-    const to = document.querySelector('input[name="to"]').value;
+    // const from = document.querySelector('input[name="from"]').value;
+    // const to = document.querySelector('input[name="to"]').value;
 
+    // const excelLink = document.getElementById("excel-link");
+    // if (from && to) {
+    //     excelLink.href = `/statistic/create_excel?from=${from}&to=${to}`;
+    // } else {
+    //     excelLink.href = `/statistic/create_excel`; // fallback
+    // }
+
+    const filterType = document.getElementById("filter-type");
+    const monthSelect = document.getElementById("month-select");
+    const yearSelect = document.getElementById("year-select");
     const excelLink = document.getElementById("excel-link");
-    if (from && to) {
-        excelLink.href = `/statistic/create_excel?from=${from}&to=${to}`;
-    } else {
-        excelLink.href = `/statistic/create_excel`; // fallback
+
+    // Hiển thị select đúng theo type ban đầu (nếu cần)
+    const updateSelectVisibility = () => {
+        const value = filterType.value;
+        if (value === "month") {
+            monthSelect.style.display = "block";
+            yearSelect.style.display = "none";
+        } else if (value === "year") {
+            yearSelect.style.display = "block";
+            monthSelect.style.display = "none";
+        } else {
+            monthSelect.style.display = "none";
+            yearSelect.style.display = "none";
+        }
+    };
+
+    // Gọi khi filterType thay đổi
+    filterType.addEventListener("change", () => {
+        updateSelectVisibility();
+        updateExcelLink();
+    });
+
+    // Gọi lại khi chọn tháng/năm thay đổi
+    document.querySelectorAll("select[name='month'], select[name='month_year'], select[name='year']").forEach(select => {
+        select.addEventListener("change", updateExcelLink);
+    });
+
+    // Hàm cập nhật link Excel theo lựa chọn lọc
+    function updateExcelLink() {
+        const type = filterType.value;
+        const month = document.querySelector('select[name="month"]')?.value;
+        const month_year = document.querySelector('select[name="month_year"]')?.value;
+        const year = document.querySelector('select[name="year"]')?.value;
+
+        let query = "";
+        if (type === "month" && month && month_year) {
+            query = `type=month&month=${month}&month_year=${month_year}`;
+        } else if (type === "year" && year) {
+            query = `type=year&year=${year}`;
+        } else {
+            query = `type=all`;
+        }
+
+        if (excelLink) {
+            excelLink.href = `/admin/warehouse/statistic/create_excel?${query}`;
+        }
     }
+
+    // Gọi khi trang load
+    updateSelectVisibility();
+    updateExcelLink();
 });
 
 // Sắp xếp

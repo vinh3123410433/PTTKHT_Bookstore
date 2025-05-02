@@ -65,9 +65,18 @@
 }
 .search-container{
     display: flex;
+    margin: 15px 0;
     font-size: 16px;
     gap: 30px;
-    margin: 15px 0;
+}
+select{
+    width: 160px;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+label{
+    font-size: 16px;
 }
 .search-btn{
     display: inline-flex;
@@ -76,7 +85,7 @@
     background: #007bff;
     color: #fff;
     font-size: 16px;
-    padding: 0 10px;
+    padding: 5px 10px;
     border: none;
     border-radius: 6px;
     text-decoration: none;

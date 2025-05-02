@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", () => {
     confirmBtn.addEventListener('click', () => {
         if (selectedProductId) {
             // Điều hướng tới URL xóa
-            window.location.href = `/category/delete/${selectedProductId}`;
+            window.location.href = `/admin/warehouse/category/delete/${selectedProductId}`;
         }
     });
 });

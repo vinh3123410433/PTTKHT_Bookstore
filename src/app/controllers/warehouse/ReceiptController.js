@@ -116,7 +116,7 @@ class ReceiptController {
       const [employee_id, employee_name] = employee.split(" - ");
       const product = JSON.parse(product_details);
       await receiptConfig.insert(provider_id, employee_id, product);
-      res.redirect("/receipt");
+      res.redirect("/admin/warehouse/receipt");
     } catch (error) {
       console.log(error);
     }
@@ -148,7 +148,7 @@ class ReceiptController {
       const [employee_id, employee_name] = employee.split(" - ");
       const product = JSON.parse(product_details);
       await receiptConfig.update(id, provider_id, employee_id, product);
-      res.redirect("/receipt");
+      res.redirect("/admin/warehouse/receipt");
     } catch (error) {
       console.log(error);
     }
@@ -162,7 +162,7 @@ class ReceiptController {
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
       const html = await hbs.render(
-        path.join(__dirname, "../resources/views/create_receipt_pdf.hbs"),
+        path.join(__dirname, "../resources/views/warehouse/create_receipt_pdf.hbs"),
         {
           id,
           receipt_info,

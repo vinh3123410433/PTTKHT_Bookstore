@@ -21,8 +21,7 @@ class Provider {
   // search ncc
   async search(id) {
     const query = `SELECT * FROM NCC
-        WHERE ID_NCC = ? 
-        AND tinhTrang = 1`;
+        WHERE ID_NCC = ?`;
     const [rows] = await pool.execute(query, [id]);
     return rows;
   }

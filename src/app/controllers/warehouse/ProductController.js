@@ -33,7 +33,7 @@ class ProductController {
       const product = (await productConfig.search(id))[0];
       const category = await productConfig.getCategory_by_name(id);
       const image = await productConfig.getImage(id);
-      res.render("view_product", {
+      res.render("warehouse/view_product", {
         product,
         category,
         image,
@@ -48,7 +48,7 @@ class ProductController {
   async create(req, res) {
     try {
       const category = await categoryConfig.getAll();
-      res.render("create_product", { category, layout: "warehouse" });
+      res.render("warehouse/create_product", { category, layout: "warehouse" });
     } catch (err) {
       console.error(err);
     }
@@ -135,7 +135,7 @@ class ProductController {
         description,
         images
       );
-      res.redirect("/product");
+      res.redirect("/admin/warehouse/product");
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +151,7 @@ class ProductController {
       const images = await productConfig.getImage(id);
       const imageBase64 = await productConfig.getImageBase64(id);
       const json_image = JSON.stringify(imageBase64);
-      res.render("update_product", {
+      res.render("warehouse/update_product", {
         edit_product,
         list_category,
         checked_category,
@@ -192,7 +192,7 @@ class ProductController {
         description,
         images
       );
-      res.redirect("/product");
+      res.redirect("/admin/warehouse/product");
     } catch (error) {
       console.log(error);
     }
@@ -202,7 +202,7 @@ class ProductController {
   async delete(req, res) {
     try {
       await productConfig.delete(req.params.id);
-      res.redirect("/product");
+      res.redirect("/admin/warehouse/product");
     } catch (error) {
       console.log(error);
     }
@@ -211,7 +211,7 @@ class ProductController {
   async delete_opt(req, res) {
     try {
       const product = await productConfig.getAll_delete();
-      res.render("product", { product, layout: "warehouse" });
+      res.render("warehouse/product", { product, layout: "warehouse" });
     } catch (error) {
       console.log(error);
     }
@@ -220,7 +220,7 @@ class ProductController {
   async on_sale(req, res) {
     try {
       const product = await productConfig.getAll();
-      res.render("product", { product, layout: "warehouse" });
+      res.render("warehouse/product", { product, layout: "warehouse" });
     } catch (error) {
       console.log(error);
     }

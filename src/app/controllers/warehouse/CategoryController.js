@@ -60,7 +60,7 @@ class CategoryController {
     try {
       const { name } = req.body;
       await categoryConfig.insert(name);
-      res.redirect("/category");
+      res.redirect("/admin/warehouse/category");
     } catch (error) {
       console.log(error);
     }
@@ -85,7 +85,7 @@ class CategoryController {
     try {
       const { id, name } = req.body;
       await categoryConfig.update(id, name);
-      res.redirect("/category");
+      res.redirect("/admin/warehouse/category");
     } catch (error) {
       console.log(error);
     }
@@ -95,7 +95,7 @@ class CategoryController {
   async delete(req, res) {
     try {
       await categoryConfig.delete(req.params.id);
-      res.redirect("/category");
+      res.redirect("/admin/warehouse/category");
     } catch (error) {
       console.log(error);
     }

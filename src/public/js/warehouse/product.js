@@ -1,5 +1,6 @@
 // Gán sự kiện tự động cho các cột có class "sortable"
 window.addEventListener("DOMContentLoaded", () => {
+    // --- SẮP XẾP CỘT ---
     const headers = document.querySelectorAll("#header-row td");
     headers.forEach((td, index) => {
         if (td.classList.contains("sortable")) {
@@ -8,48 +9,152 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- Giữ lại trạng thái chọn của select-box ---
-    const currentPath = window.location.pathname;
-    const selectBox = document.getElementById("selection-box");
-    const options = selectBox.options;
+    // --- UPLOAD & RENDER ẢNH ---
+    const uploadInput = document.getElementById("imageUpload");
+    const preview = document.getElementById("imagePreview");
+    const hiddenInput = document.getElementById("imageBase64");
+    const clearButton = document.getElementById("clearAllImages");
+    const clearImages = document.getElementById("clearImages");
 
-    for (let i = 0; i < options.length; i++) {
-        if (options[i].value === currentPath) {
-            options[i].selected = true;
-            break;
+    // RENDER ẢNH CŨ KHI LOAD TRANG
+    if (preview && hiddenInput) {
+        try {
+            const imageArray = hiddenInput.value ? JSON.parse(hiddenInput.value) : [];
+            if (imageArray.length > 0) {
+                preview.innerHTML = "";
+                imageArray.forEach((imgData) => {
+                    const frame = document.createElement("div");
+                    frame.classList.add("image-frame");
+
+                    const img = document.createElement("img");
+                    img.src = imgData;
+
+                    frame.appendChild(img);
+                    preview.appendChild(frame);
+                });
+                if (clearButton) clearButton.style.display = "block";
+            }
+        } catch (e) {
+            console.error("Lỗi parse imageBase64:", e);
         }
     }
 
-    // Thông báo xóa sản phẩm
-    const deleteBtns = document.querySelectorAll('.delete-btn');
-    const deletePopup = document.querySelector('.delete-popup');
-    const closeBtn = document.querySelector('.popup-close-btn');
-    const cancelBtn = document.querySelector('.popup-cancel-btn');
-    const confirmBtn = document.querySelector('.popup-confirm-btn');
+    // SỰ KIỆN CHỌN ẢNH MỚI
+    if (uploadInput && preview && hiddenInput) {
+        uploadInput.addEventListener("change", function (event) {
+            let imageArray = [];
+
+            try {
+                imageArray = hiddenInput.value ? JSON.parse(hiddenInput.value) : [];
+            } catch (e) {
+                imageArray = [];
+            }
+
+            const newFiles = Array.from(event.target.files);
+            const readers = [];
+
+            newFiles.forEach((file) => {
+                const reader = new FileReader();
+                readers.push(new Promise((resolve) => {
+                    reader.onload = function (e) {
+                        const imageData = e.target.result;
+                        if (!imageArray.includes(imageData)) {
+                            imageArray.push(imageData);
+                        } else {
+                            alert("Ảnh này đã được chọn trước đó!");
+                        }
+                        resolve();
+                    };
+                    reader.readAsDataURL(file);
+                }));
+            });
+
+            Promise.all(readers).then(() => {
+                hiddenInput.value = JSON.stringify(imageArray);
+                preview.innerHTML = "";
+                imageArray.forEach((imgData) => {
+                    const frame = document.createElement("div");
+                    frame.classList.add("image-frame");
+
+                    const img = document.createElement("img");
+                    img.src = imgData;
+
+                    frame.appendChild(img);
+                    preview.appendChild(frame);
+                });
+                if (clearButton) clearButton.style.display = "block";
+            });
+        });
+    }
+
+    // NÚT XÓA TẤT CẢ ẢNH
+    if (clearButton && preview && hiddenInput) {
+        clearButton.addEventListener("click", () => {
+            preview.innerHTML = "";
+            hiddenInput.value = "[]";
+            clearButton.style.display = "none";
+        });
+    }
+
+    if (clearImages) {
+        clearImages.addEventListener("click", function () {
+            const preview = document.getElementById("imagePreview");
+            const hiddenInput = document.getElementById("imageBase64");
+    
+            if (preview) preview.innerHTML = ""; // Xóa giao diện ảnh
+            if (hiddenInput) hiddenInput.value = "[]"; // Reset input ẩn
+        }); 
+    }
+
+    // --- GIỮ TRẠNG THÁI SELECT-BOX ---
+    const selectBox = document.getElementById("selection-box");
+    if (selectBox) {
+        const currentPath = window.location.pathname;
+        const options = selectBox.options;
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === currentPath) {
+                options[i].selected = true;
+                break;
+            }
+        }
+
+        selectBox.addEventListener("change", function () {
+            const url = this.value;
+            window.location.href = url;
+        });
+    }
+
+    // --- POPUP XÓA SẢN PHẨM ---
+    const deleteBtns = document.querySelectorAll(".delete-btn");
+    const deletePopup = document.querySelector(".delete-popup");
+    const closeBtn = document.querySelector(".popup-close-btn");
+    const cancelBtn = document.querySelector(".popup-cancel-btn");
+    const confirmBtn = document.querySelector(".popup-confirm-btn");
 
     let selectedProductId = null;
 
-    deleteBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            selectedProductId = btn.getAttribute('data-id');
-            deletePopup.classList.add('active');
+    if (deleteBtns.length && deletePopup && closeBtn && cancelBtn && confirmBtn) {
+        deleteBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                selectedProductId = btn.getAttribute("data-id");
+                deletePopup.classList.add("active");
+            });
         });
-    });
 
-    closeBtn.addEventListener('click', () => {
-        deletePopup.classList.remove('active');
-    });
+        closeBtn.addEventListener("click", () => {
+            deletePopup.classList.remove("active");
+        });
 
-    cancelBtn.addEventListener('click', () => {
-        deletePopup.classList.remove('active');
-    });
+        cancelBtn.addEventListener("click", () => {
+            deletePopup.classList.remove("active");
+        });
 
-    confirmBtn.addEventListener('click', () => {
-        if (selectedProductId) {
-            // Điều hướng tới URL xóa
-            window.location.href = `/product/delete/${selectedProductId}`;
-        }
-    });
+        confirmBtn.addEventListener("click", () => {
+            if (selectedProductId) {
+                window.location.href = `/admin/warehouse/product/delete/${selectedProductId}`;
+            }
+        });
+    }
 });
 
 // --- Sự kiện thay đổi lựa chọn trong dropdown ---
@@ -92,53 +197,3 @@ function sortTable(colIndex) {
     const currentArrow = table.rows[0].cells[colIndex].querySelector(".arrow");
     if (currentArrow) currentArrow.textContent = isAscending ? "▲" : "▼";
 }
-
-// tải ảnh trang create product
-document.getElementById("imageUpload").addEventListener("change", function(event) {
-    let preview = document.getElementById("imagePreview");
-    let hiddenInput = document.getElementById("imageBase64"); // Input ẩn
-    let clearButton = document.getElementById("clearAllImages");
-    let imageArray = hiddenInput.value ? JSON.parse(hiddenInput.value) : []; // Giữ lại ảnh đã có
-
-    for (let file of event.target.files) {
-        let reader = new FileReader();
-        
-        reader.onload = function(e) {
-            let imageData = e.target.result; // Base64
-
-            if (imageArray.includes(imageData)) {
-                alert("Ảnh này đã được chọn trước đó!");
-                return;
-            }
-
-            imageArray.push(imageData); // Lưu vào mảng
-            
-            let frame = document.createElement("div");
-            frame.classList.add("image-frame");
-            
-            let img = document.createElement("img");
-            img.src = imageData; // Hiển thị ảnh
-
-            frame.appendChild(img);
-            preview.appendChild(frame); 
-
-            hiddenInput.value = JSON.stringify(imageArray); // Gán vào input ẩn
-
-            // Hiện nút "Xóa Tất Cả" khi có ảnh
-            clearButton.style.display = "block";
-        };
-        
-        reader.readAsDataURL(file);
-    }
-
-    document.getElementById("clearAllImages").addEventListener("click", function () {
-        document.getElementById("imagePreview").innerHTML = ""; // Xóa giao diện ảnh
-        document.getElementById("imageBase64").value = "[]"; // Reset input ẩn
-        document.getElementById("clearAllImages").style.display = "none"; // Ẩn nút sau khi xóa hết ảnh
-    });
-});
-
-document.getElementById("clearImages").addEventListener("click", function () {
-    document.getElementById("imagePreview").innerHTML = ""; // Xóa giao diện ảnh
-    document.getElementById("imageBase64").value = "[]"; // Reset input ẩn
-});

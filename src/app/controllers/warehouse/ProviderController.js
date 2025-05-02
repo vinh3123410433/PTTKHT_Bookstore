@@ -88,7 +88,7 @@ class ProviderController {
         district,
         city
       );
-      res.redirect("/provider");
+      res.redirect("/admin/warehouse/provider");
     } catch (error) {
       console.log(error);
     }
@@ -122,7 +122,7 @@ class ProviderController {
         district,
         city
       );
-      res.redirect("/provider");
+      res.redirect("/admin/warehouse/provider");
     } catch (error) {
       console.log(error);
     }
@@ -132,7 +132,7 @@ class ProviderController {
   async delete(req, res) {
     try {
       await providerConfig.delete(req.params.id);
-      res.redirect("/provider");
+      res.redirect("/admin/warehouse/provider");
     } catch (error) {
       console.log(error);
     }

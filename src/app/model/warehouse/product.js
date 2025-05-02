@@ -44,8 +44,7 @@ class Product {
         LEFT JOIN SP_TG ON SanPham.SanPhamID = SP_TG.SanPhamID
         LEFT JOIN AnhSP ON SanPham.SanPhamID = AnhSP.ID_SP AND AnhSP.STT = 1
         LEFT JOIN TacGia ON SP_TG.IDTacGia = TacGia.IDTacGia
-        WHERE SanPham.SanPhamID = ?
-        AND SanPham.tinhTrang = 1`;
+        WHERE SanPham.SanPhamID = ?`;
     const [rows] = await pool.execute(query, [id]);
     return rows;
   }

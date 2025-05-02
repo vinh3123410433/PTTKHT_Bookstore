@@ -61,7 +61,7 @@ provider.addEventListener('input', async () => {
         return;
     }
 
-    const response = await fetch(`/receipt/search_provider?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`/admin/warehouse/receipt/search_provider?q=${encodeURIComponent(query)}`);
     const products = await response.json();
 
     suggestions_provider.innerHTML = '';
@@ -88,7 +88,7 @@ employee.addEventListener('input', async () => {
         return;
     }
 
-    const response = await fetch(`/receipt/search_employee?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`/admin/warehouse/receipt/search_employee?q=${encodeURIComponent(query)}`);
     const products = await response.json();
 
     suggestions_employee.innerHTML = '';
@@ -134,7 +134,7 @@ productInput.addEventListener("input", async () => {
         return;
     }
 
-    const response = await fetch(`/receipt/search_product?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`/admin/warehouse/receipt/search_product?q=${encodeURIComponent(query)}`);
     const products = await response.json();
 
     suggestions_product.innerHTML = '';

@@ -24,7 +24,8 @@ router.use("/provider", providerRouter); // trang provider
 router.use("/receipt", receiptRouter); // trang hóa đơn
 
 router.use("/statistic", statisticRouter); // trang thống kê
-router.use("/", dashboardRouter); // trang dáhboard
+
+router.use("/", dashboardRouter); // trang dashboard
 
 // module.exports = router;
 export default router;

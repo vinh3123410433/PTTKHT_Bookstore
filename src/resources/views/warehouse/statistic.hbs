@@ -1,70 +1,91 @@
 {{#block "css"}}
-  <link rel="stylesheet" href="/css/warehouse/statistic.css" />
+    <link rel="stylesheet" href="/css/warehouse/statistic.css"/>
 {{/block}}
 
 {{#block "js"}}
-  <script src="/js/warehouse/statistic.js"></script>
+    <script src="/js/warehouse/statistic.js"></script>
 {{/block}}
 
 <!-- Statistic table -->
 <div class="statistic-table">
-  <div class="inside-table">
-    <div class="statisticHeader">
-      <h2>Thống Kê Lịch Sử Nhập Hàng</h2>
-      <div>
-        <a id="excel-link" href="#"><button class="excel-statistic">Xuất Excel</button></a>
-        <a href="warehouse/statistic"><button class="reset-btn">Làm Mới</button></a>
-      </div>
-    </div>
-    <div>
-      <form method="GET" action="warehouse/statistic/history">
-        <div class="search-container">
-          <div>
-            <label>Ngày bắt đầu:</label>
-            <input
-              id="date"
-              type="date"
-              name="from"
-              value="{{from}}"
-              required
-            />
-          </div>
-          <div>
-            <label class="date">Ngày kết thúc:</label>
-            <input id="date" type="date" name="to" value="{{to}}" required />
-          </div>
-          <button class="search-btn" type="submit">Thống Kê</button>
+    <div class="inside-table">
+        <div class="statisticHeader">
+            <h2>Thống Kê Lịch Sử Nhập Hàng</h2>
+            <div>
+                <a id="excel-link" href="#"><button class="excel-statistic">Xuất Excel</button></a>
+                <a href="/admin/warehouse/statistic"><button class="reset-btn">Làm Mới</button></a>
+            </div>
         </div>
-      </form>
-    </div>
-    <table class="statistic-table-list" id="statistic_table">
-      <thead>
-        <tr id="header-row">
-          <td class="sortable">ID<span class="arrow">▲</span></td>
-          <td class="sortable">Ngày nhập<span class="arrow">▲</span></td>
-          <td class="sortable">Nhà cung cấp<span class="arrow">▲</span></td>
-          <td class="sortable">Nhân viên<span class="arrow">▲</span></td>
-          <td class="sortable">Tổng hóa đơn<span class="arrow">▲</span></td>
-          {{! <td>Tình trạng thanh toán</td> }}
-          <td>Chức năng</td>
-        </tr>
-      </thead>
-      <tbody class="statistics-list">
-        {{#if statistic.length}}
-          {{#each statistic}}
-            <tr>
-              <td>#{{this.IDHoaDonNhap}}</td>
-              <td
-                data-value="{{formatDate this.NgayNhap 'YYYY-MM-DD HH:mm:ss'}}"
-              >
-                {{formatDate this.NgayNhap "DD/MM/YYYY HH:mm"}}
-              </td>
-              <td>{{this.TenNCC}}</td>
-              <td>{{this.TenNhanVien}}</td>
-              <td data-value="{{this.TongTien}}">{{formatCurrency
-                  this.TongTien
-                }}</td>
-              {{!-- {{#if this.TinhTrangThanhToan}}
+        <div>
+            <form method="GET" action="/admin/warehouse/statistic/history">
+                <div class="search-container">
+                    <div>
+                        <label>Xem thống kê theo: </label>
+                        <select name="type" id="filter-type">
+                            <option value="all" {{#if (eq type "all")}}selected{{/if}}>---- Tất Cả ----</option>
+                            <option value="month" {{#if (eq type "month")}}selected{{/if}}>Tháng</option>
+                            <option value="year" {{#if (eq type "year")}}selected{{/if}}>Năm</option>
+                        </select>
+                    </div>
+
+                    <!-- Select chọn tháng -->
+                    <div id="month-select" style="display: none;">
+                        <label>Chọn tháng:</label>
+                        <select name="month">
+                            <option value="">-- Chọn tháng --</option>
+                            {{#each (range 1 12)}}
+                                <option value="{{this}}" {{#if (eq ../month this)}}selected{{/if}}>Tháng {{this}}</option>
+                            {{/each}}
+                        </select>
+
+                        <label>Chọn năm:</label>
+                        <select name="month_year">
+                            <option value="">-- Chọn năm --</option>
+                            {{#each (range 2023 2025)}}
+                                <option value="{{this}}" {{#if (eq ../month_year this)}}selected{{/if}}>{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <!-- Select chọn năm -->
+                    <div id="year-select" style="display: none;">
+                        <label>Chọn năm:</label>
+                        <select name="year">
+                            <option value="">-- Chọn năm --</option>
+                            {{#each (range 2023 2025)}}
+                                <option value="{{this}}" {{#if (eq ../year this)}}selected{{/if}}>{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <button class="search-btn" type="submit">Thống Kê</button>
+                </div>
+            </form>
+        </div>
+        <table class="statistic-table-list" id="statistic_table">
+            <thead>
+                <tr id="header-row">
+                    <td class="sortable">ID<span class="arrow">▲</span></td>
+                    <td class="sortable">Ngày nhập<span class="arrow">▲</span></td>
+                    <td class="sortable">Nhà cung cấp<span class="arrow">▲</span></td>
+                    <td class="sortable">Nhân viên<span class="arrow">▲</span></td>
+                    <td class="sortable">Tổng hóa đơn<span class="arrow">▲</span></td>
+                    {{!-- <td>Tình trạng thanh toán</td> --}}
+                    <td>Chức năng</td>
+                </tr>
+            </thead>
+            <tbody class="statistics-list">
+                {{#if statistic.length}}
+                    {{#each statistic}}
+                        <tr>
+                            <td>#{{this.IDHoaDonNhap}}</td>
+                            <td data-value="{{formatDate this.NgayNhap 'YYYY-MM-DD HH:mm:ss'}}">
+                                {{formatDate this.NgayNhap "DD/MM/YYYY HH:mm"}}
+                            </td>
+                            <td>{{this.TenNCC}}</td>
+                            <td>{{this.TenNhanVien}}</td>
+                            <td data-value="{{this.TongTien}}">{{formatCurrency this.TongTien}}</td>
+                            {{!-- {{#if this.TinhTrangThanhToan}}
                                 <td>
                                     <div class="delivered">
                                         Đã thanh toán
@@ -77,39 +98,32 @@
                                     </div>
                                 </td>
                             {{/if}} --}}
-              <td>
-                <div class="button-container">
-                  <a href="warehouse/receipt/view/{{this.IDHoaDonNhap}}">
-                    <button class="icon-btn view-btn">
-                      <i class="fas fa-eye"></i>
-                      <span class="tooltip">Chi tiết</span>
-                    </button>
-                  </a>
-                </div>
-              </td>
-            </tr>
-          {{/each}}
-        {{else}}
-          <tr>
-            <td colspan="9" style="text-align: center;">Không có dữ liệu trong
-              khoảng thời gian này.</td>
-          </tr>
-        {{/if}}
-      </tbody>
-      {{#if statistic.length}}
-        <tfoot>
-          <tr>
-            <td
-              colspan="5"
-              style="text-align:center;color:red;font-weight:600;font-size:24px;"
-            >Tổng cộng:</td>
-            <td
-              colspan="5"
-              style="text-align:center;color:red;font-weight:600;font-size:24px;"
-            >{{formatCurrency total}}</td>
-          </tr>
-        </tfoot>
-      {{/if}}
-    </table>
-  </div>
+                            <td>
+                                <div class="button-container">
+                                    <a href="/admin/warehouse/receipt/view/{{this.IDHoaDonNhap}}">
+                                        <button class="icon-btn view-btn">
+                                            <i class="fas fa-eye"></i>
+                                            <span class="tooltip">Chi tiết</span>
+                                        </button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/each}}
+                {{else}}
+                <tr>
+                    <td colspan="9" style="text-align: center;">Không có dữ liệu trong khoảng thời gian này.</td>
+                </tr>
+                {{/if}}
+            </tbody>
+            {{#if statistic.length}}
+            <tfoot>
+                <tr>
+                    <td colspan="5" style="text-align:center;color:red;font-weight:600;font-size:24px;">Tổng cộng:</td>
+                    <td colspan="5" style="text-align:center;color:red;font-weight:600;font-size:24px;">{{formatCurrency total}}</td>
+                </tr>
+            </tfoot>
+            {{/if}}
+        </table>
+    </div>
 </div>

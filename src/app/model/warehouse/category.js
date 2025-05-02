@@ -4,8 +4,9 @@ import pool from "../../../config/db.js";
 class Category {
   // Xem tất cả danh mục
   async getAll() {
-    const query = `SELECT * FROM danhmuc 
-        WHERE tinhTrang = 1`;
+    const query = 
+    `SELECT * FROM danhmuc 
+    WHERE tinhTrang = 1`;
     const [rows] = await pool.execute(query);
     return rows;
   }
@@ -13,8 +14,7 @@ class Category {
   // search danh mục
   async search(id) {
     const query = `SELECT * FROM danhmuc 
-        WHERE DanhMucID = ?
-        AND tinhTrang = 1`;
+        WHERE DanhMucID = ?`;
     const [rows] = await pool.execute(query, [id]);
     return rows;
   }

@@ -1,5 +1,6 @@
 // const providerConfig = require('../db/provider');
 import providerConfig from "../../model/warehouse/provider.js";
+import phanquyen from "../../model/admin/phanquyenModel.js";
 import ExcelJS from "exceljs";
 
 class ProviderController {
@@ -7,7 +8,15 @@ class ProviderController {
   async index(req, res) {
     try {
       const provider = await providerConfig.getAll();
-      res.render("warehouse/provider", { provider, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/provider", {
+        provider,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -18,7 +27,15 @@ class ProviderController {
     try {
       const query = req.query.search || "";
       const provider = await providerConfig.search_provider(query);
-      res.render("warehouse/provider", { provider, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/provider", {
+        provider,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -27,7 +44,14 @@ class ProviderController {
   // create new provider form
   async create(req, res) {
     try {
-      res.render("warehouse/create_provider", { layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/create_provider", {
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -99,9 +123,14 @@ class ProviderController {
     try {
       const { id } = req.params;
       const edit_provider = (await providerConfig.search(id))[0];
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
       res.render("warehouse/update_provider", {
         edit_provider,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);
@@ -141,7 +170,15 @@ class ProviderController {
   async delete_opt(req, res) {
     try {
       const provider = await providerConfig.getAll_delete();
-      res.render("warehouse/provider", { provider, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/provider", {
+        provider,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -150,7 +187,15 @@ class ProviderController {
   async on_cooperate(req, res) {
     try {
       const provider = await providerConfig.getAll();
-      res.render("warehouse/provider", { provider, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/provider", {
+        provider,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }

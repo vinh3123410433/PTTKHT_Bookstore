@@ -1,14 +1,21 @@
 // const categoryConfig = require('../db/category');
 import categoryConfig from "../../model/warehouse/category.js";
-
+import phanquyen from "../../model/admin/phanquyenModel.js";
 class CategoryController {
   // show all category
+
   async index(req, res) {
+    const permissions = (
+      await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+    ).map((p) => p.ChucNang);
+    console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+    console.log(permissions);
     try {
       const category = await categoryConfig.getAll();
       res.render("warehouse/category", {
         layout: "warehouse",
         category,
+        permissions,
       });
     } catch (err) {
       console.log(err);
@@ -18,8 +25,13 @@ class CategoryController {
   // search category
   async search(req, res) {
     try {
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+      console.log(permissions);
       const { id } = req.params;
-      res.render("warehouse/category", { layout: "warehouse" });
+      res.render("warehouse/category", { layout: "warehouse" }, permissions);
     } catch (err) {
       console.log(err);
     }
@@ -36,10 +48,16 @@ class CategoryController {
       // Lọc bỏ những object có tất cả giá trị là null
       category_detail = category_detail.filter((sp) => !isAllNull(sp));
       const detail_header = (await categoryConfig.detailHeader(id))[0];
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+      console.log(permissions);
       res.render("warehouse/view_category", {
         detail_header,
         category_detail,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);
@@ -49,7 +67,15 @@ class CategoryController {
   // create form
   async create(req, res) {
     try {
-      res.render("warehouse/create_category", { layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+      console.log(permissions);
+      res.render("warehouse/create_category", {
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -71,9 +97,15 @@ class CategoryController {
     try {
       const { id } = req.params;
       const edit_category = (await categoryConfig.search(id))[0];
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+      console.log(permissions);
       res.render("warehouse/update_category", {
         edit_category,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);

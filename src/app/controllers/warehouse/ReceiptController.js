@@ -1,5 +1,6 @@
 // const receiptConfig = require('../db/receipt');
 import receiptConfig from "../../model/warehouse/receipt.js";
+import phanquyen from "../../model/admin/phanquyenModel.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import puppeteer from "puppeteer";
@@ -23,7 +24,15 @@ class ReceiptController {
   async index(req, res) {
     try {
       const receipt = await receiptConfig.getAll();
-      res.render("warehouse/receipt", { receipt, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/receipt", {
+        receipt,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +43,15 @@ class ReceiptController {
     try {
       const { id } = req.params;
       const receipt = await receiptConfig.search(id);
-      res.render("warehouse/receipt", { receipt, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/receipt", {
+        receipt,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -46,11 +63,16 @@ class ReceiptController {
       const { id } = req.params;
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
       res.render("warehouse/view_receipt", {
         id,
         receipt_info,
         product_detail,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);
@@ -60,7 +82,14 @@ class ReceiptController {
   // create new receipt form
   async create(req, res) {
     try {
-      res.render("warehouse/create_receipt", { layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/create_receipt", {
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -129,11 +158,16 @@ class ReceiptController {
       const receipt_info = (await receiptConfig.get_receipt(id))[0];
       const receipt_detail = await receiptConfig.get_receipt_detail(id);
       const product_detail = JSON.stringify(receipt_detail);
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
       res.render("warehouse/update_receipt", {
         receipt_info,
         receipt_detail,
         product_detail,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);
@@ -161,13 +195,21 @@ class ReceiptController {
       const { id } = req.params;
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
       const html = await hbs.render(
-        path.join(__dirname, "../resources/views/warehouse/create_receipt_pdf.hbs"),
+        path.join(
+          __dirname,
+          "../resources/views/warehouse/create_receipt_pdf.hbs"
+        ),
         {
           id,
           receipt_info,
           product_detail,
           layout: "warehouse",
+          permissions,
         }
       );
       const browser = await puppeteer.launch();

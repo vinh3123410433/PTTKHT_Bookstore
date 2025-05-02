@@ -10,7 +10,7 @@ import {
 } from "../app/middlewares/admin/auth.js";
 
 // Import các router phụ bằng ES module
-import warehouseRouter from "./warehouse.js";
+import warehouseRouter from "./warehouse/index.js";
 import salesRouter from "./salesRouter.js";
 import dashboardRouter from "./dashboardRouter.js";
 // import saleRouter from "./sale.js";
@@ -31,6 +31,7 @@ router.post("/login", AdminController.handleLogin);
 const warehouse = [];
 const sales = [];
 const admin = [];
+
 router.use(
   "/warehouse",
   isLoggedIn,

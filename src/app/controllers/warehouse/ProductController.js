@@ -2,6 +2,7 @@
 // const categoryConfig = require('../db/category');
 import productConfig from "../../model/warehouse/product.js";
 import categoryConfig from "../../model/warehouse/category.js";
+import phanquyen from "../../model/admin/phanquyenModel.js";
 import ExcelJS from "exceljs";
 
 class ProductController {
@@ -9,7 +10,15 @@ class ProductController {
   async index(req, res) {
     try {
       const product = await productConfig.getAll();
-      res.render("warehouse/product", { product, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/product", {
+        product,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -20,7 +29,15 @@ class ProductController {
     try {
       const query = req.query.search || "";
       const product = await productConfig.search_product(query);
-      res.render("warehouse/product", { product, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/product", {
+        product,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -33,11 +50,16 @@ class ProductController {
       const product = (await productConfig.search(id))[0];
       const category = await productConfig.getCategory_by_name(id);
       const image = await productConfig.getImage(id);
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
       res.render("warehouse/view_product", {
         product,
         category,
         image,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.error(err);
@@ -48,7 +70,15 @@ class ProductController {
   async create(req, res) {
     try {
       const category = await categoryConfig.getAll();
-      res.render("warehouse/create_product", { category, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/create_product", {
+        category,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (err) {
       console.error(err);
     }
@@ -151,6 +181,10 @@ class ProductController {
       const images = await productConfig.getImage(id);
       const imageBase64 = await productConfig.getImageBase64(id);
       const json_image = JSON.stringify(imageBase64);
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
       res.render("warehouse/update_product", {
         edit_product,
         list_category,
@@ -158,6 +192,7 @@ class ProductController {
         json_image,
         images,
         layout: "warehouse",
+        permissions,
       });
     } catch (error) {
       console.log(error);
@@ -211,7 +246,15 @@ class ProductController {
   async delete_opt(req, res) {
     try {
       const product = await productConfig.getAll_delete();
-      res.render("warehouse/product", { product, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/product", {
+        product,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -220,7 +263,15 @@ class ProductController {
   async on_sale(req, res) {
     try {
       const product = await productConfig.getAll();
-      res.render("warehouse/product", { product, layout: "warehouse" });
+      const permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      res.render("warehouse/product", {
+        product,
+        layout: "warehouse",
+        permissions,
+      });
     } catch (error) {
       console.log(error);
     }

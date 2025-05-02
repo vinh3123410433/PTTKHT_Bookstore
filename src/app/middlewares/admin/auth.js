@@ -15,15 +15,16 @@ export function redirectByRole(req, res) {
 
   res.redirect("/admin/login");
 }
+// middleware/authMiddleware.js
 export function checkRole(...allowedRoles) {
-  const normalizedRoles = allowedRoles.map((role) => role.toLowerCase());
-
   return (req, res, next) => {
-    const userGroup = req.session.user?.TenNhomQuyen?.toLowerCase();
-    console.log("Nhóm quyền:", userGroup);
-    if (normalizedRoles.includes(userGroup)) {
-      return next(); // Có quyền
-    }
+    const accessList = req.session.user?.accessList || [];
+    const hasAccess = allowedRoles.some((access) =>
+      accessList.includes(access)
+    );
+
+    if (hasAccess) return next();
+
     return res.status(403).render("errors/403", { layout: false });
   };
 }

@@ -18,20 +18,12 @@ import dashboardRouter from "./dashboardRouter.js";
 // Trang đăng nhập
 router.get("/login", AdminController.showLogin);
 router.post("/login", AdminController.handleLogin);
-
-router.use(
-  "/warehouse",
-  isLoggedIn,
-  checkRole("admin", "quản lý kho"),
-  warehouseRouter
-);
-router.use(
-  "/sales",
-  isLoggedIn,
-  checkRole("admin", "quản lý bán hàng"),
-  salesRouter
-);
-router.use("/dashboard", isLoggedIn, dashboardRouter);
+const warehouse = [];
+const sales = [];
+const admin = [];
+router.use("/warehouse", isLoggedIn, checkRole("qlkho"), warehouseRouter);
+router.use("/sales", isLoggedIn, checkRole("qlbanhang"), salesRouter);
+router.use("/dashboard", isLoggedIn, checkRole("admin"), dashboardRouter);
 
 // Trang chủ admin (chuyển hướng theo vai trò)
 router.get("/", isLoggedIn, redirectByRole);

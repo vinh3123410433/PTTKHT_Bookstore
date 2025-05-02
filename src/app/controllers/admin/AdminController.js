@@ -1,5 +1,6 @@
 // app/controllers/admin/AdminController.js
 import AdminModel from "../../model/admin/adminModel.js";
+import phanquyen from "../../model/admin/phanquyenModel.js";
 
 class AdminController {
   showLogin(req, res) {
@@ -9,35 +10,46 @@ class AdminController {
   async handleLogin(req, res) {
     const { id, password } = req.body;
     const user = await AdminModel.findByID(id);
-    // console.log("Tài khoản:", user);
 
     if (!user || user.MatKhau !== password) {
-      console.log(user.MatKhau);
-      console.log(password);
       return res.render("admin/login", {
         layout: "admin",
         error: "Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.",
       });
     }
-    // // Lưu session
+
+    const accessPermissions = await phanquyen.findPAccessIdNhomQuyen(
+      user.ID_NhomQuyen
+    );
+
     req.session.user = {
       id: user.ID_TK,
-      TenNhomQuyen: user.TenNhomQuyen.toLowerCase(), // ví dụ: "Admin", "Sale" → chuyển về "admin", "sale"
+      TenNhomQuyen: user.TenNhomQuyen.toLowerCase(),
+      accessList: accessPermissions.map((item) => item.ChucNang),
     };
-    console.log("Tên nhóm quyền: hiiii" + req.session.user.TenNhomQuyen);
 
-    // Điều hướng theo nhóm quyền
-    switch (req.session.user.TenNhomQuyen) {
-      case "admin":
-        return res.redirect("/admin/dashboard");
-      case "quản lý bán hàng":
-        return res.redirect("/admin/sale");
-      case "người quản lý doanh nghiệp":
-        return res.redirect("/admin");
-      case "quản lý kho":
-        return res.redirect("/admin/warehouse");
-      default:
-        return res.redirect("/admin/login");
+    console.log("Session user:", req.session.user);
+
+    const accessRedirectMap = {
+      admin: "/",
+      qlkho: "/admin/warehouse",
+      qlbanhang: "/admin/sales",
+      qldoanhnghiep: "/admin/dashboard",
+    };
+
+    if (req.session.user.accessList.length === 1) {
+      console.log("1 nè");
+      const onlyAccess = req.session.user.accessList[0];
+      console.log(onlyAccess);
+      const redirectURL = accessRedirectMap[onlyAccess] || "/admin/dashboard";
+      return res.redirect(redirectURL);
+    } else if (req.session.user.accessList.length > 1) {
+      return res.redirect("/admin/dashboard");
+    } else {
+      return res.render("admin/login", {
+        layout: "admin",
+        error: "Không tìm thấy quyền truy cập.",
+      });
     }
   }
 }

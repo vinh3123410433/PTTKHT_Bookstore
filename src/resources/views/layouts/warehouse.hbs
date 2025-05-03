@@ -29,7 +29,12 @@
               <span class="title">Tổng Quan</span>
             </a>
           </li>
-          {{#if (includes permissions "qlsanpham")}}
+          {{#if
+            (or
+              (includes permissions "qlsanpham")
+              (includes permissions "qlbanhang")
+            )
+          }}
             <li>
               <a href="/admin/warehouse/product">
                 <span class="icon"><i class="fas fa-gifts"></i></span>
@@ -37,7 +42,7 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qldanhmuc")}}
+          {{#if (or(includes permissions "qldanhmuc")(includes permissions "qlbanhang"))}}
             <li>
               <a href="/admin/warehouse/category">
                 <span class="icon"><i class="fas fa-clipboard-list"></i></span>
@@ -45,7 +50,7 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qlncc")}}
+          {{#if (or(includes permissions "qlncc")(includes permissions "qlbanhang"))}}
             <li>
               <a href="/admin/warehouse/provider">
                 <span class="icon"><i class="fas fa-warehouse"></i></span>
@@ -53,7 +58,7 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qlhdn")}}
+          {{#if(or (includes permissions "qlhdn")(includes permissions "qlbanhang"))}}
             <li>
               <a href="/admin/warehouse/receipt">
                 <span class="icon"><i
@@ -63,7 +68,7 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qltk")}}
+          {{#if (or(includes permissions "qltk")(includes permissions "qlbanhang"))}}
             <li>
               <a href="/admin/warehouse/statistic">
                 <span class="icon"><i class="fas fa-chart-bar"></i></span>

@@ -24,10 +24,16 @@ class ReceiptController {
   async index(req, res) {
     try {
       const receipt = await receiptConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/receipt", {
         receipt,
         layout: "warehouse",
@@ -43,10 +49,16 @@ class ReceiptController {
     try {
       const { id } = req.params;
       const receipt = await receiptConfig.search(id);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/receipt", {
         receipt,
         layout: "warehouse",
@@ -63,9 +75,16 @@ class ReceiptController {
       const { id } = req.params;
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
 
       res.render("warehouse/view_receipt", {
         id,
@@ -82,10 +101,16 @@ class ReceiptController {
   // create new receipt form
   async create(req, res) {
     try {
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/create_receipt", {
         layout: "warehouse",
         permissions,
@@ -158,10 +183,16 @@ class ReceiptController {
       const receipt_info = (await receiptConfig.get_receipt(id))[0];
       const receipt_detail = await receiptConfig.get_receipt_detail(id);
       const product_detail = JSON.stringify(receipt_detail);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/update_receipt", {
         receipt_info,
         receipt_detail,
@@ -195,10 +226,16 @@ class ReceiptController {
       const { id } = req.params;
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       const html = await hbs.render(
         path.join(
           __dirname,

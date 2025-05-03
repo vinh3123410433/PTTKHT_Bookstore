@@ -34,6 +34,7 @@ export function checkRole(...allowedRoles) {
 }
 // middlewares/checkPermission.js
 export function checkPermission(requiredPermission) {
+  console.log(requiredPermission);
   return async (req, res, next) => {
     try {
       console.log(">> [checkPermission] Session user:", req.session.user); // 👈 thêm dòng này
@@ -52,12 +53,10 @@ export function checkPermission(requiredPermission) {
       );
 
       if (!userPermissions.includes(requiredPermission)) {
-        return res
-          .status(403)
-          .render("errors/403", {
-            message: "Không có quyền truy cập!",
-            layout: false,
-          });
+        return res.status(403).render("errors/403", {
+          message: "Không có quyền truy cập!",
+          layout: false,
+        });
       }
 
       console.log(

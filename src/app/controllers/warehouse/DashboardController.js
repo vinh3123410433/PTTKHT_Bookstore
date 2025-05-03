@@ -11,10 +11,16 @@ class DashboardController {
       const sum_paid_money = (await dashboardConfig.get_sum_of_paid_money())[0];
       const provider_recently = await dashboardConfig.get_provider_recently();
       const receipt_recently = await dashboardConfig.get_receipt_recently();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
-      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
+
       console.log(permissions);
       res.render("warehouse/dashboard", {
         sum_product,

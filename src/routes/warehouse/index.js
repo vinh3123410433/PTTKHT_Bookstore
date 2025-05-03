@@ -19,23 +19,38 @@ import dashboardRouter from "./dashboard.js";
 import statisticRouter from "./statistic.js";
 const router = express.Router();
 
-router.use("/product", isLoggedIn, checkPermission("qlsanpham"), productRouter);
+router.use(
+  "/product",
+  isLoggedIn,
+  checkPermission(["qlsanpham", "qlkho"]),
+  productRouter
+);
 
 router.use(
   "/category",
   isLoggedIn,
-  checkPermission("qldanhmuc"),
+  checkPermission(["qldanhmuc", "qlkho"]),
   categoryRouter
 ); // trang category
 
-router.use("/provider", isLoggedIn, checkPermission("qlncc"), providerRouter); // trang provider
+router.use(
+  "/provider",
+  isLoggedIn,
+  checkPermission(["qlncc", "qlkho"]),
+  providerRouter
+); // trang provider
 
-router.use("/receipt", isLoggedIn, checkPermission("qlhdn"), receiptRouter); // trang hóa đơn
+router.use(
+  "/receipt",
+  isLoggedIn,
+  checkPermission(["qlhdn", "qlkho"]),
+  receiptRouter
+);
 
 router.use(
   "/statistic",
   isLoggedIn,
-  checkPermission("qlthongke"),
+  checkPermission(["qlthongke", "qlkho"]),
   statisticRouter
 ); // trang thống kê
 router.use("/", isLoggedIn, dashboardRouter); // trang dáhboard

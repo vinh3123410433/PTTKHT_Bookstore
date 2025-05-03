@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { generateOrdersExcel } from "../../services/excelService.js";
+import phanquyen from "../../model/admin/phanquyenModel.js";
 // import Dashboard from "../models/Dashboard.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -130,6 +131,16 @@ class OrderController {
         );
       } else archivedOrders = [];
       // console.log("Đang show");
+      let permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("sales/orders/show", {
         title: "Order",
         cssFiles: [
@@ -150,6 +161,7 @@ class OrderController {
         hasActiveFilters: activeFilters.length > 0,
         layout: "sales",
         currentPath: req.path,
+        permissions,
       });
     } catch (error) {
       console.error("Error fetching orders:", error);
@@ -162,12 +174,23 @@ class OrderController {
       const orderModel = new Order();
       const orderId = req.params.id;
       const orderDetails = await orderModel._findById(orderId);
+      let permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("sales/orders/detail", {
         title: "Order Details",
         cssFiles: ["/css/sales/orderAnother.css", "/css/sales/style.css"],
         jsFiles: ["/js/sales/index.js", "/js/sales/orders.js"],
         orderDetails,
         layout: "sales",
+        permissions,
       });
     } catch (error) {
       console.error(error);

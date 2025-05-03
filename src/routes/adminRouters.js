@@ -35,19 +35,19 @@ const admin = [];
 router.use(
   "/warehouse",
   isLoggedIn,
-  checkRole("qlkho", "qldoanhnghiep"),
+  checkRole(["qlkho", "qldoanhnghiep"]),
   warehouseRouter
 );
 router.use(
   "/sales",
   isLoggedIn,
-  checkRole("qlbanhang", "qldoanhnghiep"),
+  checkRole(["qlbanhang", "qldoanhnghiep"]),
   salesRouter
 );
 router.use(
   "/dashboard",
   isLoggedIn,
-  checkRole("admin", "qldoanhnghiep"),
+  checkRole(["admin", "qldoanhnghiep"]),
   dashboardRouter
 );
 

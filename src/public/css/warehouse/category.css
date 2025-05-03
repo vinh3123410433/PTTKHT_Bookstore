@@ -50,6 +50,13 @@
     font-size: 18px;
     margin-right: 8px;
 }
+/* Làm mô tả ngắn lại */
+.mo-ta {
+    width: 300px;             /* Định nghĩa chiều rộng cụ thể */
+    white-space: nowrap;      /* Không xuống dòng */
+    overflow: hidden;         /* Ẩn phần vượt quá */
+    text-overflow: ellipsis;  /* Thêm dấu "..." khi vượt quá */
+}
 .category-table .inside-table table{
     width: 100%;
     border-collapse: separate; /* Phải dùng separate thay vì collapse */

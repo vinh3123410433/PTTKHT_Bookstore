@@ -9,8 +9,9 @@ const app = express();
 const port = 5000;
 
 // Body parser
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Thêm dòng này để tăng giới hạn upload body
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.json({ limit: '50mb' }));
 
 // Session, ViewEngine, Static
 configSession(app);

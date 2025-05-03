@@ -9,21 +9,21 @@ import hbsHelpers from "./helpers.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const hbsInstance = hbs.create({
+  extname: ".hbs",
+  layoutsDir: path.join(__dirname, "../resources/views/layouts"),
+  partialsDir: path.join(__dirname, "../resources/views/partials"),
+  defaultLayout: "main",
+  helpers: hbsHelpers,
+});
+
 const configViewEngine = (app) => {
   // Serve static files trước
   app.use(express.static(path.join(__dirname, "../public")));
 
   // Đăng ký Handlebars engine với helpers
-  app.engine(
-    "hbs",
-    hbs.engine({
-      extname: ".hbs",
-      layoutsDir: path.join(__dirname, "../resources/views/layouts"),
-      partialsDir: path.join(__dirname, "../resources/views/partials"),
-      defaultLayout: "main",
-      helpers: hbsHelpers,
-    })
-  );
+  app.engine("hbs", hbsInstance.engine);
+  app.locals.hbsInstance = hbsInstance;
 
   // Set views folder và view engine
   app.set("views", path.join(__dirname, "../resources/views"));

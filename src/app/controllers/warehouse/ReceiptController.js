@@ -191,7 +191,7 @@ class ReceiptController {
   // create pdf receipt
   async create_pdf(req, res) {
     try {
-      const hbs = req.app.locals.hbs; // lấy hbs từ app.js
+      const hbsInstance = req.app.locals.hbsInstance; // lấy hbsInstance từ index.js
       const { id } = req.params;
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
@@ -199,10 +199,10 @@ class ReceiptController {
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
-      const html = await hbs.render(
+      const html = await hbsInstance.render(
         path.join(
           __dirname,
-          "../resources/views/warehouse/create_receipt_pdf.hbs"
+          "../../../resources/views/warehouse/create_receipt_pdf.hbs"
         ),
         {
           id,

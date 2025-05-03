@@ -82,7 +82,7 @@ class StatisticController {
         data = await statisticConfig.getReceiptsByMonthYear(month, month_year);
       } else if (type === "year" && year) {
         data = await statisticConfig.getReceiptsByYear(year);
-      } else {
+      } else if (type === "all"){
         data = await statisticConfig.getAll(); // <-- Thêm dòng này để lấy tất cả nếu không có ngày
       }
       const total = data.reduce((sum, r) => sum + Number(r.TongTien || 0), 0);

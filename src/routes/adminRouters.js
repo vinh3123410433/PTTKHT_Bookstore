@@ -28,10 +28,6 @@ router.get("/logout", (req, res) => {
 
 router.get("/login", AdminController.showLogin);
 router.post("/login", AdminController.handleLogin);
-const warehouse = [];
-const sales = [];
-const admin = [];
-
 router.use(
   "/warehouse",
   isLoggedIn,

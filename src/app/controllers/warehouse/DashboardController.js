@@ -20,7 +20,7 @@ class DashboardController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
-
+      console.log("per nè");
       console.log(permissions);
       res.render("warehouse/dashboard", {
         sum_product,

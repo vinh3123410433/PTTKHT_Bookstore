@@ -31,7 +31,7 @@ export default {
   range: (start, end) => {
     let arr = [];
     for (let i = start; i <= end; i++) {
-        arr.push(i);
+      arr.push(i);
     }
     return arr;
   },
@@ -61,6 +61,10 @@ export default {
   includes: (arr, val) => {
     const a = Array.isArray(arr) ? arr : [arr];
     return a.includes(val.toString()) || a.includes(Number(val));
+  },
+  orIncludes: (arr, val1, val2) => {
+    const a = Array.isArray(arr) ? arr : [arr];
+    return a.includes(val1) || a.includes(val2);
   },
 
   block: function (name, opts) {

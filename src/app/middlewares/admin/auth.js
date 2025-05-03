@@ -52,7 +52,8 @@ export function checkPermission(requiredPermission) {
       }
 
       const tmp = await phanquyen.findPAccessIdNhomQuyen(idNQ, "view");
-
+      console.log("tmp nè");
+      console.log(tmp);
       // Thêm quyền "all" vào danh sách permissions
       const allPermissions = (
         await phanquyen.findPAccessIdNhomQuyen(idNQ, "all")

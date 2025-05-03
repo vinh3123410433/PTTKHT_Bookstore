@@ -1,10 +1,22 @@
+import phanquyen from "../../model/admin/phanquyenModel.js";
 class DashboardController {
   async show(req, res) {
+    let permissions = (
+      await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+    ).map((p) => p.ChucNang);
+
+    // Thêm quyền "all" vào danh sách permissions
+    const allPermissions = (
+      await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+    ).map((p) => p.ChucNang);
+
+    permissions = permissions.concat(allPermissions);
     try {
       res.render("admin/dashboard", {
         title: "Dashboard",
-        cssFiles: [],
+        cssFiles: ["admin/style"],
         layout: "admin",
+        permissions,
       });
     } catch (error) {}
   }

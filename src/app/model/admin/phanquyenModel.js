@@ -25,6 +25,8 @@ async function findPAccessIdNhomQuyen(id, action) {
       `SELECT ChucNang FROM ChiTietQuyen WHERE ID_NhomQuyen = ? AND HanhDong = ?`,
       [id, action]
     );
+    console.log("EEEEE");
+    console.log(rows);
     return rows;
   } catch (error) {
     console.error("Lỗi khi truy vấn quyền:", error);

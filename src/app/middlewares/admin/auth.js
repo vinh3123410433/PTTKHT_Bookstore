@@ -69,8 +69,8 @@ export function checkPermission(requiredPermission) {
       );
       console.log(userPermissions);
       console.log(requiredPermission);
-      const hasPermission = requiredPermission.some((perm) =>
-        userPermissions.includes(perm)
+      const hasPermission = userPermissions.some((perm) =>
+        requiredPermission.includes(perm)
       );
 
       if (!hasPermission) {

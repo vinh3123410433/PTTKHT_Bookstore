@@ -14,7 +14,7 @@ const router = express.Router();
 router.use(
   "/orders",
   isLoggedIn,
-  checkPermission(["qldhx", "qlbanhang"]),
+  checkPermission(["qlhdx", "qlbanhang"]),
   orderRouter
 );
 router.use(

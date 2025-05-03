@@ -22,7 +22,7 @@ class AdminController {
       user.ID_NhomQuyen,
       "access"
     );
-
+    console.log("hi" + accessPermissions);
     req.session.user = {
       id: user.ID_TK,
       idNQ: user.ID_NhomQuyen,

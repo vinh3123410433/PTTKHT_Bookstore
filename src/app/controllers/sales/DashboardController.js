@@ -41,6 +41,7 @@ class DashboardController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      console.log("per   " + permissions);
       res.render("sales/dashboard", {
         title: "Dashboard",
         cssFiles: [

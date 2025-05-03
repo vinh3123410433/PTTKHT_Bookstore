@@ -15,6 +15,10 @@ const hbsInstance = hbs.create({
   partialsDir: path.join(__dirname, "../resources/views/partials"),
   defaultLayout: "main",
   helpers: hbsHelpers,
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  }
 });
 
 const configViewEngine = (app) => {

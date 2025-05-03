@@ -8,9 +8,16 @@ class ProviderController {
   async index(req, res) {
     try {
       const provider = await providerConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
 
       res.render("warehouse/provider", {
         provider,
@@ -27,10 +34,16 @@ class ProviderController {
     try {
       const query = req.query.search || "";
       const provider = await providerConfig.search_provider(query);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/provider", {
         provider,
         layout: "warehouse",
@@ -44,10 +57,16 @@ class ProviderController {
   // create new provider form
   async create(req, res) {
     try {
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/create_provider", {
         layout: "warehouse",
         permissions,
@@ -123,10 +142,16 @@ class ProviderController {
     try {
       const { id } = req.params;
       const edit_provider = (await providerConfig.search(id))[0];
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/update_provider", {
         edit_provider,
         layout: "warehouse",
@@ -170,10 +195,16 @@ class ProviderController {
   async delete_opt(req, res) {
     try {
       const provider = await providerConfig.getAll_delete();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/provider", {
         provider,
         layout: "warehouse",
@@ -187,10 +218,16 @@ class ProviderController {
   async on_cooperate(req, res) {
     try {
       const provider = await providerConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/provider", {
         provider,
         layout: "warehouse",

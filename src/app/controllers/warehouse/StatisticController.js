@@ -9,10 +9,16 @@ class StatisticController {
   async index(req, res) {
     try {
       const statistic = await statisticConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       const total = statistic.reduce(
         (sum, r) => sum + Number(r.TongTien || 0),
         0
@@ -53,10 +59,15 @@ class StatisticController {
 
       // Tính tổng tiền
       total = statistic.reduce((sum, r) => sum + Number(r.TongTien || 0), 0);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/statistic", {
         statistic,
         total,

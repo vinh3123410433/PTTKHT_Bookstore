@@ -1,31 +1,59 @@
-// const productRouter = require("./warehouse/product");
-// const providerRouter = require("./warehouse/provider");
-// const categoryRouter = require("./warehouse/category");
-// const receiptRouter = require("./receipt");
-// const dashboardRouter = require("./warehouse/dashboard");
-// const statisticRouter = require("./warehouse/statistic");
+// const productRouter = require('./product');
+// const providerRouter = require('./provider');
+// const categoryRouter = require('./category');
+// const receiptRouter = require('./receipt');
+// const dashboardRouter = require('./dashboard');
+// const statisticRouter = require('./statistic');
 import express from "express";
+import {
+  isLoggedIn,
+  redirectByRole,
+  checkRole,
+  checkPermission,
+} from "../app/middlewares/admin/auth.js";
 
-import productRouter from "./warehouse/product.js";
 import providerRouter from "./warehouse/provider.js";
-import categoryRouter from "./warehouse/category.js";
 import receiptRouter from "./warehouse/receipt.js";
 import dashboardRouter from "./warehouse/dashboard.js";
 import statisticRouter from "./warehouse/statistic.js";
-
 const router = express.Router();
 
-router.use("/product", productRouter); // trang product
+// router.use(
+//   "/product",
+//   isLoggedIn,
+//   checkPermission(["qlsanpham", "qlkho"]),
+//   productRouter
+// );
 
-router.use("/category", categoryRouter); // trang category
+// router.use(
+//   "/category",
+//   console.log("Vào"),
+//   isLoggedIn,
+//   checkPermission(["qlkho", "qldanhmuc"]),
+//   categoryRouter
+// ); // trang category
 
-router.use("/provider", providerRouter); // trang provider
+router.use(
+  "/provider",
+  isLoggedIn,
+  checkPermission(["qlncc", "qlkho"]),
+  providerRouter
+); // trang provider
 
-router.use("/receipt", receiptRouter); // trang hóa đơn
+router.use(
+  "/receipt",
+  isLoggedIn,
+  checkPermission(["qlhdn", "qlkho"]),
+  receiptRouter
+); // trang hóa đơn
 
-router.use("/statistic", statisticRouter); // trang thống kê
-
-router.use("/", dashboardRouter); // trang dashboard
+router.use(
+  "/statistic",
+  isLoggedIn,
+  checkPermission(["qlthongke", "qlkho"]),
+  statisticRouter
+); // trang thống kê
+router.use("/", isLoggedIn, dashboardRouter); // trang dáhboard
 
 // module.exports = router;
 export default router;

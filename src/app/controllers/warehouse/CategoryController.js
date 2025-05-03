@@ -5,10 +5,16 @@ class CategoryController {
   // show all category
 
   async index(req, res) {
-    const permissions = (
+    let permissions = (
       await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
     ).map((p) => p.ChucNang);
-    console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+
+    // Thêm quyền "all" vào danh sách permissions
+    const allPermissions = (
+      await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+    ).map((p) => p.ChucNang);
+
+    permissions = permissions.concat(allPermissions);
     console.log(permissions);
     try {
       const category = await categoryConfig.getAll();
@@ -25,11 +31,16 @@ class CategoryController {
   // search category
   async search(req, res) {
     try {
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
-      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
-      console.log(permissions);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       const { id } = req.params;
       res.render("warehouse/category", { layout: "warehouse" }, permissions);
     } catch (err) {
@@ -48,10 +59,16 @@ class CategoryController {
       // Lọc bỏ những object có tất cả giá trị là null
       category_detail = category_detail.filter((sp) => !isAllNull(sp));
       const detail_header = (await categoryConfig.detailHeader(id))[0];
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
-      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       console.log(permissions);
       res.render("warehouse/view_category", {
         detail_header,
@@ -67,10 +84,16 @@ class CategoryController {
   // create form
   async create(req, res) {
     try {
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
-      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       console.log(permissions);
       res.render("warehouse/create_category", {
         layout: "warehouse",
@@ -97,10 +120,16 @@ class CategoryController {
     try {
       const { id } = req.params;
       const edit_category = (await categoryConfig.search(id))[0];
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
-      console.log("Nhóm quyền nè:" + req.session.user.idNQ);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       console.log(permissions);
       res.render("warehouse/update_category", {
         edit_category,

@@ -22,6 +22,12 @@ export function redirectByRole(req, res) {
 // middleware/authMiddleware.js
 export function checkRole(...allowedRoles) {
   return (req, res, next) => {
+    // allowedRoles = allowedRoles[0];
+
+    let tmp = allowedRoles[0];
+    allowedRoles = tmp;
+
+    console.log(allowedRoles);
     const accessList = req.session.user?.accessList || [];
     const hasAccess = allowedRoles.some((access) =>
       accessList.includes(access)
@@ -34,6 +40,7 @@ export function checkRole(...allowedRoles) {
 }
 // middlewares/checkPermission.js
 export function checkPermission(requiredPermission) {
+  // console.log(requiredPermission);
   return async (req, res, next) => {
     try {
       console.log(">> [checkPermission] Session user:", req.session.user); // 👈 thêm dòng này
@@ -44,20 +51,32 @@ export function checkPermission(requiredPermission) {
         return res.redirect("/admin/login");
       }
 
-      const permissions = await phanquyen.findPAccessIdNhomQuyen(idNQ, "view");
-      const userPermissions = permissions.map((p) => p.ChucNang);
+      const tmp = await phanquyen.findPAccessIdNhomQuyen(idNQ, "view");
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(idNQ, "all")
+      ).map((p) => p.ChucNang);
+      const permissions = [...tmp, ...allPermissions];
+      console.log(allPermissions);
+      console.log(permissions);
+      // permissions = permissions.concat(allPermissions);
+      const userPermissions = permissions;
       console.log(
         ">> [checkPermission] Các quyền người dùng:",
         userPermissions
       );
+      console.log(userPermissions);
+      console.log(requiredPermission);
+      const hasPermission = requiredPermission.some((perm) =>
+        userPermissions.includes(perm)
+      );
 
-      if (!userPermissions.includes(requiredPermission)) {
-        return res
-          .status(403)
-          .render("errors/403", {
-            message: "Không có quyền truy cập!",
-            layout: false,
-          });
+      if (!hasPermission) {
+        return res.status(403).render("errors/403", {
+          message: "Không có quyền truy cập!",
+          layout: false,
+        });
       }
 
       console.log(

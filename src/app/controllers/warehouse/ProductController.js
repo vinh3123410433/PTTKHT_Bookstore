@@ -10,10 +10,15 @@ class ProductController {
   async index(req, res) {
     try {
       const product = await productConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/product", {
         product,
         layout: "warehouse",
@@ -29,10 +34,16 @@ class ProductController {
     try {
       const query = req.query.search || "";
       const product = await productConfig.search_product(query);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/product", {
         product,
         layout: "warehouse",
@@ -50,10 +61,16 @@ class ProductController {
       const product = (await productConfig.search(id))[0];
       const category = await productConfig.getCategory_by_name(id);
       const image = await productConfig.getImage(id);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/view_product", {
         product,
         category,
@@ -70,10 +87,16 @@ class ProductController {
   async create(req, res) {
     try {
       const category = await categoryConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/create_product", {
         category,
         layout: "warehouse",
@@ -181,10 +204,16 @@ class ProductController {
       const images = await productConfig.getImage(id);
       const imageBase64 = await productConfig.getImageBase64(id);
       const json_image = JSON.stringify(imageBase64);
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/update_product", {
         edit_product,
         list_category,
@@ -246,10 +275,16 @@ class ProductController {
   async delete_opt(req, res) {
     try {
       const product = await productConfig.getAll_delete();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/product", {
         product,
         layout: "warehouse",
@@ -263,10 +298,16 @@ class ProductController {
   async on_sale(req, res) {
     try {
       const product = await productConfig.getAll();
-      const permissions = (
+      let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("warehouse/product", {
         product,
         layout: "warehouse",

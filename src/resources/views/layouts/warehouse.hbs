@@ -1,7 +1,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewp orIncludest"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>Quản Lý Kho</title>
     <link
       rel="stylesheet"
@@ -29,7 +32,12 @@
               <span class="title">Tổng Quan</span>
             </a>
           </li>
-          {{#if (includes permissions "qlsanpham")}}
+          {{#if
+            (orIncludes
+              (includes permissions "qlsanpham")
+              (includes permissions "qlbanhang")
+            )
+          }}
             <li>
               <a href="/admin/warehouse/product">
                 <span class="icon"><i class="fas fa-gifts"></i></span>
@@ -37,7 +45,12 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qldanhmuc")}}
+          {{#if
+            (orIncludes
+              (includes permissions "qldanhmuc")
+              (includes permissions "qlbanhang")
+            )
+          }}
             <li>
               <a href="/admin/warehouse/category">
                 <span class="icon"><i class="fas fa-clipboard-list"></i></span>
@@ -45,7 +58,12 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qlncc")}}
+
+          {{#if
+            (orIncludes
+              (includes permissions "qlncc") (includes permissions "qlbanhang")
+            )
+          }}
             <li>
               <a href="/admin/warehouse/provider">
                 <span class="icon"><i class="fas fa-warehouse"></i></span>
@@ -53,7 +71,11 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qlhdn")}}
+          {{#if
+            (orIncludes
+              (includes permissions "qlhdn") (includes permissions "qlbanhang")
+            )
+          }}
             <li>
               <a href="/admin/warehouse/receipt">
                 <span class="icon"><i
@@ -63,7 +85,11 @@
               </a>
             </li>
           {{/if}}
-          {{#if (includes permissions "qltk")}}
+          {{#if
+            (orIncludes
+              (includes permissions "qltk") (includes permissions "qlbanhang")
+            )
+          }}
             <li>
               <a href="/admin/warehouse/statistic">
                 <span class="icon"><i class="fas fa-chart-bar"></i></span>

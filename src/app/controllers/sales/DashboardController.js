@@ -1,6 +1,6 @@
 import Dashboard from "../../model/sales/Dashboard.js";
 import { Order } from "../../model/sales/Order.js";
-
+import phanquyen from "../../model/admin/phanquyenModel.js";
 class DashboardController {
   async show(req, res) {
     try {
@@ -31,6 +31,16 @@ class DashboardController {
         currentOrders,
         revenueData,
       };
+      let permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
       res.render("sales/dashboard", {
         title: "Dashboard",
         cssFiles: [
@@ -41,6 +51,7 @@ class DashboardController {
         data,
         layout: "sales",
         currentPath: req.path,
+        permissions,
       });
     } catch (error) {
       console.error("Error fetching dashboard data:", error);

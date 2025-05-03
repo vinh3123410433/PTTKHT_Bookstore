@@ -29,26 +29,22 @@ router.get("/logout", (req, res) => {
 
 router.get("/login", AdminController.showLogin);
 router.post("/login", AdminController.handleLogin);
-const warehouse = [];
-const sales = [];
-const admin = [];
-
 router.use(
   "/warehouse",
   isLoggedIn,
-  checkRole("qlkho", "qldoanhnghiep"),
+  checkRole(["qlkho", "qldoanhnghiep"]),
   warehouseRouter
 );
 router.use(
   "/sales",
   isLoggedIn,
-  checkRole("qlbanhang", "qldoanhnghiep"),
+  checkRole(["qlbanhang", "qldoanhnghiep"]),
   salesRouter
 );
 router.use(
   "/dashboard",
   isLoggedIn,
-  checkRole("admin", "qldoanhnghiep"),
+  checkRole(["admin", "qldoanhnghiep"]),
   dashboardRouter
 );
 

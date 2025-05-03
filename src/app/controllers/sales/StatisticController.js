@@ -1,7 +1,7 @@
 // @ts-nocheck
 import Statistic from "../../model/sales/Statistic.js";
 import { generateRevenueExcel } from "../../services/excelService.js";
-
+import phanquyen from "../../model/admin/phanquyenModel.js";
 class StatisticController {
   constructor() {
     this.statisticModel = new Statistic();
@@ -98,7 +98,17 @@ class StatisticController {
         const day = date.getDate().toString().padStart(2, "0");
         return `${year}-${month}-${day}`;
       };
+      let permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
 
+      // Thêm quyền "all" vào danh sách permissions
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
+      console.log("per: " + permissions);
       // Render trang thống kê với dữ liệu
       res.render("sales/statistic", {
         title: "Thống Kê Doanh Thu",
@@ -117,6 +127,7 @@ class StatisticController {
         selectedYear: year || years[0],
         layout: "sales",
         currentPath: req.path,
+        permissions,
         // pageTitle: title,
       });
     } catch (error) {

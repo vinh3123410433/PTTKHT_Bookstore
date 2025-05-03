@@ -15,7 +15,10 @@
       </a>
     </li>
     <!-- Đơn Hàng -->
-    {{#if (includes permissions "qlhdx")}}
+
+    {{#if
+      (or (includes accessList "qlhdx") (includes permissions "qlbanhang"))
+    }}
       <li>
         <a href="orders/show">
           <!-- Liên kết đến orders/show -->
@@ -25,7 +28,12 @@
       </li>
     {{/if}}
     <!-- Thống Kê -->
-    {{#if (includes permissions "qlthongke")}}
+    {{#if
+      (or
+        (includes permissions "qlthongkexuat")
+        (includes permissions "qlbanhang")
+      )
+    }}
       <li>
         <a href="statistic">
           <!-- Liên kết đến statistic -->

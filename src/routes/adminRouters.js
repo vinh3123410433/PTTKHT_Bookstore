@@ -10,6 +10,7 @@ import {
 } from "../app/middlewares/admin/auth.js";
 
 // Import các router phụ bằng ES module
+// import warehouseRouter from "./warehouse.js";
 import warehouseRouter from "./warehouse/index.js";
 import salesRouter from "./salesRouter.js";
 import dashboardRouter from "./dashboardRouter.js";

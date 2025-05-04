@@ -25,9 +25,24 @@ async function findPAccessIdNhomQuyen(id, action) {
       `SELECT ChucNang FROM ChiTietQuyen WHERE ID_NhomQuyen = ? AND HanhDong = ?`,
       [id, action]
     );
-    console.log("EEEEE");
     console.log(rows);
+
     return rows;
+  } catch (error) {
+    console.error("Lỗi khi truy vấn quyền:", error);
+    return [];
+  }
+}
+
+async function action(id, ChucNang) {
+  try {
+    const [rows] = await db.execute(
+      `SELECT HanhDong FROM ChiTietQuyen WHERE ID_NhomQuyen = ? AND ChucNang = ?`,
+      [id, ChucNang]
+    );
+
+    const actions = rows.map((p) => p.HanhDong);
+    return actions;
   } catch (error) {
     console.error("Lỗi khi truy vấn quyền:", error);
     return [];
@@ -37,4 +52,5 @@ async function findPAccessIdNhomQuyen(id, action) {
 export default {
   findPermissionbyQuyenCha,
   findPAccessIdNhomQuyen,
+  action,
 };

@@ -1,22 +1,23 @@
 // routes/adminRouters.js
 import express from "express";
 const router = express.Router();
-
 import AdminController from "../app/controllers/admin/AdminController.js";
 import {
   isLoggedIn,
   redirectByRole,
   checkRole,
 } from "../app/middlewares/admin/auth.js";
-
+import Permission from "../app/controllers/admin/Permissions.js";
+import Dashboard from "../app/controllers/admin/DashboardController.js";
 // Import các router phụ bằng ES module
 // import warehouseRouter from "./warehouse.js";
 import warehouseRouter from "./warehouse/index.js";
 import salesRouter from "./salesRouter.js";
 import dashboardRouter from "./dashboardRouter.js";
+import indexAdminRouter from "./admin/index.js";
+
 // import saleRouter from "./sale.js";
 
-// Trang đăng nhập
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -47,8 +48,12 @@ router.use(
   checkRole(["admin", "qldoanhnghiep"]),
   dashboardRouter
 );
-
-// Trang chủ admin (chuyển hướng theo vai trò)
-router.get("/", isLoggedIn, redirectByRole);
+router.get(
+  "/permissions",
+  isLoggedIn,
+  checkRole(["admin", "qldoanhnghiep"]),
+  Permission.show
+);
+router.get("/", isLoggedIn, Dashboard.show);
 
 export default router;

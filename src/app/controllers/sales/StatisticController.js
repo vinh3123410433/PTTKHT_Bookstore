@@ -108,7 +108,7 @@ class StatisticController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
-      console.log("per: " + permissions);
+      console.log(permissions);
       // Render trang thống kê với dữ liệu
       res.render("sales/statistic", {
         title: "Thống Kê Doanh Thu",

@@ -1,10 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewp orIncludest"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản Lý Kho</title>
     <link
       rel="stylesheet"
@@ -33,7 +30,7 @@
             </a>
           </li>
           {{#if
-            (orIncludes
+            (or
               (includes permissions "qlsanpham")
               (includes permissions "qlbanhang")
             )
@@ -46,7 +43,7 @@
             </li>
           {{/if}}
           {{#if
-            (orIncludes
+            (or
               (includes permissions "qldanhmuc")
               (includes permissions "qlbanhang")
             )
@@ -60,9 +57,7 @@
           {{/if}}
 
           {{#if
-            (orIncludes
-              (includes permissions "qlncc") (includes permissions "qlbanhang")
-            )
+            (or (includes permissions "qlncc") (includes permissions "qlkho"))
           }}
             <li>
               <a href="/admin/warehouse/provider">
@@ -72,9 +67,7 @@
             </li>
           {{/if}}
           {{#if
-            (orIncludes
-              (includes permissions "qlhdn") (includes permissions "qlbanhang")
-            )
+            (or (includes permissions "qlhdn") (includes permissions "qlkho"))
           }}
             <li>
               <a href="/admin/warehouse/receipt">
@@ -86,8 +79,8 @@
             </li>
           {{/if}}
           {{#if
-            (orIncludes
-              (includes permissions "qltk") (includes permissions "qlbanhang")
+            (or
+              (includes permissions "qlthongke") (includes permissions "qlkho")
             )
           }}
             <li>
@@ -123,7 +116,7 @@
       </div>
     </div>
 
-    {{!-- <script src="/js/warehouse/script.js"></script> --}}
+    {{! <script src="/js/warehouse/script.js"></script> }}
     {{{_blocks.js}}}
   </body>
 </html>

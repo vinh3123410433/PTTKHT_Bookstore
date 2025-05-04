@@ -4,18 +4,18 @@ export const isLoggedIn = (req, res, next) => {
   console.log(">> Kiểm tra session:", req.session);
   if (req.session && req.session.user) {
     console.log(">> Đã đăng nhập:", req.session.user);
+
     return next();
   }
-  console.log(">> Chưa đăng nhập");
   return res.redirect("/admin/login");
 };
 
 export function redirectByRole(req, res) {
-  const role = req.session.user?.role;
-
+  const role = req.session.user?.TenNhomQuyen;
+  console.log("Ê" + req.session.user.TenNhomQuyen);
   if (role === "admin") return res.redirect("/admin/dashboard");
-  if (role === "sale") return res.redirect("/admin/sale");
-  if (role === "manager") return res.redirect("/admin/manager");
+  if (role === "sales") return res.redirect("/admin/sales");
+  if (role === "warehouse") return res.redirect("/admin/warehouse");
 
   res.redirect("/admin/login");
 }
@@ -40,7 +40,6 @@ export function checkRole(...allowedRoles) {
 }
 // middlewares/checkPermission.js
 export function checkPermission(requiredPermission) {
-  // console.log(requiredPermission);
   return async (req, res, next) => {
     try {
       console.log(">> [checkPermission] Session user:", req.session.user); // 👈 thêm dòng này
@@ -51,28 +50,24 @@ export function checkPermission(requiredPermission) {
         return res.redirect("/admin/login");
       }
 
-      const tmp = await phanquyen.findPAccessIdNhomQuyen(idNQ, "view");
-      console.log("tmp nè");
-      console.log(tmp);
-      // Thêm quyền "all" vào danh sách permissions
+      const tmp = (await phanquyen.findPAccessIdNhomQuyen(idNQ, "view")).map(
+        (p) => p.ChucNang
+      );
+
       const allPermissions = (
         await phanquyen.findPAccessIdNhomQuyen(idNQ, "all")
       ).map((p) => p.ChucNang);
       const permissions = [...tmp, ...allPermissions];
-      console.log(allPermissions);
-      console.log(permissions);
       // permissions = permissions.concat(allPermissions);
       const userPermissions = permissions;
       console.log(
         ">> [checkPermission] Các quyền người dùng:",
         userPermissions
       );
-      console.log(userPermissions);
-      console.log(requiredPermission);
       const hasPermission = userPermissions.some((perm) =>
         requiredPermission.includes(perm)
       );
-
+      console.log("has nè" + hasPermission);
       if (!hasPermission) {
         return res.status(403).render("errors/403", {
           message: "Không có quyền truy cập!",
@@ -88,6 +83,31 @@ export function checkPermission(requiredPermission) {
     } catch (err) {
       console.error("Permission check failed:", err);
       return res.status(500).send("Lỗi hệ thống.");
+    }
+  };
+}
+
+export function checkAction(require, yc) {
+  return async (req, res, next) => {
+    try {
+      const actions = await phanquyen.action(req.session.user.idNQ, yc);
+      console.log(actions);
+      console.log(require);
+      const hasPermission = actions.some((action) => require.includes(action));
+
+      console.log("Đây: " + hasPermission);
+      if (hasPermission) {
+        return next();
+      } else {
+        return res.status(403).render("errors/403", {
+          message: "Bạn không có quyền thực hiện chức năng này.",
+          user: req.session.user, // nếu muốn truyền thông tin người dùng
+          layout: false,
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi kiểm tra quyền:", error);
+      return res.status(500).send("Lỗi máy chủ.");
     }
   };
 }

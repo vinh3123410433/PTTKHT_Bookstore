@@ -145,6 +145,7 @@ CREATE TABLE GiaoHang (
     IDDiaChi INT,
     NgayGiaoHang DATE,
     TinhTrangDon ENUM('Chờ xác nhận', 'Chờ lấy hàng', 'Đang giao hàng', 'Đã giao', 'Trả hàng', 'Đã hủy'),
+    GiaShip DECIMAL(10,2) DEFAULT 30000.00,
     FOREIGN KEY (IDNhanVien) REFERENCES NhanVien(IDNhanVien),
     FOREIGN KEY (IDDiaChi) REFERENCES DiaChi_KH(ID_DCKH),
     FOREIGN KEY (ID_HDX) REFERENCES HoaDonXuat(IDHoaDonXuat)

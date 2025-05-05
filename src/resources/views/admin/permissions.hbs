@@ -11,11 +11,11 @@
   <div class="inside-table">
     <div class="permissionHeader">
       <h2>Quản lý nhóm quyền</h2>
-
+       <p>Action:{{action}}</p>
       {{#if (or (includes action "create") (includes action "all"))}}
 
         <div>
-          <a href="/admin/warehouse/permission/create"><button
+          <a href="/admin/permissions/create"><button
               class="add-permission"
             >Thêm Nhóm quyền</button></a>
         </div>
@@ -36,7 +36,7 @@
             <td>{{this.TenNhomQuyen}}</td>
             <td>
               <div class="button-container">
-                <a href="/admin/warehouse/permission/view/{{this.DanhMucID}}">
+                <a href="/admin/warehouse/permission/view/{{this.ID_NhomQuyen}}">
                   <button class="icon-btn view-btn">
                     <i class="fas fa-eye"></i>
                     <span class="tooltip">Chi tiết</span>
@@ -47,7 +47,7 @@
                     (or (includes ../action "edit") (includes ../action "all"))
                   }}
     
-                <a href="/admin/warehouse/permission/update/{{this.DanhMucID}}">
+                <a href="/admin/permissions/update/{{this.ID_NhomQuyen}}">
                   <button class="icon-btn edit-btn">
                     <i class="fas fa-edit"></i>
                     <span class="tooltip">Chỉnh sửa</span>
@@ -62,7 +62,7 @@
 
                 <button
                   class="icon-btn delete-btn"
-                  data-id="{{this.DanhMucID}}"
+                  data-id="{{this.ID_NhomQuyen}}"
                 >
                   <i class="fas fa-trash-alt"></i>
                   <span class="tooltip">Xóa</span>
@@ -78,14 +78,15 @@
 </div>
 
 <!-- Delete product -->
-<div class="delete-popup">
+<div class="delete-popup show">
   <div class="popup">
     <div class="popup-head">
-      <p>Bạn có chắc chắn muốn xóa danh mục?</p>
+      <p>Bạn có chắc chắn muốn xóa nhóm quyền này?</p>
       <button class="popup-close-btn"><i class="fas fa-times"></i></button>
     </div>
     <div class="popup-body">
-      <p>Nếu đã xóa, bạn sẽ không thể tiếp tục sử dụng danh mục.</p>
+   <p>Sau khi xóa, các tài khoản sử dụng nhóm quyền này sẽ không còn quyền hạn liên quan.</p>
+
     </div>
     <div class="popup-foot">
       <button class="popup-btn popup-cancel-btn">Hủy</button>
@@ -93,3 +94,39 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  window.addEventListener("DOMContentLoaded", () => {
+    // Thông báo xóa danh mục
+    const deleteBtns = document.querySelectorAll('.delete-btn');
+    const deletePopup = document.querySelector('.delete-popup');
+    const closeBtn = document.querySelector('.popup-close-btn');
+    const cancelBtn = document.querySelector('.popup-cancel-btn');
+    const confirmBtn = document.querySelector('.popup-confirm-btn');
+
+    let selectedProductId = null;
+
+    deleteBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            selectedProductId = btn.getAttribute('data-id');
+            deletePopup.classList.add('active');
+        });
+    });
+
+    closeBtn.addEventListener('click', () => {
+        deletePopup.classList.remove('active');
+    });
+
+    cancelBtn.addEventListener('click', () => {
+        deletePopup.classList.remove('active');
+    });
+
+    confirmBtn.addEventListener('click', () => {
+        if (selectedProductId) {
+            // Điều hướng tới URL xóa
+            window.location.href = `/admin/permissions/delete/${selectedProductId}`;
+        }
+    });
+});
+</script>

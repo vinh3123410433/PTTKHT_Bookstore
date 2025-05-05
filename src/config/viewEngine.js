@@ -4,6 +4,7 @@ import express from "express";
 import hbs from "express-handlebars";
 import moment from "moment";
 import hbsHelpers from "./helpers.js";
+import fs from "fs";
 
 // Thiết lập __filename và __dirname cho ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -22,8 +23,43 @@ const hbsInstance = hbs.create({
 });
 
 const configViewEngine = (app) => {
-  // Serve static files trước
-  app.use(express.static(path.join(__dirname, "../public")));
+  const staticPath = path.join(__dirname, "../public");
+  
+  // Enhanced static file middleware with better error handling
+  app.use((req, res, next) => {
+    // Only handle CSS, JS, image and font requests
+    if (/\.(css|js|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/i.test(req.path)) {
+      const filePath = path.join(staticPath, req.path);
+      
+      // Check if the file exists before attempting to serve it
+      fs.access(filePath, fs.constants.R_OK, (err) => {
+        if (err) {
+          console.error(`Static file not found or not readable: ${filePath}`);
+          return next(); // Skip to next middleware
+        }
+        
+        // Set cache headers for better performance
+        const maxAge = 86400000; // 1 day in milliseconds
+        res.setHeader('Cache-Control', `public, max-age=${maxAge / 1000}`);
+        res.setHeader('Expires', new Date(Date.now() + maxAge).toUTCString());
+      });
+    }
+    next();
+  });
+  
+  // Standard static file serving with improved options
+  app.use(express.static(staticPath, {
+    maxAge: '1d', // Cache for 1 day
+    etag: true,
+    lastModified: true,
+    index: false, // Don't serve directory indexes
+    setHeaders: (res, path) => {
+      // Disable caching for HTML files
+      if (path.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    }
+  }));
 
   // Đăng ký Handlebars engine với helpers
   app.engine("hbs", hbsInstance.engine);
@@ -34,50 +70,4 @@ const configViewEngine = (app) => {
   app.set("view engine", "hbs");
 };
 
-// {
-//   formatNumber: (number) => {
-//     const num = Number(number);
-//     if (isNaN(num)) return "";
-//     return num.toLocaleString("vi-VN") + "₫";
-//   },
-//   formatCurrency: (value) =>
-//     new Intl.NumberFormat("vi-VN", {
-//       style: "currency",
-//       currency: "VND",
-//     }).format(value),
-//   formatDate: (timestamp, fmt) => moment(timestamp).format(fmt),
-//   inc: (value) => parseInt(value, 10) + 1,
-//   add: (a, b) => Number(a) + Number(b),
-//   subtract: (a, b) => Number(a) - Number(b),
-//   eq: (a, b) => a == b,
-//   or: (a, b) => a || b,
-//   isChecked: (id, list) =>
-//     Array.isArray(list) && list.some((cat) => cat.DanhMucID == id)
-//       ? "checked"
-//       : "",
-//   range: (start, end, opts) => {
-//     if (opts && typeof opts.fn === "function") {
-//       let res = "";
-//       for (let i = start; i <= end; i++) res += opts.fn(i);
-//       return res;
-//     }
-//     let arr = [];
-//     for (let i = start; i <= end; i++) arr.push(i);
-//     return arr;
-//   },
-//   paginationURL: (page, opts) =>
-//     `?${new URLSearchParams({
-//       ...opts.data.root.query,
-//       page,
-//     }).toString()}`,
-//   includes: (arr, val) => {
-//     const a = Array.isArray(arr) ? arr : [arr];
-//     return a.includes(val.toString()) || a.includes(Number(val));
-//   },
-//   block: function (name, opts) {
-//     this._blocks = this._blocks || {};
-//     this._blocks[name] = opts.fn(this);
-//     return null;
-//   },
-// },
 export default configViewEngine;

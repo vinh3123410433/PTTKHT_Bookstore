@@ -1,0 +1,69 @@
+<div class="details">
+  <div class="cardHeader">
+    <h2>{{title}}</h2>
+    <div class="actions">
+      <a href="/admin/customers/edit/{{customer.ID_KH}}" class="btn">Chỉnh sửa</a>
+      <a href="/admin/customers" class="btn">Quay lại</a>
+    </div>
+  </div>
+
+  <div class="customer-details">
+    <h3>Thông tin cơ bản</h3>
+    <div class="info-grid">
+      <div class="info-row">
+        <span class="info-label">ID:</span>
+        <span class="info-value">{{customer.ID_KH}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Tên tài khoản:</span>
+        <span class="info-value">{{customer.TenTK}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Tên khách hàng:</span>
+        <span class="info-value">{{customer.TenKH}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Số điện thoại:</span>
+        <span class="info-value">{{customer.SDT}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Ngày sinh:</span>
+        <span class="info-value">{{formatDate customer.NgaySinh}}</span>
+      </div>
+    </div>
+
+    <h3>Địa chỉ</h3>
+    {{#if addresses.length}}
+      <table>
+        <thead>
+          <tr>
+            <td>Loại địa chỉ</td>
+            <td>Địa chỉ chi tiết</td>
+            <td>Thành phố</td>
+            <td>Quận/Huyện</td>
+            <td>Phường/Xã</td>
+            <td>Địa chỉ mặc định</td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each addresses}}
+            <tr>
+              <td>{{LoaiDC}}</td>
+              <td>{{DiaChi}}</td>
+              <td>{{ThanhPho}}</td>
+              <td>{{QuanHuyen}}</td>
+              <td>{{PhuongXa}}</td>
+              <td>{{#if LaDCMacDinh}}Có{{else}}Không{{/if}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{else}}
+      <p>Khách hàng chưa có địa chỉ nào.</p>
+    {{/if}}
+  </div>
+
+  {{#section 'css'}}
+  <link rel="stylesheet" href="/css/admin/customers.css">
+  {{/section}}
+</div>

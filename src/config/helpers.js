@@ -15,6 +15,18 @@ export default {
 
   formatDate: (timestamp, fmt) => moment(timestamp).format(fmt),
 
+  // Format date for display in Vietnamese format
+  formatDate: (timestamp) => {
+    if (!timestamp) return "";
+    return moment(timestamp).format("DD/MM/YYYY");
+  },
+
+  // Format date for HTML date input
+  formatDateInput: (timestamp) => {
+    if (!timestamp) return "";
+    return moment(timestamp).format("YYYY-MM-DD");
+  },
+
   inc: (value) => parseInt(value, 10) + 1,
 
   add: (a, b) => Number(a) + Number(b),

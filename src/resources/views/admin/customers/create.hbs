@@ -1,0 +1,70 @@
+<div class="details">
+  <div class="cardHeader">
+    <h2>{{title}}</h2>
+    <a href="/admin/customers" class="btn">Quay lại</a>
+  </div>
+
+  <div class="form-container">
+    <form action="/admin/customers/create" method="POST">
+      <div class="form-group">
+        <label for="TenTK">Tên tài khoản</label>
+        <input type="text" id="TenTK" name="TenTK" required>
+      </div>
+
+      <div class="form-group">
+        <label for="TenKH">Tên khách hàng</label>
+        <input type="text" id="TenKH" name="TenKH" required>
+      </div>
+
+      <div class="form-group">
+        <label for="SDT">Số điện thoại</label>
+        <input type="text" id="SDT" name="SDT" required pattern="[0-9]{10}" title="Số điện thoại phải có 10 chữ số">
+      </div>
+
+      <div class="form-group">
+        <label for="NgaySinh">Ngày sinh</label>
+        <input type="date" id="NgaySinh" name="NgaySinh">
+      </div>
+
+      <div class="form-group">
+        <label for="MatKhau">Mật khẩu</label>
+        <input type="password" id="MatKhau" name="MatKhau" required minlength="6">
+      </div>
+
+      <div class="form-group">
+        <label for="XacNhanMatKhau">Xác nhận mật khẩu</label>
+        <input type="password" id="XacNhanMatKhau" name="XacNhanMatKhau" required minlength="6">
+      </div>
+
+      <button type="submit" class="btn">Thêm mới</button>
+    </form>
+  </div>
+
+  {{#section 'css'}}
+  <link rel="stylesheet" href="/css/admin/customers.css">
+  {{/section}}
+
+  {{#section 'js'}}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('form');
+      
+      form.addEventListener('submit', function(e) {
+        const matKhau = document.getElementById('MatKhau').value;
+        const xacNhanMatKhau = document.getElementById('XacNhanMatKhau').value;
+        
+        if (matKhau !== xacNhanMatKhau) {
+          e.preventDefault();
+          alert('Mật khẩu và xác nhận mật khẩu không khớp!');
+          return false;
+        }
+      });
+
+      // Show error message if it exists in the session
+      {{#if req.session.error}}
+      alert('{{req.session.error}}');
+      {{/if}}
+    });
+  </script>
+  {{/section}}
+</div>

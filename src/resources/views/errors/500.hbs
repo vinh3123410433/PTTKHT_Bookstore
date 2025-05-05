@@ -1,0 +1,85 @@
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>500 - Lỗi máy chủ</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        background: #f9f9f9; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        height: 100vh; 
+        text-align: center; 
+        padding: 20px; 
+      }
+      .error-box {
+        max-width: 500px; 
+        background: white; 
+        padding: 40px; 
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); 
+        animation: slideIn 0.6s ease-out; 
+      }
+      .error-box h1 { 
+        font-size: 4rem; 
+        color: #ff9966;
+        margin-bottom: 10px; 
+      }
+      .error-box h2 { 
+        font-size: 1.5rem; 
+        margin-bottom: 20px; 
+      }
+      .error-box p { 
+        font-size: 1rem; 
+        margin-bottom: 30px; 
+        line-height: 1.5;
+      }
+      .error-box .message {
+        background: #f8f9fa;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border-left: 4px solid #ff9966;
+      }
+      .error-box a { 
+        display: inline-block; 
+        padding: 10px 20px; 
+        background: #007bff; 
+        color: white; 
+        text-decoration: none; 
+        border-radius: 6px; 
+        transition: background 0.3s; 
+      }
+      .error-box a:hover { 
+        background: #0056b3; 
+      }
+      @keyframes slideIn {
+        from { 
+          transform: translateY(30px); 
+          opacity: 0; 
+        }
+        to { 
+          transform: translateY(0); 
+          opacity: 1; 
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-box">
+      <h1>500</h1>
+      <h2>Lỗi máy chủ</h2>
+      <p>Rất tiếc, hệ thống đang gặp sự cố khi xử lý yêu cầu của bạn.</p>
+      {{#if error}}
+        <div class="message">{{error}}</div>
+      {{/if}}
+      <p>Vui lòng thử tải lại trang hoặc quay lại sau.</p>
+      <a href="javascript:history.back()">Quay lại trang trước</a>
+      &nbsp;
+      <a href="/admin">Về trang quản trị</a>
+    </div>
+  </body>
+</html>

@@ -10,6 +10,7 @@ import {
 
 import Dashboard from "../app/controllers/admin/DashboardController.js";
 import perRouter from "./admin/permissions.js";
+import customerRouter from "./admin/customers.js";
 
 // Import các router phụ bằng ES module
 // import warehouseRouter from "./warehouse.js";
@@ -51,6 +52,7 @@ router.use(
   dashboardRouter
 );
 router.use("/permissions", isLoggedIn, perRouter);
+router.use("/customers", isLoggedIn, checkRole(["admin", "qldoanhnghiep"]), customerRouter);
 router.get("/", isLoggedIn, Dashboard.show);
 
 export default router;

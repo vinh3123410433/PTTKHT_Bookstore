@@ -184,7 +184,7 @@ CREATE TABLE ChiTietHoaDonNhap (
 );
 
 CREATE TABLE NhomQuyen (
-    ID_NhomQuyen INT PRIMARY KEY,
+   ID_NhomQuyen INT AUTO_INCREMENT PRIMARY KEY,
     TenNhomQuyen VARCHAR(255) NOT NULL
 );
 
@@ -817,3 +817,12 @@ WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
 
 ALTER TABLE NhomQuyen
 ADD TinhTrang TINYINT DEFAULT 1;
+
+INSERT INTO DanhMucChucNang (ChucNang, TenQuyen,QuyenCha) VALUES
+('taikhoan','Tài khoản','admin'),
+('nhomquyen','Nhóm quyền','admin'),
+('nhanvien','Nhân viên','admin'),
+('qlhdx','Hoá đơn xuất','qlbanhang'),
+('qlthongkexuat','Thống kê','qlbanhang');
+
+

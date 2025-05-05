@@ -31,8 +31,7 @@
           </li>
           {{#if
             (or
-              (includes permissions "qlsanpham")
-              (includes permissions "qlbanhang")
+              (includes permissions "qlsanpham") (includes permissions "qlkho")
             )
           }}
             <li>
@@ -44,8 +43,7 @@
           {{/if}}
           {{#if
             (or
-              (includes permissions "qldanhmuc")
-              (includes permissions "qlbanhang")
+              (includes permissions "qldanhmuc") (includes permissions "qlkho")
             )
           }}
             <li>

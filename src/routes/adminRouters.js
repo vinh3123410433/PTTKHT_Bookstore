@@ -7,8 +7,10 @@ import {
   redirectByRole,
   checkRole,
 } from "../app/middlewares/admin/auth.js";
-import Permission from "../app/controllers/admin/Permissions.js";
+
 import Dashboard from "../app/controllers/admin/DashboardController.js";
+import perRouter from "./admin/permissions.js";
+
 // Import các router phụ bằng ES module
 // import warehouseRouter from "./warehouse.js";
 import warehouseRouter from "./warehouse/index.js";
@@ -48,12 +50,7 @@ router.use(
   checkRole(["admin", "qldoanhnghiep"]),
   dashboardRouter
 );
-router.get(
-  "/permissions",
-  isLoggedIn,
-  checkRole(["admin", "qldoanhnghiep"]),
-  Permission.show
-);
+router.use("/permissions", isLoggedIn, perRouter);
 router.get("/", isLoggedIn, Dashboard.show);
 
 export default router;

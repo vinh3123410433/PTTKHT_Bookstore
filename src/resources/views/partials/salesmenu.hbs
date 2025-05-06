@@ -27,6 +27,20 @@
         </a>
       </li>
     {{/if}}
+    
+    <!-- Khách Hàng -->
+    {{#if
+      (or (includes permissions "qlkhachhang") (includes permissions "qlbanhang"))
+    }}
+      <li>
+        <a href="/admin/sales/khachhang">
+          <!-- Liên kết đến customer management -->
+          <span><i class="fas fa-users"></i></span>
+          <span>Khách Hàng</span>
+        </a>
+      </li>
+    {{/if}}
+    
     <!-- Thống Kê -->
     {{#if
       (or
@@ -53,11 +67,23 @@
 </div>
 
 <script>
-  document.querySelectorAll('.sidebar a').forEach(link => { const href =
-  link.getAttribute('href'); const currentPath = window.location.pathname; if
-  (currentPath.includes('/admin/sales/')) { if (href === "orders/show") {
-  link.setAttribute('href', "/admin/sales/" + href); } if (href === "statistic")
-  { link.setAttribute('href', "/admin/sales/" + href); } } if
-  (currentPath.includes('/admin/sales/orders/')) { if (href === "./") {
-  link.setAttribute('href', "/admin/sales/"); } } });
+  document.querySelectorAll('.sidebar a').forEach(link => { 
+    const href = link.getAttribute('href'); 
+    const currentPath = window.location.pathname; 
+    
+    if (currentPath.includes('/admin/sales/')) { 
+      if (href === "orders/show") {
+        link.setAttribute('href', "/admin/sales/" + href); 
+      } 
+      if (href === "statistic") { 
+        link.setAttribute('href', "/admin/sales/" + href); 
+      } 
+    } 
+    
+    if (currentPath.includes('/admin/sales/orders/')) { 
+      if (href === "./") {
+        link.setAttribute('href', "/admin/sales/"); 
+      } 
+    } 
+  });
 </script>

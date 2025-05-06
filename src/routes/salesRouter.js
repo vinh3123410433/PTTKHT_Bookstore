@@ -1,5 +1,6 @@
 import express from "express";
 import orderRouter from "./sales/orders.js";
+import customerRouter from "./sales/customers.js";
 import DashboardController from "../app/controllers/sales/DashboardController.js";
 import statisticRouter from "./sales/statistic.js";
 import {
@@ -16,6 +17,12 @@ router.use(
   isLoggedIn,
   checkPermission(["qlhdx", "qlbanhang"]),
   orderRouter
+);
+router.use(
+  "/khachhang",
+  isLoggedIn,
+  checkPermission(["qlkhachhang", "qlbanhang"]),
+  customerRouter
 );
 router.use(
   "/statistic",

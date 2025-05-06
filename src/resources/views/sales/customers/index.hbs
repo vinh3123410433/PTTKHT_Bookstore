@@ -1,0 +1,160 @@
+{{#block "css"}}
+  <style>
+    .customers-container {
+      width: 100%;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .add-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .add-button i {
+      margin-right: 5px;
+    }
+
+    .customers-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .customers-table th,
+    .customers-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .customers-table th {
+      background-color: #f2f2f2;
+      position: sticky;
+      top: 0;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .action-button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+      text-decoration: none;
+    }
+
+    .view-button {
+      background-color: #2196F3;
+    }
+
+    .edit-button {
+      background-color: #FFC107;
+    }
+
+    .delete-button {
+      background-color: #F44336;
+    }
+
+    .alert {
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+
+    .alert-success {
+      background-color: #dff0d8;
+      border: 1px solid #d6e9c6;
+      color: #3c763d;
+    }
+
+    .alert-danger {
+      background-color: #f2dede;
+      border: 1px solid #ebccd1;
+      color: #a94442;
+    }
+  </style>
+{{/block}}
+
+<div class="customers-container">
+  <div class="header">
+    <h1>Quản lý khách hàng</h1>
+
+    {{#if (or (includes permissions "qlkhachhang") (includes permissions "qlbanhang"))}}
+      <a href="/admin/sales/khachhang/create" class="add-button">
+        <i class="fas fa-plus"></i> Thêm khách hàng
+      </a>
+    {{/if}}
+  </div>
+
+  {{#if success}}
+    <div class="alert alert-success">{{success}}</div>
+  {{/if}}
+
+  {{#if error}}
+    <div class="alert alert-danger">{{error}}</div>
+  {{/if}}
+
+  <div class="table-container">
+    <table class="customers-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên tài khoản</th>
+          <th>Tên khách hàng</th>
+          <th>Số điện thoại</th>
+          <th>Ngày sinh</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each customers}}
+          <tr>
+            <td>{{this.ID_KH}}</td>
+            <td>{{this.TenTK}}</td>
+            <td>{{this.TenKH}}</td>
+            <td>{{this.SDT}}</td>
+            <td>{{formatDate this.NgaySinh}}</td>
+            <td class="action-buttons">
+              <a href="/admin/sales/khachhang/details/{{this.ID_KH}}" class="action-button view-button">
+                <i class="fas fa-eye"></i>
+              </a>
+              {{#if ../permissions}}
+                {{#if (or (includes ../permissions "qlkhachhang") (includes ../permissions "qlbanhang"))}}
+                  <a href="/admin/sales/khachhang/edit/{{this.ID_KH}}" class="action-button edit-button">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <form action="/admin/sales/khachhang/delete/{{this.ID_KH}}" method="POST" style="display:inline;">
+                    <button type="submit" class="action-button delete-button" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?');">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                {{/if}}
+              {{/if}}
+            </td>
+          </tr>
+        {{else}}
+          <tr>
+            <td colspan="6" style="text-align: center;">Không có dữ liệu khách hàng</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -13,13 +13,10 @@ import perRouter from "./admin/permissions.js";
 import customerRouter from "./admin/customers.js";
 
 // Import các router phụ bằng ES module
-// import warehouseRouter from "./warehouse.js";
 import warehouseRouter from "./warehouse/index.js";
 import salesRouter from "./salesRouter.js";
 import dashboardRouter from "./dashboardRouter.js";
 import indexAdminRouter from "./admin/index.js";
-
-// import saleRouter from "./sale.js";
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -52,7 +49,7 @@ router.use(
   dashboardRouter
 );
 router.use("/permissions", isLoggedIn, perRouter);
-router.use("/customers", isLoggedIn, checkRole(["admin", "qldoanhnghiep"]), customerRouter);
+router.use("/customers", isLoggedIn, checkRole(["admin", "qldoanhnghiep", "khachhang", "qlbanhang"]), customerRouter);
 router.get("/", isLoggedIn, Dashboard.show);
 
 export default router;

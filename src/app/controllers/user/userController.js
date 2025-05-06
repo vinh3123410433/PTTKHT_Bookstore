@@ -115,7 +115,10 @@ const changeUserInfo = async (req, res, next) => {
 
 const errorPage = async (req, res) => {
   const errorMessage = req.query.error;
-  res.render("errorPage", { errorMessage: errorMessage });
+  res.render("user/errorPage", { 
+    errorMessage: errorMessage,
+    layout: "main"
+  });
 };
 
 const login = async (req, res, next) => {
@@ -201,7 +204,7 @@ const registerUser = async (req, res, next) => {
 
     if (!user_telephone) {
       return res.redirect(
-        "user/errorPage?error=" + encodeURIComponent("Chưa nhập số điện thoại")
+        "/user/errorPage?error=" + encodeURIComponent("Chưa nhập số điện thoại")
       );
     }
 
@@ -209,34 +212,55 @@ const registerUser = async (req, res, next) => {
 
     if (existingUser) {
       return res.redirect(
-        "user/errorPage?error=" + encodeURIComponent("Số điện thoại đã tồn tại")
+        "/user/errorPage?error=" + encodeURIComponent("Số điện thoại đã tồn tại")
       );
     }
 
     if (!user_password || !user_account_name || !user_name) {
       return res.redirect(
-        "user/errorPage?error=" + encodeURIComponent("Chưa nhập đủ thông tin")
+        "/user/errorPage?error=" + encodeURIComponent("Chưa nhập đủ thông tin")
       );
     }
 
     if (user_password !== user_confirm_password) {
       return res.redirect(
-        "user/errorPage?error=" +
+        "/user/errorPage?error=" +
           encodeURIComponent("Mật khẩu xác nhận không khớp")
       );
     }
 
-    await UserModel.createUser({
+    // Tạo người dùng mới và kiểm tra kết quả
+    const result = await UserModel.createUser({
       user_account_name,
       user_name,
       user_telephone,
       user_password,
     });
-    return res.redirect("/");
+    
+    // Kiểm tra kết quả tạo tài khoản
+    if (!result.success) {
+      console.error("Không thể tạo tài khoản:", result.error);
+      return res.redirect(
+        "/user/errorPage?error=" + encodeURIComponent("Không thể tạo tài khoản: " + result.error)
+      );
+    }
+    
+    // Lấy thông tin user vừa tạo để thiết lập phiên đăng nhập
+    const newUser = await UserModel.findUserByPhone(user_telephone);
+    if (newUser) {
+      // Thiết lập phiên đăng nhập cho người dùng mới
+      req.session.user_id = newUser.ID_KH;
+      
+      console.log("Đăng ký thành công, đã thiết lập phiên:", req.session.user_id);
+      return res.redirect("/?success=" + encodeURIComponent("Đăng ký thành công"));
+    } else {
+      console.error("Đã tạo tài khoản nhưng không tìm thấy user mới");
+      return res.redirect("/user/account?error=" + encodeURIComponent("Đã tạo tài khoản nhưng không thể đăng nhập"));
+    }
   } catch (error) {
     console.error("Lỗi đăng ký:", error);
     return res.redirect(
-      "user/errorPage?error=" +
+      "/user/errorPage?error=" +
         encodeURIComponent("Đã xảy ra lỗi, vui lòng thử lại")
     );
   }

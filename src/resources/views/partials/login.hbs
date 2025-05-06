@@ -1,4 +1,4 @@
-    <div class=" flex items-center justify-center min-h-screen">
+<div class=" flex items-center justify-center min-h-screen">
         <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
             <div class="flex justify-center mb-6">
               <div id="loginTab" class=" text-red-600 text-lg font-medium cursor-pointer mr-8 border-red-600 border-b-2 border-transparent border-400" onclick="switchTab('login')">Đăng nhập</div>
@@ -74,6 +74,7 @@
     </div>
 
 <script>
+  // This function switches between login and registration tabs
   function switchTab(tab) {
     const loginTab = document.getElementById('loginTab');
     const registerTab = document.getElementById('registerTab');
@@ -105,6 +106,7 @@
     }
   }
 
+  // This function toggles password visibility
   function togglePassword(inputId = 'passwordInput', buttonId = 'toggleBtn') {
     const passwordInput = document.getElementById(inputId);
     const toggleBtn = document.getElementById(buttonId);
@@ -119,4 +121,62 @@
       }
     }
   }
+  
+  // Enable submit button when fields are filled
+  document.addEventListener('DOMContentLoaded', function() {
+    // For login form
+    const loginForm = document.getElementById('formdangnhap');
+    const loginInputs = loginForm.querySelectorAll('input');
+    const loginButton = loginForm.querySelector('button[type="submit"]');
+    
+    // For registration form
+    const registerForm = document.getElementById('formdangki');
+    const registerInputs = registerForm.querySelectorAll('input');
+    const registerButton = registerForm.querySelector('button[type="submit"]');
+    
+    // Check login form inputs
+    function checkLoginInputs() {
+      let allFilled = true;
+      loginInputs.forEach(input => {
+        if (!input.value.trim()) {
+          allFilled = false;
+        }
+      });
+      
+      if (allFilled) {
+        loginButton.classList.remove('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+        loginButton.classList.add('bg-red-600', 'text-white');
+      } else {
+        loginButton.classList.add('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+        loginButton.classList.remove('bg-red-600', 'text-white');
+      }
+    }
+    
+    // Check registration form inputs
+    function checkRegisterInputs() {
+      let allFilled = true;
+      registerInputs.forEach(input => {
+        if (!input.value.trim()) {
+          allFilled = false;
+        }
+      });
+      
+      if (allFilled) {
+        registerButton.classList.remove('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+        registerButton.classList.add('bg-red-600', 'text-white');
+      } else {
+        registerButton.classList.add('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+        registerButton.classList.remove('bg-red-600', 'text-white');
+      }
+    }
+    
+    // Add event listeners to all inputs
+    loginInputs.forEach(input => {
+      input.addEventListener('input', checkLoginInputs);
+    });
+    
+    registerInputs.forEach(input => {
+      input.addEventListener('input', checkRegisterInputs);
+    });
+  });
 </script>

@@ -1,16 +1,44 @@
-// controllers/admin/CustomerController.js
-import Customer from '../../models/Customer.js';
+// app/controllers/admin/CustomerController.js
+import Customer from "../../model/admin/customerModel.js";
+import phanquyen from "../../model/admin/phanquyenModel.js";
+import bcrypt from "bcrypt";
 
 class CustomerController {
     // Show customer list page
     async index(req, res) {
         try {
             const customers = await Customer.getAllCustomers();
+            
+            // Get user permissions
+            let permissions;
+            if (req.session.cachedPermissions) {
+                permissions = req.session.cachedPermissions;
+            } else {
+                const viewPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "view"
+                );
+                
+                const allPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "all"
+                );
+
+                permissions = [
+                    ...viewPermissions.map(p => p.ChucNang),
+                    ...allPermissions.map(p => p.ChucNang)
+                ];
+                
+                // Cache the permissions in the session
+                req.session.cachedPermissions = permissions;
+            }
+            
             res.render('admin/customers/index', {
                 layout: 'admin',
                 title: 'Quản lý khách hàng',
                 customers,
-                user: req.session.user
+                user: req.session.user,
+                permissions
             });
         } catch (error) {
             console.error('Error fetching customers:', error);
@@ -20,12 +48,43 @@ class CustomerController {
     }
 
     // Show create customer page
-    showCreate(req, res) {
-        res.render('admin/customers/create', {
-            layout: 'admin',
-            title: 'Thêm khách hàng mới',
-            user: req.session.user
-        });
+    async showCreate(req, res) {
+        try {
+            // Get user permissions
+            let permissions;
+            if (req.session.cachedPermissions) {
+                permissions = req.session.cachedPermissions;
+            } else {
+                const viewPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "view"
+                );
+                
+                const allPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "all"
+                );
+
+                permissions = [
+                    ...viewPermissions.map(p => p.ChucNang),
+                    ...allPermissions.map(p => p.ChucNang)
+                ];
+                
+                // Cache the permissions in the session
+                req.session.cachedPermissions = permissions;
+            }
+            
+            res.render('admin/customers/create', {
+                layout: 'admin',
+                title: 'Thêm khách hàng mới',
+                user: req.session.user,
+                permissions
+            });
+        } catch (error) {
+            console.error('Error rendering create customer page:', error);
+            req.session.error = 'Có lỗi xảy ra khi hiển thị trang tạo khách hàng';
+            res.redirect('/admin/customers');
+        }
     }
 
     // Handle create customer
@@ -33,25 +92,30 @@ class CustomerController {
         try {
             const { TenTK, TenKH, SDT, NgaySinh, MatKhau } = req.body;
             
-            // Generate a new ID (should match your ID generation logic)
-            const nextId = Math.floor(Math.random() * 10000) + 1;
+            // Check if username already exists
+            const existingCustomer = await Customer.getCustomerByUsername(TenTK);
+            if (existingCustomer) {
+                req.session.error = 'Tên tài khoản đã tồn tại';
+                return res.redirect('/admin/customers/create');
+            }
             
-            const newCustomer = {
-                ID_KH: nextId,
+            // Hash password
+            const hashedPassword = await bcrypt.hash(MatKhau, 10);
+            
+            // Create customer
+            await Customer.createCustomer({
                 TenTK,
                 TenKH,
                 SDT,
                 NgaySinh: NgaySinh || null,
-                MatKhau
-            };
+                MatKhau: hashedPassword
+            });
             
-            await Customer.createCustomer(newCustomer);
-            
-            req.session.success = 'Thêm khách hàng thành công';
+            req.session.success = 'Tạo khách hàng thành công';
             res.redirect('/admin/customers');
         } catch (error) {
             console.error('Error creating customer:', error);
-            req.session.error = 'Có lỗi xảy ra khi thêm khách hàng';
+            req.session.error = 'Có lỗi xảy ra khi tạo khách hàng';
             res.redirect('/admin/customers/create');
         }
     }
@@ -67,11 +131,36 @@ class CustomerController {
                 return res.redirect('/admin/customers');
             }
             
+            // Get user permissions
+            let permissions;
+            if (req.session.cachedPermissions) {
+                permissions = req.session.cachedPermissions;
+            } else {
+                const viewPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "view"
+                );
+                
+                const allPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "all"
+                );
+
+                permissions = [
+                    ...viewPermissions.map(p => p.ChucNang),
+                    ...allPermissions.map(p => p.ChucNang)
+                ];
+                
+                // Cache the permissions in the session
+                req.session.cachedPermissions = permissions;
+            }
+            
             res.render('admin/customers/edit', {
                 layout: 'admin',
                 title: 'Chỉnh sửa khách hàng',
                 customer,
-                user: req.session.user
+                user: req.session.user,
+                permissions
             });
         } catch (error) {
             console.error('Error fetching customer for edit:', error);
@@ -86,6 +175,23 @@ class CustomerController {
             const customerId = req.params.id;
             const { TenTK, TenKH, SDT, NgaySinh, MatKhau } = req.body;
             
+            // Get the original customer
+            const originalCustomer = await Customer.getCustomerById(customerId);
+            if (!originalCustomer) {
+                req.session.error = 'Không tìm thấy khách hàng';
+                return res.redirect('/admin/customers');
+            }
+            
+            // Check if username is being changed and already exists
+            if (TenTK !== originalCustomer.TenTK) {
+                const existingCustomer = await Customer.getCustomerByUsername(TenTK);
+                if (existingCustomer) {
+                    req.session.error = 'Tên tài khoản đã tồn tại';
+                    return res.redirect(`/admin/customers/edit/${customerId}`);
+                }
+            }
+            
+            // Prepare updated customer data
             const updatedCustomer = {
                 TenTK,
                 TenKH,
@@ -93,23 +199,19 @@ class CustomerController {
                 NgaySinh: NgaySinh || null
             };
             
-            // Only update password if it's provided
+            // Update password if provided
             if (MatKhau && MatKhau.trim() !== '') {
-                updatedCustomer.MatKhau = MatKhau;
+                updatedCustomer.MatKhau = await bcrypt.hash(MatKhau, 10);
             }
             
-            const success = await Customer.updateCustomer(customerId, updatedCustomer);
+            // Update customer
+            await Customer.updateCustomer(customerId, updatedCustomer);
             
-            if (!success) {
-                req.session.error = 'Không thể cập nhật khách hàng';
-                return res.redirect(`/admin/customers/edit/${customerId}`);
-            }
-            
-            req.session.success = 'Cập nhật khách hàng thành công';
+            req.session.success = 'Cập nhật thông tin khách hàng thành công';
             res.redirect('/admin/customers');
         } catch (error) {
             console.error('Error updating customer:', error);
-            req.session.error = 'Có lỗi xảy ra khi cập nhật khách hàng';
+            req.session.error = 'Có lỗi xảy ra khi cập nhật thông tin khách hàng';
             res.redirect(`/admin/customers/edit/${req.params.id}`);
         }
     }
@@ -118,19 +220,15 @@ class CustomerController {
     async delete(req, res) {
         try {
             const customerId = req.params.id;
-            const success = await Customer.deleteCustomer(customerId);
+            await Customer.deleteCustomer(customerId);
             
-            if (!success) {
-                req.session.error = 'Không thể xóa khách hàng';
-            } else {
-                req.session.success = 'Xóa khách hàng thành công';
-            }
+            req.session.success = 'Xóa khách hàng thành công';
+            res.redirect('/admin/customers');
         } catch (error) {
             console.error('Error deleting customer:', error);
             req.session.error = 'Có lỗi xảy ra khi xóa khách hàng';
+            res.redirect('/admin/customers');
         }
-        
-        res.redirect('/admin/customers');
     }
 
     // Show customer details page
@@ -147,12 +245,37 @@ class CustomerController {
             // Get customer addresses
             const addresses = await Customer.getCustomerAddresses(customerId);
             
+            // Get user permissions
+            let permissions;
+            if (req.session.cachedPermissions) {
+                permissions = req.session.cachedPermissions;
+            } else {
+                const viewPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "view"
+                );
+                
+                const allPermissions = await phanquyen.findPAccessIdNhomQuyen(
+                    req.session.user.idNQ, 
+                    "all"
+                );
+
+                permissions = [
+                    ...viewPermissions.map(p => p.ChucNang),
+                    ...allPermissions.map(p => p.ChucNang)
+                ];
+                
+                // Cache the permissions in the session
+                req.session.cachedPermissions = permissions;
+            }
+            
             res.render('admin/customers/details', {
                 layout: 'admin',
                 title: 'Chi tiết khách hàng',
                 customer,
                 addresses,
-                user: req.session.user
+                user: req.session.user,
+                permissions
             });
         } catch (error) {
             console.error('Error fetching customer details:', error);

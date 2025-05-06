@@ -35,9 +35,13 @@ export default {
 
   eq: (a, b) => a == b,
 
-  or: (...args) => {
-    const options = args.pop();
-    return args.some(Boolean);
+  or: function() {
+    for (let i = 0; i < arguments.length - 1; i++) {
+      if (arguments[i]) {
+        return true;
+      }
+    }
+    return false;
   },
 
   range: (start, end) => {
@@ -150,7 +154,10 @@ export default {
         return options.inverse(this);
     }
   },
+  
+  // Helper function to check if array contains value
   contains: function (array, value) {
-    return array.indexOf(value) !== -1;
-  },
+    if (!array) return false;
+    return array.includes(value);
+  }
 };

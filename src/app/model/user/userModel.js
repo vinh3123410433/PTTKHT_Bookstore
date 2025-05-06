@@ -52,19 +52,60 @@ const updatePassword = async (id, newPassword) => {
   ]);
 };
 
+const getMaxCustomerId = async () => {
+  try {
+    const [rows] = await database.query("SELECT MAX(ID_KH) AS maxId FROM KhachHang");
+    return rows[0].maxId || 0; // Trả về ID lớn nhất hoặc 0 nếu bảng trống
+  } catch (error) {
+    console.error("Lỗi khi lấy ID khách hàng lớn nhất:", error);
+    return 0;
+  }
+};
+
 const createUser = async ({
   user_account_name,
   user_name,
   user_telephone,
   user_password,
 }) => {
-  const query = `INSERT INTO KhachHang (TenTK, TenKH, SDT, MatKhau) VALUES (?, ?, ?, ?)`;
-  await database.query(query, [
-    user_account_name,
-    user_name,
-    user_telephone,
-    user_password,
-  ]);
+  try {
+    console.log("Đang thực hiện tạo tài khoản với thông tin:", {
+      TenTK: user_account_name,
+      TenKH: user_name,
+      SDT: user_telephone,
+      MatKhau: '****' // Che dấu mật khẩu trong log
+    });
+    
+    // Lấy ID lớn nhất và tăng thêm 1
+    const maxId = await getMaxCustomerId();
+    const newId = maxId + 1;
+    
+    console.log("ID khách hàng mới sẽ là:", newId);
+    
+    // Thêm trường ID_KH vào câu lệnh INSERT
+    const query = `INSERT INTO KhachHang (ID_KH, TenTK, TenKH, SDT, MatKhau) VALUES (?, ?, ?, ?, ?)`;
+    const [result] = await database.query(query, [
+      newId,
+      user_account_name,
+      user_name,
+      user_telephone,
+      user_password,
+    ]);
+    
+    console.log("Kết quả tạo tài khoản:", result);
+    return {
+      success: true,
+      insertId: newId, // Trả về ID mới
+      affectedRows: result.affectedRows
+    };
+  } catch (error) {
+    console.error("Lỗi khi tạo tài khoản:", error);
+    return {
+      success: false,
+      error: error.message,
+      code: error.code
+    };
+  }
 };
 
 export default {
@@ -77,4 +118,5 @@ export default {
   updatePassword,
   findUserByIdAndPassword,
   createUser,
+  getMaxCustomerId, // Xuất hàm mới
 };

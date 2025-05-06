@@ -1,160 +1,134 @@
 {{#block "css"}}
-  <style>
-    .customers-container {
-      width: 100%;
-      padding: 20px;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .add-button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .add-button i {
-      margin-right: 5px;
-    }
-
-    .customers-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .customers-table th,
-    .customers-table td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-    }
-
-    .customers-table th {
-      background-color: #f2f2f2;
-      position: sticky;
-      top: 0;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 5px;
-    }
-
-    .action-button {
-      padding: 5px 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      color: white;
-      text-decoration: none;
-    }
-
-    .view-button {
-      background-color: #2196F3;
-    }
-
-    .edit-button {
-      background-color: #FFC107;
-    }
-
-    .delete-button {
-      background-color: #F44336;
-    }
-
-    .alert {
-      padding: 10px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-    }
-
-    .alert-success {
-      background-color: #dff0d8;
-      border: 1px solid #d6e9c6;
-      color: #3c763d;
-    }
-
-    .alert-danger {
-      background-color: #f2dede;
-      border: 1px solid #ebccd1;
-      color: #a94442;
-    }
-  </style>
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/customers.css" />
 {{/block}}
 
-<div class="customers-container">
-  <div class="header">
-    <h1>Quản lý khách hàng</h1>
+{{#block "js"}}
+  <script src="/js/sales/index.js"></script>
+{{/block}}
 
-    {{#if (or (includes permissions "qlkhachhang") (includes permissions "qlbanhang"))}}
-      <a href="/admin/sales/khachhang/create" class="add-button">
-        <i class="fas fa-plus"></i> Thêm khách hàng
-      </a>
-    {{/if}}
+<div class="main-content">
+  <!-- nav bar -->
+  <div class="navbar">
+    <div class="navbar-toggle">
+      {{! <i class="fas fa-bars"></i> }}
+    </div>
+    <div class="search-box">
+      <label>
+        <input type="text" placeholder="Tìm Kiếm" />
+        <i class="fas fa-search"></i>
+      </label>
+    </div>
+    <div class="user-profile">
+      <a href="#"><img src="/user.jpg" /></a>
+    </div>
   </div>
 
-  {{#if success}}
-    <div class="alert alert-success">{{success}}</div>
-  {{/if}}
+  <!-- Nội dung quản lý khách hàng -->
+  <div class="customers-container">
+    <div class="customer-header">
+      <h2 class="customer-title">Quản lý khách hàng</h2>
+      {{#if (or (includes permissions "qlkhachhang") (includes permissions "qlbanhang"))}}
+        <a href="/admin/sales/khachhang/create" class="add-button">
+          <i class="fas fa-plus"></i> Thêm khách hàng
+        </a>
+      {{/if}}
+    </div>
 
-  {{#if error}}
-    <div class="alert alert-danger">{{error}}</div>
-  {{/if}}
+    {{#if success}}
+      <div class="alert alert-success">{{success}}</div>
+    {{/if}}
 
-  <div class="table-container">
-    <table class="customers-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Tên tài khoản</th>
-          <th>Tên khách hàng</th>
-          <th>Số điện thoại</th>
-          <th>Ngày sinh</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each customers}}
+    {{#if error}}
+      <div class="alert alert-danger">{{error}}</div>
+    {{/if}}
+
+    <!-- Bộ lọc khách hàng -->
+    <div class="customer-filters">
+      <form class="filter-form" action="/admin/sales/khachhang" method="GET">
+        <div class="filter-group">
+          <input type="text" name="keyword" placeholder="Tên hoặc SĐT khách hàng" value="{{query.keyword}}" />
+        </div>
+        <div class="form-buttons-container">
+          <button class="filter-button" type="submit">
+            <i class="fas fa-filter"></i> Lọc
+          </button>
+          <a href="/admin/sales/khachhang" class="reset-button">
+            <i class="fas fa-sync-alt"></i> Làm mới
+          </a>
+          <button type="button" class="export-button">
+            <i class="fas fa-file-export"></i> Xuất Excel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bảng danh sách khách hàng -->
+    <div class="customer-table-container">
+      <table class="customers-table">
+        <thead>
           <tr>
-            <td>{{this.ID_KH}}</td>
-            <td>{{this.TenTK}}</td>
-            <td>{{this.TenKH}}</td>
-            <td>{{this.SDT}}</td>
-            <td>{{formatDate this.NgaySinh}}</td>
-            <td class="action-buttons">
-              <a href="/admin/sales/khachhang/details/{{this.ID_KH}}" class="action-button view-button">
-                <i class="fas fa-eye"></i>
-              </a>
-              {{#if ../permissions}}
-                {{#if (or (includes ../permissions "qlkhachhang") (includes ../permissions "qlbanhang"))}}
-                  <a href="/admin/sales/khachhang/edit/{{this.ID_KH}}" class="action-button edit-button">
-                    <i class="fas fa-edit"></i>
-                  </a>
-                  <form action="/admin/sales/khachhang/delete/{{this.ID_KH}}" method="POST" style="display:inline;">
-                    <button type="submit" class="action-button delete-button" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?');">
-                      <i class="fas fa-trash"></i>
-                    </button>
-                  </form>
+            <th>ID</th>
+            <th>Tên tài khoản</th>
+            <th>Tên khách hàng</th>
+            <th>Số điện thoại</th>
+            <th>Ngày sinh</th>
+            <th class="text-center" style="width: 120px;">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each customers}}
+            <tr>
+              <td>{{this.ID_KH}}</td>
+              <td>{{this.TenTK}}</td>
+              <td>{{this.TenKH}}</td>
+              <td>{{this.SDT}}</td>
+              <td>{{formatDate this.NgaySinh}}</td>
+              <td class="action-buttons">
+                <a href="/admin/sales/khachhang/details/{{this.ID_KH}}" class="action-button view-button" title="Xem chi tiết">
+                  <i class="fas fa-eye"></i>
+                </a>
+                {{#if ../permissions}}
+                  {{#if (or (includes ../permissions "qlkhachhang") (includes ../permissions "qlbanhang"))}}
+                    <a href="/admin/sales/khachhang/edit/{{this.ID_KH}}" class="action-button edit-button" title="Chỉnh sửa">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <form action="/admin/sales/khachhang/delete/{{this.ID_KH}}" method="POST" style="display:inline;">
+                      <button type="submit" class="action-button delete-button" onclick="return confirm('Bạn có chắc muốn xóa khách hàng này?');" title="Xóa">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  {{/if}}
                 {{/if}}
-              {{/if}}
-            </td>
-          </tr>
-        {{else}}
-          <tr>
-            <td colspan="6" style="text-align: center;">Không có dữ liệu khách hàng</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
+              </td>
+            </tr>
+          {{else}}
+            <tr>
+              <td colspan="6">
+                <div class="no-results-message">
+                  <i class="fas fa-search"></i>
+                  <p>Không tìm thấy khách hàng nào.</p>
+                </div>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Highlight current menu item
+    const currentPath = window.location.pathname;
+    const menuItems = document.querySelectorAll('.sidebar li a');
+    
+    menuItems.forEach(item => {
+      if (item.getAttribute('href') === currentPath || 
+          (currentPath.includes('/admin/sales/khachhang') && item.getAttribute('href') === '/admin/sales/khachhang')) {
+        item.parentElement.classList.add('active');
+      }
+    });
+  });
+</script>

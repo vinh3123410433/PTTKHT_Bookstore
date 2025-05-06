@@ -1,0 +1,65 @@
+<html lang="en" style="width: 100%;">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/output.css" />
+    <link rel="stylesheet" href="/css/sales/output.css">
+    <link rel="stylesheet" href="/css/admin/customers.css">
+    <link rel="stylesheet" href="/css/sales/style.css">
+    <style>
+      .sales-container {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+      }
+      .sales-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      .customer-table-container {
+        background: #fff;
+        border-radius: 8px;
+        padding: 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .page-title {
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+      }
+    </style>
+    {{{_blocks.css}}}
+  </head>
+  <body>
+    <div class="sales-container">
+      {{>salesmenu}}
+      
+      <div class="sales-content">
+        <div class="customer-table-container">
+          <h1 class="page-title">{{title}}</h1>
+          {{{body}}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Common JS libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Custom scripts -->
+    <script src="/js/sales/script.js"></script>
+    
+    <!-- Additional scripts from controller -->
+    {{#each scripts}}
+      <script src="{{this}}"></script>
+    {{/each}}
+
+    {{{_blocks.js}}}
+  </body>
+</html>

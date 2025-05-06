@@ -26,6 +26,49 @@ app.use((req, res, next) => {
   next();
 });
 
+// Add middleware to prevent headers already sent errors
+app.use((req, res, next) => {
+  const originalSend = res.send;
+  const originalJson = res.json;
+  const originalRender = res.render;
+  let sent = false;
+
+  // Override res.send
+  res.send = function(...args) {
+    if (sent) {
+      console.warn(`Attempting to send a response twice for ${req.method} ${req.originalUrl}`);
+      console.trace("Response already sent, stack trace:");
+      return this;
+    }
+    sent = true;
+    return originalSend.apply(this, args);
+  };
+
+  // Override res.json
+  res.json = function(...args) {
+    if (sent) {
+      console.warn(`Attempting to send a JSON response twice for ${req.method} ${req.originalUrl}`);
+      console.trace("Response already sent, stack trace:");
+      return this;
+    }
+    sent = true;
+    return originalJson.apply(this, args);
+  };
+
+  // Override res.render
+  res.render = function(...args) {
+    if (sent) {
+      console.warn(`Attempting to render a response twice for ${req.method} ${req.originalUrl}`);
+      console.trace("Response already sent, stack trace:");
+      return this;
+    }
+    sent = true;
+    return originalRender.apply(this, args);
+  };
+
+  next();
+});
+
 // Session, ViewEngine, Static
 configSession(app);
 configViewEngine(app);

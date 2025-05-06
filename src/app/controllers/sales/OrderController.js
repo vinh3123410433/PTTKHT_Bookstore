@@ -296,31 +296,35 @@ class OrderController {
 
   async exportOrderPdf(req, res) {
     try {
-      console.log("Exporting PDF...");
-      const orderId = req.params.id;
       const orderModel = new Order();
+      const orderId = req.params.id;
       const orderDetails = await orderModel._findById(orderId);
 
       if (!orderDetails) {
         return res.status(404).json({
           success: false,
-          message: "Đơn hàng không tồn tại",
+          message: "Không tìm thấy đơn hàng",
         });
       }
 
-      console.log("orderDetails", orderDetails);
-
-      // Tạo tên file với thời gian hiện tại
-      const currentDate = new Date();
-      const timestamp = currentDate.toISOString().replace(/[:.]/g, "-");
-      const fileName = `order-${orderId}-${timestamp}.pdf`;
-
-      // Cài đặt header trước khi tạo PDF
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
-
-      // Tạo PDF và gửi trực tiếp đến response
-      await generateOrderPdf(orderDetails, res);
+      // Generate PDF and get the result
+      const result = await generateOrderPdf(orderDetails);
+      
+      if (!result.success) {
+        return res.status(500).json({
+          success: false,
+          message: "Lỗi khi tạo PDF",
+          error: result.error
+        });
+      }
+      
+      // Set response headers
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename=order_${orderId}.pdf`);
+      
+      // Send the PDF buffer
+      res.send(result.buffer);
+      
     } catch (error) {
       console.error("Error exporting PDF:", error);
       res.status(500).json({

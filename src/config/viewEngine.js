@@ -10,6 +10,21 @@ import fs from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Create a custom file loader that handles BOM characters
+const customFileLoader = (filePath) => {
+  const content = fs.readFileSync(filePath, 'utf8');
+  
+  // Check for BOM and remove if present (BOM appears as �� at the beginning)
+  if (content.charCodeAt(0) === 0xFEFF || 
+      (content.length >= 3 && content.charCodeAt(0) === 0xEF && 
+      content.charCodeAt(1) === 0xBB && content.charCodeAt(2) === 0xBF)) {
+    console.log(`Removing BOM from template: ${filePath}`);
+    return content.slice(1); // Remove BOM
+  }
+  
+  return content;
+};
+
 const hbsInstance = hbs.create({
   extname: ".hbs",
   layoutsDir: path.join(__dirname, "../resources/views/layouts"),
@@ -19,8 +34,35 @@ const hbsInstance = hbs.create({
   runtimeOptions: {
     allowProtoPropertiesByDefault: true,
     allowProtoMethodsByDefault: true,
+  },
+  // Add custom template loader to handle BOM characters
+  compileOptions: {
+    preventIndent: true
   }
 });
+
+// Override default template loading function
+const originalLoadTemplate = hbsInstance.getTemplateFromCache;
+hbsInstance.getTemplateFromCache = function(templatePath, options) {
+  try {
+    return originalLoadTemplate.call(this, templatePath, options);
+  } catch (error) {
+    if (error.message && error.message.includes('Unrecognized text')) {
+      console.warn(`Handlebars parsing error in ${templatePath}, attempting to fix BOM...`);
+      
+      try {
+        // Try to load and fix the file manually
+        const content = customFileLoader(templatePath);
+        const template = this.handlebars.compile(content, options);
+        return template;
+      } catch (innerError) {
+        console.error(`Failed to fix template ${templatePath}:`, innerError);
+        throw error; // Throw the original error if fix fails
+      }
+    }
+    throw error;
+  }
+};
 
 const configViewEngine = (app) => {
   const staticPath = path.join(__dirname, "../public");

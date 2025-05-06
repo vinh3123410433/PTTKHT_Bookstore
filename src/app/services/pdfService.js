@@ -67,38 +67,9 @@ async function generateOrderPdf(orderDetails, res = null) {
     const content = await compile("orderDetail", { orderDetails });
     const order = orderDetails.order;
 
-    // Nếu có response, gửi PDF trực tiếp đến response
-    if (res) {
-      await page.setContent(content);
-      await page.emulateMediaType("screen");
-      const pdfBuffer = await page.pdf({
-        format: "A5",
-        printBackground: true,
-        margin: {
-          top: "10px",
-          right: "10px",
-          bottom: "10px",
-          left: "10px",
-        },
-      });
-
-      await browser.close();
-      res.send(pdfBuffer);
-      return;
-    }
-
-    // Nếu không có response, lưu file vào thư mục exports (hành vi cũ)
-    const fileName = `order_${order.IDHoaDonXuat}_${Date.now()}.pdf`;
-    const filePath = path.join(__dirname, "..", "public", "exports", fileName);
-    console.log("filePath", filePath);
-
-    // Ensure exports directory exists
-    await fs.ensureDir(path.join(__dirname, "..", "public", "exports"));
-
     await page.setContent(content);
     await page.emulateMediaType("screen");
-    await page.pdf({
-      path: filePath,
+    const pdfBuffer = await page.pdf({
       format: "A5",
       printBackground: true,
       margin: {
@@ -108,25 +79,17 @@ async function generateOrderPdf(orderDetails, res = null) {
         left: "10px",
       },
     });
-    console.log("PDF generated successfully:", fileName);
-    await browser.close();
 
+    await browser.close();
+    
+    // Return the buffer instead of sending response directly
     return {
       success: true,
-      message: "PDF generated successfully",
-      fileName,
+      buffer: pdfBuffer
     };
+
   } catch (error) {
     console.error("Error generating PDF:", error);
-    if (res) {
-      res.status(500).json({
-        success: false,
-        message: "Error generating PDF",
-        error: error.message,
-      });
-      return;
-    }
-
     return {
       success: false,
       message: "Error generating PDF",

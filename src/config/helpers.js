@@ -89,6 +89,20 @@ export default {
     return null;
   },
 
+  // Add the missing section helper
+  section: function (name, opts) {
+    if (!this._sections) this._sections = {};
+    this._sections[name] = opts.fn(this);
+    return null;
+  },
+  
+  content: function(name) {
+    if (this._sections && this._sections[name]) {
+      return this._sections[name];
+    }
+    return null;
+  },
+
   // 🌟 THÊM CÁC HÀM MỚI:
   multi: (a, b) => a * b,
 
